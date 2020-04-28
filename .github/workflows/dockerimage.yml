@@ -27,18 +27,13 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag jekyll-plantuml:$(date +%s)
     - name: Docker Publish
+      if: startsWith(github.ref, 'refs/tags/')
       uses: manusa/actions-publish-docker@v1.0.1
       with:
         # Name of the Docker image
         name: SwedbankPay/jekyll-plantuml
         # Tag for the Docker image
-        tag script: |
-          return context.ref
-            .replace('refs/heads/
-            .replace('refs/tags/'
-            .replace('refs/pull/'
-            .replace(/\//g, '_')
-            .replace(/#/g, '');
+        tag: ${{ steps.gitversion.outputs.fullSemVer }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         # Registry URL
