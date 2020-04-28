@@ -29,7 +29,7 @@ jobs:
 
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jekyll-plantuml:${{ steps.gitversion.outputs.fullSemVer }}
+      run: docker build . --file Dockerfile --tag jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}
     - name: Docker Publish
       if: startsWith(github.ref, 'refs/tags/')
       uses: manusa/actions-publish-docker@v1.0.1
@@ -37,7 +37,7 @@ jobs:
         # Name of the Docker image
         name: SwedbankPay/jekyll-plantuml
         # Tag for the Docker image
-        tag: ${{ steps.gitversion.outputs.fullSemVer }}
+        tag: ${{ steps.gitversion.outputs.majorMinorPatch }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         include pull requests: false
