@@ -17,7 +17,7 @@ jobs:
 
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
-      
+
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.2
       with:
@@ -29,7 +29,7 @@ jobs:
 
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jekyll-plantuml:$(date +%s)
+      run: docker build . --file Dockerfile --tag jekyll-plantuml:${{ steps.gitversion.outputs.fullSemVer }}
     - name: Docker Publish
       if: startsWith(github.ref, 'refs/tags/')
       uses: manusa/actions-publish-docker@v1.0.1
@@ -40,6 +40,4 @@ jobs:
         tag: ${{ steps.gitversion.outputs.fullSemVer }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        # Registry URL
-        # Don't skip pull requests
         include pull requests: false
