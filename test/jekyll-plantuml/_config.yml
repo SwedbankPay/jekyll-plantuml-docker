@@ -1,0 +1,6 @@
+theme: minima
+plugins:
+  - "jekyll-github-metadata"
+  - jemoji
+  - jekyll-material-icon-tag
+  - "kramdown-plantuml"
