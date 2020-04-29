@@ -82,7 +82,10 @@ RUN rm -rf $GEM_HOME/cache
 
 COPY . /
 
+CMD ["jekyll", "build"]
+
 ENTRYPOINT [ "/.docker/entrypoint" ]
+
 WORKDIR /srv/jekyll
 VOLUME  /srv/jekyll
 EXPOSE 35729
