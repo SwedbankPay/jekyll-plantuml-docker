@@ -20,12 +20,12 @@ ENV DRAFTS=false
 RUN apt-get clean && \
     apt-get update && \
     apt-get \
-    --no-install-recommends \
-    install -y \
-    locales=2.28-10 \
-    default-jre=2:1.11-71 \
-    graphviz=2.40.1-6 \
-    fontconfig=2.13.1-2 && \
+        --no-install-recommends \
+        install -y \
+        locales=2.28-10 \
+        default-jre=2:1.11-71 \
+        graphviz=2.40.1-6 \
+        fontconfig=2.13.1-2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -52,22 +52,22 @@ RUN unset GEM_HOME \
     && yes | gem install --force bundler
 RUN gem install jekyll --version $JEKYLL_VERSION -- --use-system-libraries
 RUN gem install \
-    html-proofer \
-    jekyll-reload \
-    jekyll-mentions \
-    jekyll-coffeescript \
-    jekyll-sass-converter \
-    jekyll-commonmark \
-    jekyll-paginate \
-    jekyll-compose \
-    jekyll-assets \
-    RedCloth \
-    kramdown \
-    jemoji \
-    jekyll-redirect-from \
-    jekyll-sitemap \
-    jekyll-feed minima \
-    -- --use-system-libraries
+        html-proofer \
+        jekyll-reload \
+        jekyll-mentions \
+        jekyll-coffeescript \
+        jekyll-sass-converter \
+        jekyll-commonmark \
+        jekyll-paginate \
+        jekyll-compose \
+        jekyll-assets \
+        RedCloth \
+        kramdown \
+        jemoji \
+        jekyll-redirect-from \
+        jekyll-sitemap \
+        jekyll-feed minima \
+        -- --use-system-libraries
 RUN addgroup --system --gid 1000 jekyll
 RUN adduser --system --gid 1000 jekyll
 RUN mkdir -p $JEKYLL_VAR_DIR
@@ -80,13 +80,14 @@ RUN rm -rf /home/jekyll/.gem
 RUN rm -rf $BUNDLE_HOME/cache
 RUN rm -rf $GEM_HOME/cache
 
-COPY . /
+COPY --chown=jekyll:jekyll ./entrypoint ${JEKYLL_BIN}/entrypoint
+
+VOLUME  /srv/jekyll
+WORKDIR /srv/jekyll
+
+EXPOSE 35729
+EXPOSE 4000
 
 CMD ["jekyll", "build"]
 
-ENTRYPOINT [ "/.docker/entrypoint" ]
-
-WORKDIR /srv/jekyll
-VOLUME  /srv/jekyll
-EXPOSE 35729
-EXPOSE 4000
+ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
