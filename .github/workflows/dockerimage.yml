@@ -33,7 +33,7 @@ jobs:
 
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
-      run: docker run jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+      run: docker run --mount type=bind,src=${pwd}/test/jekyll-plantuml,target=/srv/jekyll jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
 
     - name: Docker Publish
       if: startsWith(github.ref, 'refs/tags/')
