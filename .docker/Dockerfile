@@ -61,12 +61,17 @@ RUN gem install \
         jekyll-paginate \
         jekyll-compose \
         jekyll-assets \
+        jekyll-github-metadata \
+        jekyll-material-icon-tag \
         RedCloth \
         kramdown \
         jemoji \
         jekyll-redirect-from \
         jekyll-sitemap \
         jekyll-feed minima \
+        nokogiri \
+        kramdown-plantuml \
+        faraday \
         -- --use-system-libraries
 RUN addgroup --system --gid 1000 jekyll
 RUN adduser --system --gid 1000 jekyll
