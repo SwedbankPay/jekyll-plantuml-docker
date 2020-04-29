@@ -27,13 +27,20 @@ jobs:
       id: gitversion # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v0.9.2
 
+    - name: Generate version number
+      id: version
+      run: |
+        semver="${{ steps.gitversion.outputs.fullSemVer }}"
+        version="${semver/+/.alpha-}" # Replace `+` with `.alpha-`
+        echo "Version: ${version}"
+        echo "::set-output name=version::${version}"
 
     - name: Build the Docker image
       run: |
         docker build \
           .docker \
           --file .docker/Dockerfile \
-          --tag jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+          --tag jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
@@ -41,7 +48,7 @@ jobs:
         docker run \
           --tty \
           --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
-          jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+          jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Docker Publish
       if: startsWith(github.ref, 'refs/tags/')
@@ -50,7 +57,7 @@ jobs:
         # Name of the Docker image
         name: SwedbankPay/jekyll-plantuml
         # Tag for the Docker image
-        tag: ${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+        tag: ${{ steps.version.outputs.version }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         include pull requests: false
