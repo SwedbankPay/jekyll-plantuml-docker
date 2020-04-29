@@ -45,6 +45,7 @@ jobs:
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
       run: |
+        echo "Volume folder: $(pwd)/test/jekyll-plantuml"
         docker run \
           --tty \
           --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
