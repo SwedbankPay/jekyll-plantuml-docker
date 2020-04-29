@@ -14,11 +14,13 @@ GEM
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
+    eventmachine (1.2.7)
     eventmachine (1.2.7-x64-mingw32)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     fastimage (1.8.1)
       addressable (~> 2.3, >= 2.3.5)
+    ffi (1.12.2)
     ffi (1.12.2-x64-mingw32)
     forwardable-extended (2.6.0)
     gemoji (3.0.1)
@@ -79,6 +81,8 @@ GEM
     minitest (5.14.0)
     multi_json (1.14.1)
     multipart-post (2.1.1)
+    nokogiri (1.10.9)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.9-x64-mingw32)
       mini_portile2 (~> 2.4.0)
     octokit (4.18.0)
@@ -99,6 +103,8 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+    sassc (2.3.0)
+      ffi (~> 1.9)
     sassc (2.3.0-x64-mingw32)
       ffi (~> 1.9)
     sawyer (0.8.2)
@@ -124,6 +130,7 @@ GEM
     zeitwerk (2.3.0)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
