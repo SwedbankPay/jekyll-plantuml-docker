@@ -3,7 +3,7 @@ version: '3.7'
 services:
   jekyll-test:
     build:
-      context: ../../
+      context: .
       cache_from:
         - ruby:2.7.1
       dockerfile: Dockerfile
@@ -13,5 +13,5 @@ services:
       - 35729:35729
     command: jekyll build --trace
     volumes:
-      - .:/srv/jekyll
+      - ./test/jekyll-plantuml:/srv/jekyll
       - .bundle:/usr/local/bundle
