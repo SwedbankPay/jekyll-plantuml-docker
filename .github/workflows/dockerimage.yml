@@ -36,10 +36,10 @@ jobs:
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
       run: |
-        echo "Volume folder: $(pwd)/test/jekyll-plantuml"
+        echo "Volume folder: ${{ github.workspace }}/test/jekyll-plantuml"
         docker run \
           --tty \
-          --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
+          --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
           jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Docker Publish
