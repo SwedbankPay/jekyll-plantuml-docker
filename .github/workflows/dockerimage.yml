@@ -29,11 +29,19 @@ jobs:
 
 
     - name: Build the Docker image
-      run: docker build .docker --file .docker/Dockerfile --tag jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+      run: |
+        docker build \
+          .docker \
+          --file .docker/Dockerfile \
+          --tag jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
 
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
-      run: docker run --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
+      run: |
+        docker run \
+          --tty \
+          --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
+          jekyll-plantuml:${{ steps.gitversion.outputs.majorMinorPatch }}.${{ steps.gitversion.outputs.buildMetaData}}
 
     - name: Docker Publish
       if: startsWith(github.ref, 'refs/tags/')
