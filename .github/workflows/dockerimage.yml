@@ -46,7 +46,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/') != true
       uses: manusa/actions-publish-docker@v1.0.1
       with:
-        name: SwedbankPay/jekyll-plantuml
+        name: swedbankPay/jekyll-plantuml
         tag: ${{ steps.version.outputs.version }}
         registry: docker.pkg.github.com
         username: SwedbankPay
@@ -57,7 +57,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       uses: manusa/actions-publish-docker@v1.0.1
       with:
-        name: SwedbankPay/jekyll-plantuml
+        name: swedbankPay/jekyll-plantuml
         tag: ${{ steps.version.outputs.version }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
