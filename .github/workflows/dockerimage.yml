@@ -50,7 +50,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         tags: ${{ steps.version.outputs.version }}
-        dockerfile: ".docker"
+        dockerfile: ".docker/Dockerfile"
         repository: swedbankpay/jekyll-plantuml
 
     - name: Publish stable Docker image to Docker Hub
@@ -60,5 +60,5 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         tags: ${{ steps.version.outputs.version }}
-        dockerfile: ".docker"
+        dockerfile: ".docker/Dockerfile"
         repository: swedbankpay/jekyll-plantuml
