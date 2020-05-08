@@ -44,21 +44,21 @@ jobs:
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
-      uses: opspresso/action-docker@v0.2.12
+      uses: docker/build-push-action@v1
       with:
-        USERNAME: SwedbankPay
-        PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        REGISTRY: docker.pkg.github.com
-        TAG_NAME: ${{ steps.version.outputs.version }}
-        DOCKERFILE: ".docker/Dockerfile"
-        IMAGE_NAME: swedbankpay/jekyll-plantuml
+        username: SwedbankPay
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        tags: ${{ steps.version.outputs.version }}
+        dockerfile: ".docker/Dockerfile"
+        repository: swedbankpay/jekyll-plantuml
 
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
-      uses: opspresso/action-docker@v0.2.12
+      uses: docker/build-push-action@v1
       with:
-        USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        TAG_NAME: ${{ steps.version.outputs.version }}
-        DOCKERFILE: ".docker/Dockerfile"
-        IMAGE_NAME: swedbankpay/jekyll-plantuml
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        tags: ${{ steps.version.outputs.version }}
+        dockerfile: ".docker/Dockerfile"
+        repository: swedbankpay/jekyll-plantuml
