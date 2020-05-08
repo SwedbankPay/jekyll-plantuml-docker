@@ -50,7 +50,7 @@ jobs:
         tag: ${{ steps.version.outputs.version }}
         registry: docker.pkg.github.com
         username: SwedbankPay
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.SECRET_GITHUB_TOKEN }}
         include pull requests: false
         dockerfile path: ".docker"
 
