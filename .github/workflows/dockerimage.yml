@@ -32,6 +32,7 @@ jobs:
           .docker \
           --file .docker/Dockerfile \
           --tag jekyll-plantuml:${{ steps.version.outputs.version }}
+          --tag docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Run Docker image
       working-directory: test/jekyll-plantuml
@@ -46,7 +47,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/') != true
       run: |
         docker login -u SwedbankPay -p ${{ secrets.GITHUB_TOKEN}} docker.pkg.github.com
-        docker push jekyll-plantuml:${{ steps.version.outputs.version }}
+        docker push docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
