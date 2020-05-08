@@ -31,7 +31,7 @@ jobs:
         docker build \
           .docker \
           --file .docker/Dockerfile \
-          --tag jekyll-plantuml:${{ steps.version.outputs.version }}
+          --tag jekyll-plantuml:${{ steps.version.outputs.version }} \
           --tag docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Run Docker image
