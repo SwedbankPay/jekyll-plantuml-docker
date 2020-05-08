@@ -44,7 +44,7 @@ jobs:
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
-      uses: manusa/actions-publish-docker@v1.0.1
+      uses: NullableInt/actions-publish-docker@1.0.2
       with:
         name: swedbankpay/jekyll-plantuml
         tag: ${{ steps.version.outputs.version }}
@@ -52,13 +52,15 @@ jobs:
         username: SwedbankPay
         password: ${{ secrets.GITHUB_TOKEN }}
         include pull requests: false
+        dockerfile path: ".docker/Dockerfile"
 
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
-      uses: manusa/actions-publish-docker@v1.0.1
+      uses: NullableInt/actions-publish-docker@1.0.2
       with:
         name: swedbankpay/jekyll-plantuml
         tag: ${{ steps.version.outputs.version }}
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         include pull requests: false
+        dockerfile path: ".docker/Dockerfile"
