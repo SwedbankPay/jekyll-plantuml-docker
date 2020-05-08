@@ -53,4 +53,4 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       run: |
         docker login -u  ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD}} 
-        docker push jekyll-plantuml:${{ steps.version.outputs.version }}
+        docker push swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }}
