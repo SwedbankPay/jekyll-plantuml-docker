@@ -85,7 +85,7 @@ RUN rm -rf /home/jekyll/.gem
 RUN rm -rf $BUNDLE_HOME/cache
 RUN rm -rf $GEM_HOME/cache
 
-COPY --chown=jekyll:jekyll ./entrypoint ${JEKYLL_BIN}/entrypoint
+COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
 
 VOLUME  /srv/jekyll
 WORKDIR /srv/jekyll
