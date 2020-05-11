@@ -44,7 +44,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: "${{ secrets.DOCKERHUB_PASSWORD}}"  # you don't need to manually set this secret. GitHub does it on your behalf
-        image_name: jekyll-plantuml
+        image_name: swedbankpay/jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }}
