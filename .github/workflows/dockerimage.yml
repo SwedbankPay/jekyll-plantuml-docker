@@ -28,19 +28,19 @@ jobs:
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
-      uses: NullableInt/docker-build-with-cache-action@master
+      uses: whoan/docker-build-with-cache-action@v5
       with:
         username: swedbankpay
         password: "${{ secrets.GITHUB_TOKEN }}"  # you don't need to manually set this secret. GitHub does it on your behalf
         registry: docker.pkg.github.com
-        image_name: jekyll-plantuml
+        image_name: swedbankpay/jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }}
 
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
-      uses: NullableInt/docker-build-with-cache-action@master
+      uses: whoan/docker-build-with-cache-action@v5
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: "${{ secrets.DOCKERHUB_PASSWORD}}"  # you don't need to manually set this secret. GitHub does it on your behalf
