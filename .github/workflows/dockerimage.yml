@@ -34,7 +34,7 @@ jobs:
         password: "${{ secrets.GITHUB_TOKEN }}"  # you don't need to manually set this secret. GitHub does it on your behalf
         registry: docker.pkg.github.com
         image_name: swedbankpay/jekyll-plantuml
-        image_tag: swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }}
+        image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} "jekyll build"
 
