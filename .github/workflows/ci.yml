@@ -19,4 +19,4 @@ jobs:
 
     - name: Run docker image
       run: |
-        docker run swedbankpay/jekyll-plantuml:ci "jekyll build"
+        docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:ci "jekyll build"
