@@ -20,12 +20,12 @@ ENV DRAFTS=false
 RUN apt-get clean && \
     apt-get update && \
     apt-get \
-        --no-install-recommends \
-        install -y \
-        locales=2.28-10 \
-        default-jre=2:1.11-71 \
-        graphviz=2.40.1-6 \
-        fontconfig=2.13.1-2 && \
+    --no-install-recommends \
+    install -y \
+    locales=2.28-10 \
+    default-jre=2:1.11-71 \
+    graphviz=2.40.1-6 \
+    fontconfig=2.13.1-2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -52,27 +52,27 @@ RUN unset GEM_HOME \
     && yes | gem install --force bundler
 RUN gem install jekyll --version $JEKYLL_VERSION -- --use-system-libraries
 RUN gem install \
-        html-proofer \
-        jekyll-reload \
-        jekyll-mentions \
-        jekyll-coffeescript \
-        jekyll-sass-converter \
-        jekyll-commonmark \
-        jekyll-paginate \
-        jekyll-compose \
-        jekyll-assets \
-        jekyll-github-metadata \
-        jekyll-material-icon-tag \
-        RedCloth \
-        kramdown \
-        jemoji \
-        jekyll-redirect-from \
-        jekyll-sitemap \
-        jekyll-feed minima \
-        nokogiri \
-        kramdown-plantuml \
-        faraday \
-        -- --use-system-libraries
+    html-proofer \
+    jekyll-reload \
+    jekyll-mentions \
+    jekyll-coffeescript \
+    jekyll-sass-converter \
+    jekyll-commonmark \
+    jekyll-paginate \
+    jekyll-compose \
+    jekyll-assets \
+    jekyll-github-metadata \
+    jekyll-material-icon-tag \
+    RedCloth \
+    kramdown \
+    jemoji \
+    jekyll-redirect-from \
+    jekyll-sitemap \
+    jekyll-feed minima \
+    nokogiri \
+    kramdown-plantuml \
+    faraday \
+    -- --use-system-libraries
 RUN addgroup --system --gid 1000 jekyll
 RUN adduser --system --gid 1000 jekyll
 RUN mkdir -p $JEKYLL_VAR_DIR
@@ -93,6 +93,6 @@ WORKDIR /srv/jekyll
 EXPOSE 35729
 EXPOSE 4000
 
-CMD ["jekyll", "build"]
+CMD ["jekyll", "serve", "--livereload", "-i", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
 ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
