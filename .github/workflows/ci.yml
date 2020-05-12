@@ -15,7 +15,7 @@ jobs:
 
     - name: Build docker image
       run: |
-        docker build . --file .\.docker\Dockerfile --tag swedbankpay/jekyll-plantuml:ci
+        docker build . --file ./.docker/Dockerfile --tag swedbankpay/jekyll-plantuml:ci
 
     - name: Run docker image
       run: |
