@@ -36,7 +36,7 @@ jobs:
         image_name: swedbankpay/jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
-        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} "jekyll build"
+        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} 'jekyll build'
         pull_image_and_stages: false
 
     - name: Publish stable Docker image to Docker Hub
