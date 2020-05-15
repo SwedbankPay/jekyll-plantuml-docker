@@ -12,11 +12,13 @@ jobs:
 
     - name: Build docker image
       run: |
-        docker build . --file ./.docker/Dockerfile --tag swedbankpay/jekyll-plantuml:ci
+        docker build \
+          . \
+          --file ./.docker/Dockerfile \
+          --tag swedbankpay/jekyll-plantuml:ci
 
     - name: Init git in test folder
-      run: |
-        git init ./test/jekyll-plantuml
+      run: git init ${{ github.workspace }}/test/jekyll-plantuml
 
     - name: Test gh-pages-publish
       env:
@@ -29,7 +31,7 @@ jobs:
         JEKYLL_ENV: production
       run: |
         docker run \
-        --volume ${pwd}/test/jekyll-plantuml:/srv/jekyll \
+        --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
         --env GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
         --env JEKYLL_ENV="production" \
         --env GH_PAGES_BRANCH="gh-pages" \
