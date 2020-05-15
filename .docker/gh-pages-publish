@@ -38,7 +38,7 @@ if [[ "$branch_name" == "master" ]]; then
     fi
 
     cd _site
-    git add -a
+    git add --all .
     git commit -m "Autodeployed"
     echo "Pushing to $publishing_branch"
     git push --force origin "$publishing_branch" || exit $?

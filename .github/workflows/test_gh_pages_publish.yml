@@ -21,7 +21,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}/test/jekyll-plantuml
         git init
-        git add -a
+        git add --all .
         git commit -m 'Initial commit'
 
     - name: Test gh-pages-publish
