@@ -25,6 +25,6 @@ jobs:
         JEKYLL_GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_ENV: production
       run: |
-      docker run  \
-      --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+        docker run  \
+        --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
         swedbankpay/jekyll-plantuml:ci gh-pages-publish
