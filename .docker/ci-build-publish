@@ -9,9 +9,6 @@ fi
 # Any errors should cause an immediate exit and failure.
 set -e
 
-
-sh ./entrypoint jekyll build
-
 # Set input variables
 readonly gh_api_token="$GITHUB_TOKEN"
 readonly commiter_email="$GITHUB_ACTOR_EMAIL"
@@ -21,9 +18,7 @@ readonly jekyll_env="$JEKYLL_ENV"
 readonly github_repository="${GITHUB_REPO}"
 
 # Build project
-echo "Jekyll build:${jekyll_env}"
-bundle check
-bundle exec jekyll build JEKYLL_ENV=$jekyll_env --verbose || exit $?
+sh ./entrypoint jekyll build
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
