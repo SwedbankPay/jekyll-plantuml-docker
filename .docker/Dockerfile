@@ -86,7 +86,7 @@ RUN rm -rf $BUNDLE_HOME/cache
 RUN rm -rf $GEM_HOME/cache
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
-COPY --chown=jekyll:jekyll .docker/ci-build-publish ${JEKYLL_BIN}/ci-build-publish
+COPY --chown=jekyll:jekyll .docker/gh-pages-publish ${JEKYLL_BIN}/gh-pages-publish
 
 VOLUME  /srv/jekyll
 WORKDIR /srv/jekyll
