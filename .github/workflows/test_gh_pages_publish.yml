@@ -28,11 +28,10 @@ jobs:
         JEKYLL_GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
         JEKYLL_ENV: production
       run: |
-        docker run  \
-        --volume ${pwd}/test/jekyll-plantuml:/srv/jekyll \        
-        --env GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
-        --env JEKYLL_ENV="production" \
-        --env GH_PAGES_BRANCH="gh-pages" \
-        --env DEBUG=true \
-        swedbankpay/jekyll-plantuml:ci \
-        gh-pages-publish
+      docker run \
+      --volume ${pwd}/test/jekyll-plantuml:/srv/jekyll \
+      --env GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+      --env JEKYLL_ENV="production" \
+      --env GH_PAGES_BRANCH="gh-pages" \
+      --env DEBUG=true \
+      swedbankpay/jekyll-plantuml:ci gh-pages-publish
