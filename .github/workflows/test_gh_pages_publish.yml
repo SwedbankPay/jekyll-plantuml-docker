@@ -17,13 +17,6 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:ci
 
-    - name: Init Git in test folder
-      run: |
-        cd ${{ github.workspace }}/test/jekyll-plantuml
-        git init
-        git add --all .
-        git commit -m 'Initial commit'
-
     - name: Test gh-pages-publish
       env:
         GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}

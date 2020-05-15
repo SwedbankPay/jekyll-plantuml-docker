@@ -17,6 +17,14 @@ readonly publishing_branch="${GH_PAGES_BRANCH}"
 readonly jekyll_env="${JEKYLL_ENV}"
 readonly github_repository="${GITHUB_REPO}"
 
+# Initialize Git if there's no .git folder
+if [[ ! -d ".git" ]]; then
+    git init
+    git add --all .
+    git commit --message 'Initial commit'
+fi;
+
+# Install bundler if it's not already available on $PATH.
 if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
     gem install bundler --force
 fi
@@ -31,7 +39,7 @@ branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
 if [[ "$branch_name" == "master" ]]; then
     # Set up Git for commit and push
-    if [ "true" != "$DEBUG" ]; then
+    if [[ "$DEBUG" == "true" ]]; then
         git config user.email "${commiter_email}" || exit $?
         git config user.name "${committer_name}" || exit $?
         git config remote.origin.url "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
@@ -39,7 +47,7 @@ if [[ "$branch_name" == "master" ]]; then
 
     cd _site
     git add --all .
-    git commit -m "Autodeployed"
+    git commit --message "Autodeployed"
     echo "Pushing to $publishing_branch"
     git push --force origin "$publishing_branch" || exit $?
 else
