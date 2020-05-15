@@ -18,7 +18,8 @@ readonly jekyll_env="$JEKYLL_ENV"
 readonly github_repository="${GITHUB_REPO}"
 
 # Build project
-sh ./entrypoint jekyll build
+echo "Jekyll build:${jekyll_env}"
+bundle exec jekyll build JEKYLL_ENV=$jekyll_env --verbose || exit $?
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
