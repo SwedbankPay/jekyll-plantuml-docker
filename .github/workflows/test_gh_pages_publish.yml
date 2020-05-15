@@ -12,7 +12,7 @@ jobs:
 
     - name: Build docker image
       run: |
-        docker build . --file ./.docker/Dockerfile --tag swedbankpay/jekyll-plantuml:ci
+        docker build . --file ./.docker/Dockerfile --tag ci
 
     - name: Init git in test folder
       run: |
@@ -34,5 +34,5 @@ jobs:
         --env JEKYLL_ENV="production" \
         --env GH_PAGES_BRANCH="gh-pages" \
         --env DEBUG=true \
-        swedbankpay/jekyll-plantuml:ci \
+        ci \
         "gh-pages-publish"
