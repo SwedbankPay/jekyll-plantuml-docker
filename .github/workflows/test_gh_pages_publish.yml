@@ -35,4 +35,4 @@ jobs:
         --env GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
         --env JEKYLL_ENV="production" \
         --env GH_PAGES_BRANCH="gh-pages" \
-        --env DEBUG="true" \
+        --env DEBUG=true \
