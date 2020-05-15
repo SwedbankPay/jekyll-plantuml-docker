@@ -29,7 +29,7 @@ bundle exec jekyll build JEKYLL_ENV=$jekyll_env --verbose || exit $?
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
-if [ "$branch_name" = "master" ]; then
+if [[ "$branch_name" == "master" ]]; then
     # Set up Git for commit and push
     if [ "true" != "$DEBUG" ]; then
         git config user.email "${commiter_email}" || exit $?
