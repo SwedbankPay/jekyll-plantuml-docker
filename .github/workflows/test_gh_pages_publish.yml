@@ -31,8 +31,9 @@ jobs:
         docker run  \
         --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
         swedbankpay/jekyll-plantuml:ci \
+        --env        
         gh-pages-publish \
-        $GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}"" \
+        $GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
         JEKYLL_ENV="production" \
         GH_PAGES_BRANCH="gh-pages" \
         DEBUG="true" \
