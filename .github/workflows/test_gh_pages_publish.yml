@@ -1,4 +1,4 @@
-name: Docker build site and publish
+name: Test gh-pages-publish
 
 on: [push, pull_request]
 
