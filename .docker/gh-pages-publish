@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "true" = "$DEBUG" ]; then
+if [[ "$DEBUG" == "true" ]]; then
     env                      # ...showing the environment
     cat "$GITHUB_EVENT_PATH" # ...and the GitHub webhook payload
     set -x                   # ...and script execution.
@@ -10,11 +10,11 @@ fi
 set -e
 
 # Set input variables
-readonly gh_api_token="$GITHUB_TOKEN"
-readonly commiter_email="$GITHUB_ACTOR_EMAIL"
-readonly committer_name="$GITHUB_ACTOR"
-readonly publishing_branch="$GH_PAGES_BRANCH"
-readonly jekyll_env="$JEKYLL_ENV"
+readonly gh_api_token="${GITHUB_TOKEN}"
+readonly committer_name="${GITHUB_ACTOR}"
+readonly commiter_email="${GITHUB_ACTOR_EMAIL}"
+readonly publishing_branch="${GH_PAGES_BRANCH}"
+readonly jekyll_env="${JEKYLL_ENV}"
 readonly github_repository="${GITHUB_REPO}"
 
 if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
