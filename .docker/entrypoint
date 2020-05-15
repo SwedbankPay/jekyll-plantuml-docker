@@ -7,7 +7,7 @@ bundle check || bundle install
 
 echo "Running: $@"
 
-if [[ $@ = "ci" ]]; then
+if [[ "$@" == "ci" ]]; then
   exec ./ci-build-publish
 else
   exec $@
