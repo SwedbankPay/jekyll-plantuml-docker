@@ -35,4 +35,4 @@ jobs:
         --env GH_PAGES_BRANCH="gh-pages" \
         --env DEBUG=true \
         swedbankpay/jekyll-plantuml:ci \
-        gh-pages-publish \
+        gh-pages-publish
