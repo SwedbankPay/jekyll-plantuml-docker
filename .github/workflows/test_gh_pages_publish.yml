@@ -14,6 +14,10 @@ jobs:
       run: |
         docker build . --file ./.docker/Dockerfile --tag swedbankpay/jekyll-plantuml:ci
 
+    - name: Init git in test folder
+      run: |
+        git init ./test/jekyll-plantuml
+
     - name: Test gh-pages-publish
       env:
         secret_gh_pages_api_token: ${{ secrets.GITHUB_TOKEN }}
