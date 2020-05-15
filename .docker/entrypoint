@@ -7,4 +7,8 @@ bundle check || bundle install
 
 echo "Running: $@"
 
-exec $@
+if [[ "$@" == "gh-pages-publish" ]]; then
+  exec /usr/jekyll/bin/gh-pages-publish
+else
+  exec $@
+fi
