@@ -19,21 +19,33 @@ readonly github_repository="${GITHUB_REPO}"
 
 # Initialize Git if there's no .git folder
 if [[ ! -d ".git" ]]; then
+    echo "Git not initialized. Initializing."
     git init
     git add --all .
+    echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
     git config remote.origin.url "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
     git commit --message 'Initial commit'
 else
+    echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
     git config remote.origin.url "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
 fi;
 
+# If $publishing_branch doesn't exist, create and track it.
+if git show-ref --verify --quiet refs/heads/${publishing_branch}; then
+    echo "The branch '${publishing_branch}' was found successfully."
+else
+    echo "The branch '${publishing_branch}' was not found. Creating it."
+    git checkout -b ${publishing_branch}
+    git branch --set-upstream-to=origin/${publishing_branch} ${publishing_branch}
+fi
 
 # Install bundler if it's not already available on $PATH.
 if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
+    echo "Bundler not found. Installing bundler."
     gem install bundler --force
 fi
 
