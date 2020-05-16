@@ -34,13 +34,16 @@ else
     git remote set-url origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
 fi;
 
+branch_existed=false
 # If $publishing_branch doesn't exist, create and track it.
 if git show-ref --verify --quiet refs/heads/${publishing_branch}; then
+    branch_existed=true
     echo "The branch '${publishing_branch}' was found successfully."
 else
+    branch_existed=true
     echo "The branch '${publishing_branch}' was not found. Creating it."
     git checkout -b ${publishing_branch}
-    git branch --set-upstream-to=origin/${publishing_branch} ${publishing_branch}
+    # git branch --set-upstream ${publishing_branch} origin/${publishing_branch}
 fi
 
 # Install bundler if it's not already available on $PATH.
@@ -62,7 +65,12 @@ if [[ "$branch_name" == "master" ]]; then
     git add --all .
     git commit --message "Autodeployed"
     echo "Pushing to $publishing_branch"
-    git push --force origin "$publishing_branch" || exit $?
+
+    if [[ "$branch_existed" == "true" ]]; then
+        git push --force origin "$publishing_branch" || exit $?
+    else
+        git push --set-upstream origin "$publishing_branch" || exit $?
+    fi
 else
     echo "Branch '$branch_name' is not 'master', so nothing to do."
 fi
