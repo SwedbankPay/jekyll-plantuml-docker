@@ -1,4 +1,4 @@
-name: Build and Publish
+name: Build and Publish Docker Image
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-and-publish-docker-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +44,7 @@ jobs:
       uses: whoan/docker-build-with-cache-action@v5.3.3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: "${{ secrets.DOCKERHUB_PASSWORD}}"  # you don't need to manually set this secret. GitHub does it on your behalf
+        password: "${{ secrets.DOCKERHUB_PASSWORD }}"  # you don't need to manually set this secret. GitHub does it on your behalf
         image_name: swedbankpay/jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"

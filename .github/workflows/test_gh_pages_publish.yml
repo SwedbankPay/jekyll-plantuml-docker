@@ -3,7 +3,7 @@ name: Test gh-pages-publish
 on: [push, pull_request]
 
 jobs:
-  build:
+  test-gh-pages-publish:
     name: Docker build site and publish
     runs-on: ubuntu-latest
 
@@ -17,7 +17,7 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:ci
 
-    - name: Test gh-pages-publish with default branch and JEKYLL_ENV
+    - name: Test gh-pages-publish with defaults
       env:
         GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTOR: payex-dev
