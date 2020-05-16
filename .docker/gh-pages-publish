@@ -67,7 +67,7 @@ branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
 if [[ "$branch_name" == "master" ]]; then
     cd _site
-    git add --all .
+    git add --all --force .
     git commit --message "Autodeployed"
     "$DEBUG" == "true" && echo "Pushing to $publishing_branch"
 
