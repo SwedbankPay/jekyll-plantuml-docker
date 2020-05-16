@@ -68,13 +68,22 @@ branch_name="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$branch_name" == "master" ]]; then
     cd _site
     git add --all --force .
-    git commit --message "Autodeployed"
-    "$DEBUG" == "true" && echo "Pushing to $publishing_branch"
 
-    if [[ "$branch_existed" == "true" ]]; then
-        git push --force origin "$publishing_branch" || exit $?
+    # If we detect changes, commit them.
+    # `git diff-index --quiet` returns 0 on no changes and 1 on changes
+    if git diff-index --cached --quiet HEAD; then
+        "$DEBUG" == "true" && echo "No changes detected. Nothing to do!"
     else
-        git push --set-upstream origin "$publishing_branch" || exit $?
+        "$DEBUG" == "true" && echo "Changes detected. Committing."
+        git commit --message "Autodeployed"
+
+        "$DEBUG" == "true" && echo "Pushing to $publishing_branch"
+
+        if [[ "$branch_existed" == "true" ]]; then
+            git push --force origin "${publishing_branch}" || exit $?
+        else
+            git push --set-upstream origin "${publishing_branch}" || exit $?
+        fi
     fi
 else
     "$DEBUG" == "true" && echo "Branch '$branch_name' is not 'master', so nothing to do."
