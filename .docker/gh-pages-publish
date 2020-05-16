@@ -9,19 +9,41 @@ fi
 # Any errors should cause an immediate exit and failure.
 set -e
 
+if [[ -z $GITHUB_TOKEN ]]; then
+    echo "Environment variable GITHUB_TOKEN missing. Please define it."
+    exit 1
+fi
+
+if [[ -z $GITHUB_ACTOR ]]; then
+    echo "Environment variable GITHUB_ACTOR missing. Please define it."
+    exit 1
+fi
+
+if [[ -z $GITHUB_ACTOR_EMAIL ]]; then
+    echo "Environment variable GITHUB_ACTOR_EMAIL missing. Please define it."
+    exit 1
+fi
+
+if [[ -z $GITHUB_ACTOR_EMAIL ]]; then
+    echo "Environment variable GITHUB_ACTOR_EMAIL missing. Please define it."
+    exit 1
+fi
+
+if [[ -z $GITHUB_REPO ]]; then
+    echo "Environment variable GITHUB_REPO missing. Please define it."
+    exit 1
+fi
+
+if [[ -z $JEKYLL_ENV ]]; then
+    "$DEBUG" == "true" && echo "No JEKYLL_ENV specified, defaulting to 'production'."
+    JEKYLL_ENV="production"
+fi
+
 # Set publishing branch to 'gh-pages' by default.
 if [[ -z $GH_PAGES_BRANCH ]]; then
     "$DEBUG" == "true" && echo "No GH_PAGES_BRANCH specified, defaulting to 'gh-pages'."
     GH_PAGES_BRANCH="gh-pages"
 fi
-
-# Set input variables
-readonly gh_api_token="${GITHUB_TOKEN}"
-readonly committer_name="${GITHUB_ACTOR}"
-readonly commiter_email="${GITHUB_ACTOR_EMAIL}"
-readonly publishing_branch="${GH_PAGES_BRANCH}"
-readonly jekyll_env="${JEKYLL_ENV}"
-readonly github_repository="${GITHUB_REPO}"
 
 # Initialize Git if there's no .git folder
 if [[ ! -d ".git" ]]; then
@@ -29,26 +51,26 @@ if [[ ! -d ".git" ]]; then
     git init
     git add --all .
     "$DEBUG" == "true" && echo "Configuring Git user and remote."
-    git config user.email "${commiter_email}" || exit $?
-    git config user.name "${committer_name}" || exit $?
-    git remote add origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
+    git config user.email "${GITHUB_ACTOR_EMAIL}" || exit $?
+    git config user.name "${GITHUB_ACTOR}" || exit $?
+    git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git" || exit $?
     git commit --message 'Initial commit'
 else
     "$DEBUG" == "true" && echo "Configuring Git user and remote."
-    git config user.email "${commiter_email}" || exit $?
-    git config user.name "${committer_name}" || exit $?
-    git remote set-url origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
+    git config user.email "${GITHUB_ACTOR_EMAIL}" || exit $?
+    git config user.name "${GITHUB_ACTOR}" || exit $?
+    git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git" || exit $?
 fi
 
 branch_existed=false
-# If $publishing_branch doesn't exist, create and track it.
-if git show-ref --verify --quiet refs/heads/${publishing_branch}; then
+# If $GH_PAGES_BRANCH doesn't exist, create and track it.
+if git show-ref --verify --quiet refs/heads/${GH_PAGES_BRANCH}; then
     branch_existed=true
-    "$DEBUG" == "true" && echo "The branch '${publishing_branch}' was found successfully."
+    "$DEBUG" == "true" && echo "The branch '${GH_PAGES_BRANCH}' was found successfully."
 else
     branch_existed=true
-    "$DEBUG" == "true" && echo "The branch '${publishing_branch}' was not found. Creating it."
-    git branch ${publishing_branch}
+    "$DEBUG" == "true" && echo "The branch '${GH_PAGES_BRANCH}' was not found. Creating it."
+    git branch ${GH_PAGES_BRANCH}
 fi
 
 # Install bundler if it's not already available on $PATH.
@@ -60,8 +82,8 @@ fi
 bundle check || bundle install
 
 # Build project
-"$DEBUG" == "true" && echo "Jekyll build:${jekyll_env}"
-bundle exec jekyll build JEKYLL_ENV=$jekyll_env --verbose || exit $?
+"$DEBUG" == "true" && echo "Jekyll build:${JEKYLL_ENV}"
+bundle exec jekyll build JEKYLL_ENV=${JEKYLL_ENV} --verbose || exit $?
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -77,12 +99,12 @@ if [[ "$branch_name" == "master" ]]; then
         "$DEBUG" == "true" && echo "Changes detected. Committing."
         git commit --message "Autodeployed"
 
-        "$DEBUG" == "true" && echo "Pushing to $publishing_branch"
+        "$DEBUG" == "true" && echo "Pushing to $GH_PAGES_BRANCH"
 
         if [[ "$branch_existed" == "true" ]]; then
-            git push --force origin "${publishing_branch}" || exit $?
+            git push --force origin "${GH_PAGES_BRANCH}" || exit $?
         else
-            git push --set-upstream origin "${publishing_branch}" || exit $?
+            git push --set-upstream origin "${GH_PAGES_BRANCH}" || exit $?
         fi
     fi
 else
