@@ -4,6 +4,8 @@ if [[ "$DEBUG" == "true" ]]; then
     env                      # ...showing the environment
     cat "$GITHUB_EVENT_PATH" # ...and the GitHub webhook payload
     set -x                   # ...and script execution.
+elif [[ -z "$DEBUG" ]]; then
+    DEBUG=false
 fi
 
 # Any errors should cause an immediate exit and failure.
