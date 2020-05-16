@@ -25,13 +25,13 @@ if [[ ! -d ".git" ]]; then
     echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
-    git config remote.origin.url "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
+    git remote add origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
     git commit --message 'Initial commit'
 else
     echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
-    git config remote.origin.url "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
+    git remote set-url origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
 fi;
 
 # If $publishing_branch doesn't exist, create and track it.
