@@ -19,43 +19,43 @@ readonly github_repository="${GITHUB_REPO}"
 
 # Initialize Git if there's no .git folder
 if [[ ! -d ".git" ]]; then
-    echo "Git not initialized. Initializing."
+    "$DEBUG" == "true" && echo "Git not initialized. Initializing."
     git init
     git add --all .
-    echo "Configuring Git user and remote."
+    "$DEBUG" == "true" && echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
     git remote add origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
     git commit --message 'Initial commit'
 else
-    echo "Configuring Git user and remote."
+    "$DEBUG" == "true" && echo "Configuring Git user and remote."
     git config user.email "${commiter_email}" || exit $?
     git config user.name "${committer_name}" || exit $?
     git remote set-url origin "https://x-access-token:${gh_api_token}@github.com/${github_repository}.git" || exit $?
-fi;
+fi
 
 branch_existed=false
 # If $publishing_branch doesn't exist, create and track it.
 if git show-ref --verify --quiet refs/heads/${publishing_branch}; then
     branch_existed=true
-    echo "The branch '${publishing_branch}' was found successfully."
+    "$DEBUG" == "true" && echo "The branch '${publishing_branch}' was found successfully."
 else
     branch_existed=true
-    echo "The branch '${publishing_branch}' was not found. Creating it."
+    "$DEBUG" == "true" && echo "The branch '${publishing_branch}' was not found. Creating it."
     git checkout -b ${publishing_branch}
     # git branch --set-upstream ${publishing_branch} origin/${publishing_branch}
 fi
 
 # Install bundler if it's not already available on $PATH.
 if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
-    echo "Bundler not found. Installing bundler."
+    "$DEBUG" == "true" && echo "Bundler not found. Installing bundler."
     gem install bundler --force
 fi
 
 bundle check || bundle install
 
 # Build project
-echo "Jekyll build:${jekyll_env}"
+"$DEBUG" == "true" && echo "Jekyll build:${jekyll_env}"
 bundle exec jekyll build JEKYLL_ENV=$jekyll_env --verbose || exit $?
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
@@ -64,7 +64,7 @@ if [[ "$branch_name" == "master" ]]; then
     cd _site
     git add --all .
     git commit --message "Autodeployed"
-    echo "Pushing to $publishing_branch"
+    "$DEBUG" == "true" && echo "Pushing to $publishing_branch"
 
     if [[ "$branch_existed" == "true" ]]; then
         git push --force origin "$publishing_branch" || exit $?
@@ -72,7 +72,7 @@ if [[ "$branch_name" == "master" ]]; then
         git push --set-upstream origin "$publishing_branch" || exit $?
     fi
 else
-    echo "Branch '$branch_name' is not 'master', so nothing to do."
+    "$DEBUG" == "true" && echo "Branch '$branch_name' is not 'master', so nothing to do."
 fi
 
-echo "Done!"
+"$DEBUG" == "true" && echo "Done!"
