@@ -17,6 +17,24 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:ci
 
+    - name: Test gh-pages-publish with default branch
+      env:
+        GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ACTOR: payex-dev
+        GITHUB_ACTOR_EMAIL: dev@payex.com
+        JEKYLL_ENV: production
+        DEBUG: true
+      run: |
+        docker run \
+        --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+        --env GITHUB_TOKEN="${GITHUB_TOKEN}" \
+        --env GITHUB_ACTOR="${GITHUB_ACTOR}" \
+        --env GITHUB_ACTOR_EMAIL="${GITHUB_ACTOR_EMAIL}" \
+        --env JEKYLL_ENV="${JEKYLL_ENV}" \
+        --env DEBUG=${DEBUG} \
+        swedbankpay/jekyll-plantuml:ci \
+        gh-pages-publish
+
     - name: Test gh-pages-publish
       env:
         GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}

@@ -9,6 +9,12 @@ fi
 # Any errors should cause an immediate exit and failure.
 set -e
 
+# Set publishing branch to 'gh-pages' by default.
+if [[ -z $GH_PAGES_BRANCH ]]; then
+    "$DEBUG" == "true" && echo "No GH_PAGES_BRANCH specified, defaulting to 'gh-pages'."
+    GH_PAGES_BRANCH="gh-pages"
+fi
+
 # Set input variables
 readonly gh_api_token="${GITHUB_TOKEN}"
 readonly committer_name="${GITHUB_ACTOR}"
@@ -42,8 +48,7 @@ if git show-ref --verify --quiet refs/heads/${publishing_branch}; then
 else
     branch_existed=true
     "$DEBUG" == "true" && echo "The branch '${publishing_branch}' was not found. Creating it."
-    git checkout -b ${publishing_branch}
-    # git branch --set-upstream ${publishing_branch} origin/${publishing_branch}
+    git branch ${publishing_branch}
 fi
 
 # Install bundler if it's not already available on $PATH.
