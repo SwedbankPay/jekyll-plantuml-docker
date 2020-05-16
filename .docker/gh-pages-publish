@@ -79,6 +79,7 @@ if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
     gem install bundler --force
 fi
 
+"$DEBUG" == "true" && echo "Bundle check or install."
 bundle check || bundle install
 
 # Build project
