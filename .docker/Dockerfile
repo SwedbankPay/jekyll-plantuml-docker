@@ -72,6 +72,22 @@ RUN gem install \
     nokogiri \
     kramdown-plantuml \
     faraday \
+    minitest \
+    activesupport \
+    public_suffix \
+    fastimage \
+    hike \
+    rb \
+    rexml \
+    rouge \
+    mini_magick \
+    multi_json \
+    rack \
+    tilt \
+    sprockets \
+    sprockets \
+    sprockets \
+    jekyll \
     -- --use-system-libraries
 RUN addgroup --system --gid 1000 jekyll
 RUN adduser --system --gid 1000 jekyll
