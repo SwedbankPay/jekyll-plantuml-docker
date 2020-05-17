@@ -37,28 +37,28 @@ if [[ -z "$GITHUB_REPO" ]]; then
 fi
 
 if [[ -z "$JEKYLL_ENV" ]]; then
-    "$DEBUG" == "true" && echo "No JEKYLL_ENV specified, defaulting to 'production'."
+    if [[ "$DEBUG" == "true" ]]; then echo "No JEKYLL_ENV specified, defaulting to 'production'."; fi
     JEKYLL_ENV="production"
 fi
 
 # Set publishing branch to 'gh-pages' by default.
 if [[ -z "$GH_PAGES_BRANCH" ]]; then
-    "$DEBUG" == "true" && echo "No GH_PAGES_BRANCH specified, defaulting to 'gh-pages'."
+    if [[ "$DEBUG" == "true" ]]; then echo "No GH_PAGES_BRANCH specified, defaulting to 'gh-pages'."; fi
     GH_PAGES_BRANCH="gh-pages"
 fi
 
 # Initialize Git if there's no .git folder
 if [[ ! -d ".git" ]]; then
-    "$DEBUG" == "true" && echo "Git not initialized. Initializing."
+    if [[ "$DEBUG" == "true" ]]; then echo "Git not initialized. Initializing."; fi
     git init
     git add --all .
-    "$DEBUG" == "true" && echo "Configuring Git user and remote."
+    if [[ "$DEBUG" == "true" ]]; then echo "Configuring Git user and remote."; fi
     git config user.email "${GITHUB_ACTOR_EMAIL}" || exit $?
     git config user.name "${GITHUB_ACTOR}" || exit $?
     git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git" || exit $?
     git commit --message 'Initial commit'
 else
-    "$DEBUG" == "true" && echo "Configuring Git user and remote."
+    if [[ "$DEBUG" == "true" ]]; then echo "Configuring Git user and remote."; fi
     git config user.email "${GITHUB_ACTOR_EMAIL}" || exit $?
     git config user.name "${GITHUB_ACTOR}" || exit $?
     git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git" || exit $?
@@ -68,24 +68,24 @@ branch_existed=false
 # If $GH_PAGES_BRANCH doesn't exist, create and track it.
 if git show-ref --verify --quiet refs/heads/${GH_PAGES_BRANCH}; then
     branch_existed=true
-    "$DEBUG" == "true" && echo "The branch '${GH_PAGES_BRANCH}' was found successfully."
+    if [[ "$DEBUG" == "true" ]]; then echo "The branch '${GH_PAGES_BRANCH}' was found successfully."; fi
 else
     branch_existed=true
-    "$DEBUG" == "true" && echo "The branch '${GH_PAGES_BRANCH}' was not found. Creating it."
+    if [[ "$DEBUG" == "true" ]]; then echo "The branch '${GH_PAGES_BRANCH}' was not found. Creating it."; fi
     git branch ${GH_PAGES_BRANCH}
 fi
 
 # Install bundler if it's not already available on $PATH.
 if ! bundle_location="$(type -p bundle)" || [[ -z $bundle_location ]]; then
-    "$DEBUG" == "true" && echo "Bundler not found. Installing bundler."
+    if [[ "$DEBUG" == "true" ]]; then echo "Bundler not found. Installing bundler."; fi
     gem install bundler --force
 fi
 
-"$DEBUG" == "true" && echo "Bundle check or install."
+if [[ "$DEBUG" == "true" ]]; then echo "Bundle check or install."; fi
 bundle check || bundle install
 
 # Build project
-"$DEBUG" == "true" && echo "Jekyll build:${JEKYLL_ENV}"
+if [[ "$DEBUG" == "true" ]]; then echo "Jekyll build:${JEKYLL_ENV}"; fi
 bundle exec jekyll build JEKYLL_ENV=${JEKYLL_ENV} --verbose || exit $?
 
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
@@ -97,12 +97,12 @@ if [[ "$branch_name" == "master" ]]; then
     # If we detect changes, commit them.
     # `git diff-index --quiet` returns 0 on no changes and 1 on changes
     if git diff-index --cached --quiet HEAD; then
-        "$DEBUG" == "true" && echo "No changes detected. Nothing to do!"
+        if [[ "$DEBUG" == "true" ]]; then echo "No changes detected. Nothing to do!"; fi
     else
-        "$DEBUG" == "true" && echo "Changes detected. Committing."
+        if [[ "$DEBUG" == "true" ]]; then echo "Changes detected. Committing."; fi
         git commit --message "Autodeployed"
 
-        "$DEBUG" == "true" && echo "Pushing to $GH_PAGES_BRANCH"
+        if [[ "$DEBUG" == "true" ]]; then echo "Pushing to $GH_PAGES_BRANCH"; fi
 
         if [[ "$branch_existed" == "true" ]]; then
             git push --force origin "${GH_PAGES_BRANCH}" || exit $?
@@ -111,7 +111,7 @@ if [[ "$branch_name" == "master" ]]; then
         fi
     fi
 else
-    "$DEBUG" == "true" && echo "Branch '$branch_name' is not 'master', so nothing to do."
+    if [[ "$DEBUG" == "true" ]]; then echo "Branch '$branch_name' is not 'master', so nothing to do."; fi
 fi
 
-"$DEBUG" == "true" && echo "Done!"
+if [[ "$DEBUG" == "true" ]]; then echo "Done!"; fi
