@@ -5,10 +5,10 @@ bundle config build.nokogiri --use-system-libraries
 
 bundle check || bundle install
 
-echo "Running: $@"
+echo "Running: $*"
 
-if [[ "$@" == "gh-pages-publish" ]]; then
+if [[ "$1" == "gh-pages-publish" ]]; then
   exec /usr/jekyll/bin/gh-pages-publish
 else
-  exec $@
+  exec "$@"
 fi

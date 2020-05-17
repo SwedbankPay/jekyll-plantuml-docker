@@ -1,4 +1,4 @@
-name: Docker CI build and run
+name: Build and Run Docker Image
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ '*' ]
 
 jobs:
-  build:
+  build-and-run-docker-image:
     runs-on: ubuntu-latest
 
     steps:

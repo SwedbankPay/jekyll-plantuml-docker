@@ -8,7 +8,7 @@ ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
 ENV GEM_BIN=/usr/gem/bin \
     GEM_HOME=/usr/gem
 ENV JEKYLL_VAR_DIR=/var/jekyll \
-    JEKYLL_VERSION=4.0.0 \
+    JEKYLL_VERSION=4.0.1 \
     JEKYLL_DATA_DIR=/srv/jekyll \
     JEKYLL_BIN=/usr/jekyll/bin \
     JEKYLL_ENV=development
@@ -72,6 +72,22 @@ RUN gem install \
     nokogiri \
     kramdown-plantuml \
     faraday \
+    minitest \
+    activesupport \
+    public_suffix \
+    fastimage \
+    hike \
+    rb \
+    rexml \
+    rouge \
+    mini_magick \
+    multi_json \
+    rack \
+    tilt \
+    sprockets \
+    sprockets \
+    sprockets \
+    jekyll \
     -- --use-system-libraries
 RUN addgroup --system --gid 1000 jekyll
 RUN adduser --system --gid 1000 jekyll
