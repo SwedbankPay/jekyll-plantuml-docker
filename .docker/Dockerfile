@@ -103,7 +103,7 @@ RUN rm -rf $GEM_HOME/cache
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
 ADD --chown=jekyll:jekyll \
-    https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.0/deploy.sh \
+    https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.1/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
 RUN chmod +x ${JEKYLL_BIN}/deploy.sh
 
