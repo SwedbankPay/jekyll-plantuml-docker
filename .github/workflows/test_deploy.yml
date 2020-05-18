@@ -1,10 +1,10 @@
-name: Test gh-pages-publish
+name: Test Deploy
 
 on: [push, pull_request]
 
 jobs:
-  test-gh-pages-publish:
-    name: Docker build site and publish
+  test-deploy:
+    name: Test Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:${GIT_SHA}
 
-    - name: Test deploy
+    - name: Test Deploy
       env:
         GIT_SHA: ${{ github.sha }}
         WORK_DIR: ${{ github.workspace }}
