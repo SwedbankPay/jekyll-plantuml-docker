@@ -13,28 +13,37 @@ jobs:
     - name: Shellcheck
       uses: bewuethr/shellcheck-action@v2
 
-    - name: Build Docker Image
+    - name: Generate SHA
+      id: sha
       env:
         GIT_SHA: ${{ github.sha }}
+      run: |
+        SHA8=$(echo ${GIT_SHA} | cut -c1-8)
+        echo "SHA8: ${SHA8}"
+        echo "::set-output name=sha8::${SHA8}"
+
+    - name: Build Docker Image
+      env:
+        SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
         docker build \
           . \
           --file ./.docker/Dockerfile \
-          --tag swedbankpay/jekyll-plantuml:${GIT_SHA}
+          --tag swedbankpay/jekyll-plantuml:${SHA8}
 
     - name: Run Docker Image
       env:
-        GIT_SHA: ${{ github.sha }}
+        SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
         docker run \
           --tty \
           --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${GIT_SHA} \
+          swedbankpay/jekyll-plantuml:${SHA8} \
           jekyll build
 
     - name: Test Deploy
       env:
-        GIT_SHA: ${{ github.sha }}
+        SHA8: ${{ steps.sha.outputs.sha8 }}
         WORK_DIR: ${{ github.workspace }}
         GIT_DEPLOY_DIR: _site
         GIT_DEPLOY_BRANCH: gh-pages
@@ -45,5 +54,5 @@ jobs:
         --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
         --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
         --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
-        swedbankpay/jekyll-plantuml:${GIT_SHA} \
+        swedbankpay/jekyll-plantuml:${SHA8} \
         deploy
