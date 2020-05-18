@@ -13,7 +13,7 @@ jobs:
     - name: Shellcheck
       uses: bewuethr/shellcheck-action@v2
 
-    - name: Build docker image
+    - name: Build Docker Image
       env:
         GIT_SHA: ${{ github.sha }}
       run: |
@@ -21,6 +21,16 @@ jobs:
           . \
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:${GIT_SHA}
+
+    - name: Run Docker Image
+      env:
+        GIT_SHA: ${{ github.sha }}
+      run: |
+        docker run \
+          --tty \
+          --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+          swedbankpay/jekyll-plantuml:${GIT_SHA} \
+          jekyll build
 
     - name: Test Deploy
       env:
