@@ -7,8 +7,9 @@ bundle check || bundle install
 
 echo "Running: $*"
 
-if [[ "$1" == "gh-pages-publish" ]]; then
-  exec /usr/jekyll/bin/gh-pages-publish
+if [[ "$1" == "deploy" ]]; then
+  bundle exec jekyll build JEKYLL_ENV=production --verbose
+  exec /usr/jekyll/bin/deploy.sh
 else
   exec "$@"
 fi
