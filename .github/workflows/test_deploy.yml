@@ -22,7 +22,7 @@ jobs:
 
     - name: Test gh-pages-publish with no defaults
       env:
-        GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTOR: payex-dev
         GITHUB_ACTOR_EMAIL: dev@payex.com
         GITHUB_REPO: ${{ github.repository }}
@@ -44,7 +44,7 @@ jobs:
 
     - name: Test gh-pages-publish with defaults
       env:
-        GITHUB_TOKEN : ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTOR: payex-dev
         GITHUB_ACTOR_EMAIL: dev@payex.com
         GITHUB_REPO: ${{ github.repository }}
