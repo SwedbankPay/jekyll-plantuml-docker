@@ -25,9 +25,9 @@ jobs:
                "[\x80-\xFF]" \
                . \
         )
+        echo "$files_with_control_characters"
         if [[ ! -z $files_with_control_characters ]]; then
           echo "Files with control characters detected!"
-          echo "$files_with_control_characters"
           exit 1
         fi
 
