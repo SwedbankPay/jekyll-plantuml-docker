@@ -9,7 +9,7 @@ files_with_control_characters=$(\
         "[\x80-\xFF]" \
         . \
 )
-if [[ -n $files_with_control_characters ]]; then
+if [ -n $files_with_control_characters ]; then
   echo "Files with control characters detected!"
   echo ""
   echo "$files_with_control_characters"
