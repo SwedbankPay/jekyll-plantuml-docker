@@ -44,13 +44,20 @@ jobs:
           swedbankpay/jekyll-plantuml:${SHA8} \
           jekyll build
 
+    - name: Generate Branch Name
+      id: branch
+      run: |
+        BRANCH_NAME="r${{ github.run_id }}-${{ github.run_number }}"
+        echo "BRANCH_NAME: ${BRANCH_NAME}"
+        echo "::set-output name=name::${BRANCH_NAME}"
+
     - name: Test Deploy
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
         WORK_DIR: ${{ github.workspace }}
         GIT_DEPLOY_DIR: _site
-        GIT_DEPLOY_BRANCH: gh-pages
-        GIT_DEPLOY_REPO: https://${{ secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git
+        GIT_DEPLOY_BRANCH: ${{ steps.branch.outputs.name }}
+        GIT_DEPLOY_REPO: https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       run: |
         docker run \
         --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
@@ -60,3 +67,15 @@ jobs:
         --env DEBUG="true" \
         swedbankpay/jekyll-plantuml:${SHA8} \
         deploy --verbose
+
+    - name: Cleanup
+      if: always()
+      env:
+        GIT_DEPLOY_BRANCH: ${{ steps.branch.outputs.name }}
+      run: |
+          git checkout --force ${{ github.sha }}
+          if git show-ref --verify --quiet "refs/heads/${GIT_DEPLOY_BRANCH}"; then
+              echo "Branch '${GIT_DEPLOY_BRANCH}' found. Deleting"
+              git branch --delete --force "${GIT_DEPLOY_BRANCH}"
+              git push --delete origin "${GIT_DEPLOY_BRANCH}"
+          fi
