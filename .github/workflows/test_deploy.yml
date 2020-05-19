@@ -38,7 +38,7 @@ jobs:
         docker run \
           --tty \
           --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${SHA8} \
+          swedbankpay/jekyll-plantuml:${SHA8} \
           jekyll build
 
     - name: Test Deploy
@@ -48,6 +48,7 @@ jobs:
         GIT_DEPLOY_DIR: _site
         GIT_DEPLOY_BRANCH: gh-pages
         GIT_DEPLOY_REPO: https://${{ secrets.GITHUB_TOKEN}}@github.com/${{ github.repository }}.git
+        DEBUG: true
       run: |
         docker run \
         --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
@@ -55,4 +56,4 @@ jobs:
         --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
         --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
         swedbankpay/jekyll-plantuml:${SHA8} \
-        deploy
+        deploy --message 
