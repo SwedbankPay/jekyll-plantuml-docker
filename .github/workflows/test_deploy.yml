@@ -38,7 +38,7 @@ jobs:
         docker run \
           --tty \
           --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${SHA8} \
+          swedbankpay/jekyll-plantuml:${SHA8} \
           jekyll build
 
     - name: Test Deploy
