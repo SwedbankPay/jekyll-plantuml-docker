@@ -14,22 +14,7 @@ jobs:
       uses: bewuethr/shellcheck-action@v2
 
     - name: Control Character Check
-      run: |
-        files_with_control_characters=$(\
-          grep --color='always' \
-               --perl-regexp \
-               --line-number \
-               --byte-offset \
-               --exclude-dir='.git' \
-               --recursive \
-               "[\x80-\xFF]" \
-               . \
-        )
-        echo "$files_with_control_characters"
-        if [[ ! -z $files_with_control_characters ]]; then
-          echo "Files with control characters detected!"
-          exit 1
-        fi
+      run: ./.github/workflows/control_character_finder.sh
 
     - name: Generate SHA
       id: sha
