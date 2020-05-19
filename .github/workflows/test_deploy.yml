@@ -13,6 +13,24 @@ jobs:
     - name: Shellcheck
       uses: bewuethr/shellcheck-action@v2
 
+    - name: Control Character Check
+      run: |
+        files_with_control_characters=$(\
+          grep --color='always' \
+               --perl-regexp \
+               --line-number \
+               --byte-offset \
+               --exclude-dir='.git' \
+               --recursive \
+               "[\x80-\xFF]" \
+               . \
+        )
+        if [[ ! -z $files_with_control_characters ]]; then
+          echo "Files with control characters detected!"
+          echo "$files_with_control_characters"
+          exit 1
+        fi
+
     - name: Generate SHA
       id: sha
       env:
