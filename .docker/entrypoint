@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ "$DEBUG" = "true" ] && set -x
+[ "${DEBUG:-false}" = "true" ] && set -x
 
 # This config comes from Nokogiri error output as a suggestion
 bundle config build.nokogiri --use-system-libraries
