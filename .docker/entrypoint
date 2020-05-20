@@ -11,7 +11,7 @@ echo "Running: $*"
 
 if [[ "$1" == "deploy" ]]; then
   bundle exec jekyll build JEKYLL_ENV=production --verbose
-  exec /usr/jekyll/bin/deploy.sh
+  exec /usr/jekyll/bin/deploy.sh --verbose
 else
   exec "$@"
 fi
