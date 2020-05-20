@@ -61,14 +61,14 @@ jobs:
         GIT_DEPLOY_EMAIL: dev@payex.com
       run: |
         docker run \
-        --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
-        --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
-        --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
-        --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
-        --env GIT_DEPLOY_EMAIL="${GIT_DEPLOY_EMAIL}"" \
-        --env DEBUG="true" \
-        swedbankpay/jekyll-plantuml:${SHA8} \
-        deploy
+          --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
+          --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
+          --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
+          --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
+          --env GIT_DEPLOY_EMAIL="${GIT_DEPLOY_EMAIL}" \
+          --env DEBUG="true" \
+          swedbankpay/jekyll-plantuml:${SHA8} \
+          deploy
 
     - name: Cleanup
       if: always()
