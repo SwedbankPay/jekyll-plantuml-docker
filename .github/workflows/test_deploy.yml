@@ -59,7 +59,7 @@ jobs:
         GIT_DEPLOY_BRANCH: ${{ steps.branch.outputs.name }}
         GIT_DEPLOY_REPO: https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
         GIT_DEPLOY_USERNAME: ${{ github.actor }}
-        GIT_DEPLOY_EMAIL: ${{ github.actor }}
+          GIT_DEPLOY_EMAIL: ${{ github.actor }}
       run: |
         docker run \
         --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
