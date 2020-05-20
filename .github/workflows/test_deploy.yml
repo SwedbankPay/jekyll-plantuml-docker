@@ -57,7 +57,7 @@ jobs:
         WORK_DIR: ${{ github.workspace }}
         GIT_DEPLOY_DIR: _site
         GIT_DEPLOY_BRANCH: ${{ steps.branch.outputs.name }}
-        GIT_DEPLOY_REPO: https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
         GIT_DEPLOY_EMAIL: dev@payex.com
         GIT_DEPLOY_USERNAME: payex-dev
       run: |
