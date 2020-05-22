@@ -33,7 +33,7 @@ jobs:
         username: swedbankpay
         password: "${{ secrets.GITHUB_TOKEN }}"  # you don't need to manually set this secret. GitHub does it on your behalf
         registry: docker.pkg.github.com
-        image_name: swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+        image_name: jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
@@ -47,7 +47,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: "${{ secrets.DOCKERHUB_PASSWORD }}"  # you don't need to manually set this secret. GitHub does it on your behalf
-        image_name: swedbankpay/jekyll-plantuml
+        image_name: jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
