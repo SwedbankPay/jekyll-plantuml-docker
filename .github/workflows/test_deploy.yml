@@ -38,21 +38,33 @@ jobs:
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
-        docker run \
-          --tty \
-          --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${SHA8} \
-          &
+        { \
+          docker run \
+            --tty \
+            --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
+            swedbankpay/jekyll-plantuml:1.3.5 \
+            & echo $! > pid; \
+        } | { \
+          grep -m1 "Server running" \
+          && kill -9 $(cat pid) \
+          && rm pid; \
+        }
 
     - name: Run Docker Image (jekyll build, no Gemfile)
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
-        docker run \
-          --tty \
-          --volume ${{ github.workspace }}:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${SHA8} \
-          &
+        { \
+          docker run \
+            --tty \
+            --volume ${{ github.workspace }}:/srv/jekyll \
+            swedbankpay/jekyll-plantuml:1.3.5 \
+            & echo $! > pid; \
+        } | { \
+          grep -m1 "Server running" \
+          && kill -9 $(cat pid) \
+          && rm pid; \
+        }
 
     - name: Run Docker Image (jekyll build)
       env:
