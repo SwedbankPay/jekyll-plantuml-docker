@@ -10,13 +10,13 @@ This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
 image. The purpose of the image is to have a shared Docker image to run
 [Jekyll][jekyll] sites with [PlantUML][plantuml] support.
 
-[jekyll]: https://jekyllrb.com/
-[plantuml]: https://plantuml.com/
-[docker]: https://hub.docker.com/r/swedbankpay/jekyll-plantuml
-[cla]: https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
-[cla-badge]: https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
-[docker-pull-badge]: https://img.shields.io/docker/pulls/swedbankpay/jekyll-plantuml
+[apachev2]:             https://opensource.org/licenses/Apache-2.0
+[cla-badge]:            https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
+[cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
+[docker-pull-badge]:    https://img.shields.io/docker/pulls/swedbankpay/jekyll-plantuml
 [docker-version-badge]: https://img.shields.io/docker/v/swedbankpay/jekyll-plantuml
-[license-badge]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
-[apachev2]: https://opensource.org/licenses/Apache-2.0
-[test-badge]: https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
+[docker]:               https://hub.docker.com/r/swedbankpay/jekyll-plantuml
+[jekyll]:               https://jekyllrb.com/
+[license-badge]:        https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[plantuml]:             https://plantuml.com/
+[test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
