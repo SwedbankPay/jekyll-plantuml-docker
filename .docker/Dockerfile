@@ -102,7 +102,10 @@ RUN rm -rf $BUNDLE_HOME/cache
 RUN rm -rf $GEM_HOME/cache
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
-COPY --chown=jekyll:jekyll .docker/gh-pages-publish ${JEKYLL_BIN}/gh-pages-publish
+ADD --chown=jekyll:jekyll \
+    https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
+    ${JEKYLL_BIN}/deploy.sh
+RUN chmod +x ${JEKYLL_BIN}/deploy.sh
 
 VOLUME  /srv/jekyll
 WORKDIR /srv/jekyll

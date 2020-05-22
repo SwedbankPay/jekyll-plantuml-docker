@@ -1,5 +1,4 @@
-
-# About
+# Jekyll PlantUML
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker image.
 The purpose of the image is to have a shared Docker image to run [Jekyll][jekyll]
