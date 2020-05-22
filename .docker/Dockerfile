@@ -16,6 +16,7 @@ ENV PATH=/usr/jekyll/bin:/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/u
 ENV VERBOSE=false
 ENV FORCE_POLLING=false
 ENV DRAFTS=false
+ENV GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site"
 
 RUN apt-get clean && \
     apt-get update && \
