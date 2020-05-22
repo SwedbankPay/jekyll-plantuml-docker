@@ -43,7 +43,16 @@ jobs:
           --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
           swedbankpay/jekyll-plantuml:${SHA8}
 
-    - name: Run Docker Image
+    - name: Run Docker Image (jekyll build, no Gemfile)
+      env:
+        SHA8: ${{ steps.sha.outputs.sha8 }}
+      run: |
+        docker run \
+          --tty \
+          --volume ${{ github.workspace }}:/srv/jekyll \
+          swedbankpay/jekyll-plantuml:${SHA8}
+
+    - name: Run Docker Image (jekyll build)
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
