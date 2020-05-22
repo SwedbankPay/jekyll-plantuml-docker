@@ -34,6 +34,15 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:${SHA8}
 
+    - name: Run Docker Image (default command)
+      env:
+        SHA8: ${{ steps.sha.outputs.sha8 }}
+      run: |
+        docker run \
+          --tty \
+          --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+          swedbankpay/jekyll-plantuml:${SHA8}
+
     - name: Run Docker Image
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
