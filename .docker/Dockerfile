@@ -113,6 +113,4 @@ WORKDIR /srv/jekyll
 EXPOSE 35729
 EXPOSE 4000
 
-CMD ["jekyll", "serve", "--livereload", "-i", "--force_polling", "--watch", "--host", "0.0.0.0"]
-
 ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
