@@ -41,6 +41,16 @@ jobs:
       env:
         DEBUG: true
 
+    - name: Download and run image from GitHub Package Registry
+      if: startsWith(github.ref, 'refs/tags') != true
+      run: |
+        docker pull docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }}
+        docker run \
+        --tty \
+        --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+        swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} \
+        jekyll build
+
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
       uses: whoan/docker-build-with-cache-action@v5.3.3
@@ -52,3 +62,13 @@ jobs:
         dockerfile: ".docker/Dockerfile"
         push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
         pull_image_and_stages: false
+
+    - name: Download and run image from Docker Hub
+      if: startsWith(github.ref, 'refs/tags')
+      run: |
+        docker pull swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }}
+        docker run \
+        --tty \
+        --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+        swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} \
+        jekyll build
