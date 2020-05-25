@@ -59,6 +59,8 @@ RUN gem install jekyll \
     --version $JEKYLL_VERSION \
     -- --use-system-libraries
 RUN gem install \
+    --install-dir $GEM_HOME \
+    --bindir $GEM_BIN \
     html-proofer \
     jekyll-reload \
     jekyll-mentions \
