@@ -4,19 +4,19 @@ ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
     BUNDLE_APP_CONFIG=/usr/local/bundle \
     BUNDLE_HOME=/usr/local/bundle \
     BUNDLE_APP_CONFIG=/usr/local/bundle \
-    BUNDLE_BIN=/usr/local/bundle/bin
-ENV GEM_BIN=/usr/gem/bin \
-    GEM_HOME=/usr/gem
-ENV JEKYLL_VAR_DIR=/var/jekyll \
+    BUNDLE_BIN=/usr/local/bundle/bin \
+    GEM_BIN=/usr/gem/bin \
+    GEM_HOME=/usr/gem \
+    JEKYLL_VAR_DIR=/var/jekyll \
     JEKYLL_VERSION=4.0.1 \
     JEKYLL_DATA_DIR=/srv/jekyll \
     JEKYLL_BIN=/usr/jekyll/bin \
-    JEKYLL_ENV=development
-ENV PATH=/usr/jekyll/bin:/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ENV VERBOSE=false
-ENV FORCE_POLLING=false
-ENV DRAFTS=false
-ENV GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site"
+    JEKYLL_ENV=development \
+    PATH="$JEKYLL_BIN:$BUNDLE_BIN:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+    VERBOSE=false \
+    FORCE_POLLING=false \
+    DRAFTS=false \
+    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site"
 
 RUN apt-get clean && \
     apt-get update && \
@@ -90,17 +90,18 @@ RUN gem install \
     sprockets \
     jekyll \
     -- --use-system-libraries
-RUN addgroup --system --gid 1000 jekyll
-RUN adduser --system --gid 1000 jekyll
-RUN mkdir -p $JEKYLL_VAR_DIR
-RUN mkdir -p $JEKYLL_DATA_DIR
-RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR
-RUN chown -R jekyll:jekyll $JEKYLL_VAR_DIR
-RUN chown -R jekyll:jekyll $BUNDLE_HOME
-RUN rm -rf /root/.gem
-RUN rm -rf /home/jekyll/.gem
-RUN rm -rf $BUNDLE_HOME/cache
-RUN rm -rf $GEM_HOME/cache
+
+RUN addgroup --system --gid 1000 jekyll && \
+    adduser --system --gid 1000 jekyll && \
+    mkdir -p $JEKYLL_VAR_DIR && \
+    mkdir -p $JEKYLL_DATA_DIR && \
+    chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
+    chown -R jekyll:jekyll $JEKYLL_VAR_DIR && \
+    chown -R jekyll:jekyll $BUNDLE_HOME && \
+    rm -rf /root/.gem && \
+    rm -rf /home/jekyll/.gem && \
+    rm -rf $BUNDLE_HOME/cache && \
+    rm -rf $GEM_HOME/cache
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
 ADD --chown=jekyll:jekyll \
