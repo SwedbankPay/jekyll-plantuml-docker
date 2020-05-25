@@ -44,7 +44,7 @@ jobs:
             --volume $(pwd)/test/jekyll-plantuml:/srv/jekyll \
             swedbankpay/jekyll-plantuml:1.3.5 \
             & echo $! > pid; \
-        } | tee /dev/tty | { \
+        } | tee /dev/stderr | { \
           grep -m1 "Server running" \
           && kill -9 $(cat pid) \
           && rm pid; \
@@ -60,7 +60,7 @@ jobs:
             --volume ${{ github.workspace }}:/srv/jekyll \
             swedbankpay/jekyll-plantuml:1.3.5 \
             & echo $! > pid; \
-        } | tee /dev/tty | { \
+        } | tee /dev/stderr | { \
           grep -m1 "Server running" \
           && kill -9 $(cat pid) \
           && rm pid; \
