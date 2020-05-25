@@ -1,22 +1,20 @@
 FROM ruby:2.7.1
 
-ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
-    BUNDLE_APP_CONFIG=/usr/local/bundle \
-    BUNDLE_HOME=/usr/local/bundle \
-    BUNDLE_APP_CONFIG=/usr/local/bundle \
-    BUNDLE_BIN=/usr/local/bundle/bin \
-    GEM_BIN=/usr/gem/bin \
-    GEM_HOME=/usr/gem \
-    JEKYLL_VAR_DIR=/var/jekyll \
-    JEKYLL_VERSION=4.0.1 \
-    JEKYLL_DATA_DIR=/srv/jekyll \
-    JEKYLL_BIN=/usr/jekyll/bin \
-    JEKYLL_ENV=development \
-    PATH="$JEKYLL_BIN:$BUNDLE_BIN:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
-    VERBOSE=false \
-    FORCE_POLLING=false \
+ENV BUNDLE_HOME="/usr/local/bundle" \
+    BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
+    BUNDLE_SILENCE_ROOT_WARNING=1 \
+    GEM_HOME="/usr/gem" \
+    GEM_BIN="$GEM_HOME/bin" \
+    JEKYLL_BIN="/usr/jekyll/bin" \
+    JEKYLL_DATA_DIR="/srv/jekyll" \
+    JEKYLL_ENV="development" \
+    JEKYLL_VAR_DIR="/var/jekyll" \
+    JEKYLL_VERSION="4.0.1" \
+    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
+    PATH="${JEKYLL_BIN}:${GEM_HOME}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
     DRAFTS=false \
-    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site"
+    FORCE_POLLING=false \
+    VERBOSE=false
 
 RUN apt-get clean && \
     apt-get update && \
