@@ -2,6 +2,17 @@
 
 [ "${DEBUG:-false}" = "true" ] && set -x
 
+if [ ! -f "Gemfile" ]; then
+  DEFAULT_GEMFILE="${JEKYLL_VAR_DIR}/Gemfile"
+  echo "No Gemfile found. Using default: ${DEFAULT_GEMFILE}" 1>&2
+  export BUNDLE_GEMFILE="$DEFAULT_GEMFILE"
+fi
+
+if [ ! -f "_config.yml" ]; then
+  export DEFAULT_CONFIG="${JEKYLL_VAR_DIR}/_config.yml"
+  echo "No _config.yml found. Using default: ${DEFAULT_CONFIG}" 1>&2
+fi
+
 # This config comes from Nokogiri error output as a suggestion
 bundle config build.nokogiri --use-system-libraries
 
@@ -9,11 +20,21 @@ bundle check || bundle install
 
 if [[ "$1" == "deploy" ]]; then
   echo "Deploying..."
-  bundle exec jekyll build JEKYLL_ENV=production --verbose
+
+  if [ -n "$DEFAULT_CONFIG" ]; then
+    bundle exec jekyll build --config "$DEFAULT_CONFIG" JEKYLL_ENV=production --verbose
+  else
+    bundle exec jekyll build JEKYLL_ENV=production --verbose
+  fi
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ -z "$*" ]]; then
   echo "Running default command 'jekyll serve'..."
-  exec bundle exec jekyll serve --livereload --incremental --force_polling --watch --host 0.0.0.0
+
+  if [ -n "$DEFAULT_CONFIG" ]; then
+    exec bundle exec jekyll serve --config "$DEFAULT_CONFIG" --livereload --incremental --force_polling --watch --host 0.0.0.0
+  else
+    exec bundle exec jekyll serve --livereload --incremental --force_polling --watch --host 0.0.0.0
+  fi
 else
   echo "Running: $*"
   exec "$@"

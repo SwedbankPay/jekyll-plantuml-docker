@@ -102,6 +102,8 @@ RUN addgroup --system --gid 1000 jekyll && \
     rm -rf $GEM_HOME/cache
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
+COPY --chown=jekyll:jekyll test/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/Gemfile
+COPY --chown=jekyll:jekyll test/jekyll-plantuml/_config.yml ${JEKYLL_VAR_DIR}/_config.yml
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
