@@ -4,6 +4,7 @@ ENV BUNDLE_HOME="/usr/local/bundle" \
     BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
+    GEM_PATH="$GEM_HOME" \
     GEM_BIN="$GEM_HOME/bin" \
     JEKYLL_BIN="/usr/jekyll/bin" \
     JEKYLL_DATA_DIR="/srv/jekyll" \
