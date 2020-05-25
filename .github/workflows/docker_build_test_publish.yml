@@ -49,7 +49,7 @@ jobs:
         docker run \
         --tty \
         --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
-        swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} \
+        docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} \
         jekyll build
 
     - name: Publish stable Docker image to Docker Hub
