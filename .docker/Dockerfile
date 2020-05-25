@@ -51,12 +51,7 @@ ENV LANG=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US
 
-RUN unset GEM_HOME \
-    && unset GEM_BIN \
-    && yes | gem update --system
-RUN unset GEM_HOME \
-    && unset GEM_BIN \
-    && yes | gem install --force bundler
+RUN gem update --system && gem install --force bundler
 RUN gem install jekyll \
     --install-dir $JEKYLL_VAR_DIR \
     --bindir $JEKYLL_BIN \
