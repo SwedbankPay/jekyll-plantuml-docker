@@ -28,7 +28,7 @@ if [[ "$1" == "deploy" ]]; then
   fi
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ "$1" == "jekyll" ]]; then
-  echo "Running Jekyll command '${@:2}'..."
+  echo "Running Jekyll command '${*:2}'..."
 
   # If the DEFAULT_CONFIG is assigned and the jekyll command supports '--config',
   # apply the default config by performing some positional argument magic.
