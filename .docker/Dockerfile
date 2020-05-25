@@ -11,10 +11,18 @@ ENV BUNDLE_HOME="/usr/local/bundle" \
     JEKYLL_VAR_DIR="/var/jekyll" \
     JEKYLL_VERSION="4.0.1" \
     GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
-    PATH="${JEKYLL_BIN}:${GEM_HOME}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
     DRAFTS=false \
     FORCE_POLLING=false \
     VERBOSE=false
+
+ENV PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Create all folders needed by RubyGems, Bundler, etc.
+RUN addgroup --system --gid 1000 jekyll && \
+    adduser --system --gid 1000 jekyll && \
+    mkdir -p $JEKYLL_VAR_DIR && \
+    mkdir -p $JEKYLL_DATA_DIR && \
+    mkdir -p $JEKYLL_BIN
 
 RUN apt-get clean && \
     apt-get update && \
@@ -49,7 +57,11 @@ RUN unset GEM_HOME \
 RUN unset GEM_HOME \
     && unset GEM_BIN \
     && yes | gem install --force bundler
-RUN gem install jekyll --version $JEKYLL_VERSION -- --use-system-libraries
+RUN gem install jekyll \
+    --install-dir $JEKYLL_VAR_DIR \
+    --bindir $JEKYLL_BIN \
+    --version $JEKYLL_VERSION \
+    -- --use-system-libraries
 RUN gem install \
     html-proofer \
     jekyll-reload \
@@ -89,17 +101,17 @@ RUN gem install \
     jekyll \
     -- --use-system-libraries
 
-RUN addgroup --system --gid 1000 jekyll && \
-    adduser --system --gid 1000 jekyll && \
-    mkdir -p $JEKYLL_VAR_DIR && \
-    mkdir -p $JEKYLL_DATA_DIR && \
-    chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
-    chown -R jekyll:jekyll $JEKYLL_VAR_DIR && \
-    chown -R jekyll:jekyll $BUNDLE_HOME && \
-    rm -rf /root/.gem && \
+# Clean up cache folders, as they aren't needed in a Docker container.
+RUN rm -rf /root/.gem && \
     rm -rf /home/jekyll/.gem && \
     rm -rf $BUNDLE_HOME/cache && \
     rm -rf $GEM_HOME/cache
+
+# Make sure jekyll:jekyll owns everything.
+RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
+    chown -R jekyll:jekyll $JEKYLL_VAR_DIR && \
+    chown -R jekyll:jekyll $JEKYLL_BIN && \
+    chown -R jekyll:jekyll $BUNDLE_HOME
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
 COPY --chown=jekyll:jekyll test/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/Gemfile
