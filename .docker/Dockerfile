@@ -58,46 +58,13 @@ RUN gem install jekyll \
     --bindir $JEKYLL_BIN \
     --version $JEKYLL_VERSION \
     -- --use-system-libraries
-RUN gem install \
-    --install-dir $GEM_HOME \
-    --bindir $GEM_BIN \
-    html-proofer \
-    jekyll-reload \
-    jekyll-mentions \
-    jekyll-coffeescript \
-    jekyll-sass-converter \
-    jekyll-commonmark \
-    jekyll-paginate \
-    jekyll-compose \
-    jekyll-assets \
-    jekyll-github-metadata \
-    jekyll-material-icon-tag \
-    RedCloth \
-    kramdown \
-    jemoji \
-    jekyll-redirect-from \
-    jekyll-sitemap \
-    jekyll-feed minima \
-    nokogiri \
-    kramdown-plantuml \
-    faraday \
-    minitest \
-    activesupport \
-    public_suffix \
-    fastimage \
-    hike \
-    rb \
-    rexml \
-    rouge \
-    mini_magick \
-    multi_json \
-    rack \
-    tilt \
-    sprockets \
-    sprockets \
-    sprockets \
-    jekyll \
-    -- --use-system-libraries
+
+COPY --chown=jekyll:jekyll test/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/
+COPY --chown=jekyll:jekyll test/jekyll-plantuml/Gemfile.lock ${JEKYLL_VAR_DIR}/
+COPY --chown=jekyll:jekyll test/jekyll-plantuml/_config.yml ${JEKYLL_VAR_DIR}/_config.yml
+
+RUN bundle config build --use-system-libraries && \
+    bundle install --gemfile=${JEKYLL_VAR_DIR}/Gemfile
 
 # Clean up cache folders, as they aren't needed in a Docker container.
 RUN rm -rf /root/.gem && \
@@ -112,8 +79,6 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
-COPY --chown=jekyll:jekyll test/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/Gemfile
-COPY --chown=jekyll:jekyll test/jekyll-plantuml/_config.yml ${JEKYLL_VAR_DIR}/_config.yml
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh

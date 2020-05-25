@@ -13,9 +13,6 @@ if [ ! -f "_config.yml" ]; then
   echo "No _config.yml found. Using default: ${DEFAULT_CONFIG}" 1>&2
 fi
 
-# This config comes from Nokogiri error output as a suggestion
-bundle config build.nokogiri --use-system-libraries
-
 bundle check || bundle install
 
 if [[ "$1" == "deploy" ]]; then
