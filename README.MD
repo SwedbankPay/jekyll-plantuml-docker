@@ -18,7 +18,7 @@ To have Jekyll serve content from the current working directory, simply execute
 the following:
 
 ```bash
-docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:1.3.5
+docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest
 ```
 
 ### Commands
@@ -49,7 +49,7 @@ docker run --tty \
     --volume $(pwd):/srv/jekyll \
     --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
     --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
-    swedbankpay/jekyll-plantuml:1.3.5 \
+    swedbankpay/jekyll-plantuml:latest \
     deploy
 ```
 
