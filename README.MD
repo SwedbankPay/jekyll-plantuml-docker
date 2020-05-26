@@ -90,6 +90,13 @@ If you want a full Jekyll site with local config, custom plugins, etc., you need
 to install Jekyll and initialize the folder you `build` or `serve` with it
 according to [Jekyll's documentation][jekyll-docs].
 
+## Contributing
+
+Bug reports and pull requests are welcome on [GitHub][github]. This project is
+intended to be a safe, welcoming space for collaboration, and contributors are
+expected to adhere to the [code of conduct][coc] and sign the [contributor's
+license agreement][cla].
+
 ## License
 
 The Docker is available as open source under the terms of the [Apache 2.0
@@ -115,6 +122,7 @@ conduct][coc].
 [entrypoint]:           ./.docker/entrypoint
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
 [gemfile]:              ./.docker/jekyll-plantuml/Gemfile
+[github]:               https://github.com/SwedbankPay/jekyll-plantuml-docker
 [jekyll-docs]:          https://jekyllrb.com/docs/
 [jekyll]:               https://jekyllrb.com/
 [kramdown-plantuml]:    https://github.com/SwedbankPay/kramdown-plantuml
