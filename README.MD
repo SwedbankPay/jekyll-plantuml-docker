@@ -6,6 +6,7 @@
 [![Docker Image Version (latest semver)][docker-version-badge]][docker]
 [![License][license-badge]][apachev2]
 [![Dependabot Status][dependabot-badge]][dependabot]
+[![Contributor Covenant][coc-badge]][coc]
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
 image. The purpose of the image is to have a shared Docker image to run
@@ -89,10 +90,17 @@ If you want a full Jekyll site with local config, custom plugins, etc., you need
 to install Jekyll and initialize the folder you `build` or `serve` with it
 according to [Jekyll's documentation][jekyll-docs].
 
+## Code of Conduct
+
+Everyone interacting in the Kramdown::PlantUml project's codebases, issue
+trackers, chat rooms and mailing lists is expected to follow the [code of
+conduct][coc].
 
 [apachev2]:             https://opensource.org/licenses/Apache-2.0
 [cla-badge]:            https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
+[coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+[coc]:                  ./CODE_OF_CONDUCT.md
 [config]:               ./.docker/jekyll-plantuml/_config.yml
 [dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
 [dependabot]:           https://dependabot.com
