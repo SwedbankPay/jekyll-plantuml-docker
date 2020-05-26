@@ -54,6 +54,7 @@ jobs:
         pull_image_and_stages: false
 
   verify-image:
+    runs-on: ubuntu-latest
     needs: build-and-publish-docker-image
 
     steps:
