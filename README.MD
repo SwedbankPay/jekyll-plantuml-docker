@@ -35,7 +35,7 @@ If the default command isn't to your liking, or if you just want to do
 name as such:
 
 ```bash
-docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:1.3.5 jekyll build
+docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest jekyll build
 ```
 
 #### Deploy
