@@ -4,8 +4,9 @@
 [![CLA assistant][cla-badge]][cla]
 [![Docker Pulls][docker-pull-badge]][docker]
 [![Docker Image Version (latest semver)][docker-version-badge]][docker]
-[![License][license-badge]][apachev2]
+[![License][license-badge]][license]
 [![Dependabot Status][dependabot-badge]][dependabot]
+[![Contributor Covenant][coc-badge]][coc]
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
 image. The purpose of the image is to have a shared Docker image to run
@@ -89,10 +90,23 @@ If you want a full Jekyll site with local config, custom plugins, etc., you need
 to install Jekyll and initialize the folder you `build` or `serve` with it
 according to [Jekyll's documentation][jekyll-docs].
 
+## Contributing
 
-[apachev2]:             https://opensource.org/licenses/Apache-2.0
+Bug reports and pull requests are welcome on [GitHub][github]. This project is
+intended to be a safe, welcoming space for collaboration, and contributors are
+expected to adhere to the [code of conduct][coc] and sign the
+[contributor's license agreement][cla].
+
+## License
+
+The code within this repository is available as open source under the terms of
+the [Apache 2.0 License][license] and the [contributor's license
+agreement][cla].
+
 [cla-badge]:            https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
+[coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+[coc]:                  ./CODE_OF_CONDUCT.md
 [config]:               ./.docker/jekyll-plantuml/_config.yml
 [dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
 [dependabot]:           https://dependabot.com
@@ -102,10 +116,12 @@ according to [Jekyll's documentation][jekyll-docs].
 [entrypoint]:           ./.docker/entrypoint
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
 [gemfile]:              ./.docker/jekyll-plantuml/Gemfile
+[github]:               https://github.com/SwedbankPay/jekyll-plantuml-docker
 [jekyll-docs]:          https://jekyllrb.com/docs/
 [jekyll]:               https://jekyllrb.com/
 [kramdown-plantuml]:    https://github.com/SwedbankPay/kramdown-plantuml
-[license-badge]:        https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[license-badge]:        https://img.shields.io/github/license/SwedbankPay/jekyll-plantuml-docker
+[license]:              https://opensource.org/licenses/Apache-2.0
 [pat]:                  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
 [plantuml]:             https://plantuml.com/
 [test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
