@@ -5,6 +5,7 @@
 [![Docker Pulls][docker-pull-badge]][docker]
 [![Docker Image Version (latest semver)][docker-version-badge]][docker]
 [![License][license-badge]][apachev2]
+[![Dependabot Status][dependabot-badge]][dependabot]
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
 image. The purpose of the image is to have a shared Docker image to run
@@ -77,14 +78,16 @@ placed.
 [apachev2]:             https://opensource.org/licenses/Apache-2.0
 [cla-badge]:            https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
+[dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
+[dependabot]:           https://dependabot.com
 [docker-pull-badge]:    https://img.shields.io/docker/pulls/swedbankpay/jekyll-plantuml
 [docker-version-badge]: https://img.shields.io/docker/v/swedbankpay/jekyll-plantuml
 [docker]:               https://hub.docker.com/r/swedbankpay/jekyll-plantuml
-[jekyll]:               https://jekyllrb.com/
-[license-badge]:        https://img.shields.io/badge/License-Apache%202.0-blue.svg
-[plantuml]:             https://plantuml.com/
-[test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
 [entrypoint]:           ./.docker/entrypoint
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
-[pat]:                  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+[jekyll]:               https://jekyllrb.com/
 [kramdown-plantuml]:    https://github.com/SwedbankPay/kramdown-plantuml
+[license-badge]:        https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[pat]:                  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+[plantuml]:             https://plantuml.com/
+[test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
