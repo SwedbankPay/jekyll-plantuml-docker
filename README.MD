@@ -94,19 +94,14 @@ according to [Jekyll's documentation][jekyll-docs].
 
 Bug reports and pull requests are welcome on [GitHub][github]. This project is
 intended to be a safe, welcoming space for collaboration, and contributors are
-expected to adhere to the [code of conduct][coc] and sign the [contributor's
-license agreement][cla].
+expected to adhere to the [code of conduct][coc] and sign the
+[contributor's license agreement][cla].
 
 ## License
 
-The Docker is available as open source under the terms of the [Apache 2.0
-License][apachev2].
-
-## Code of Conduct
-
-Everyone interacting in the Kramdown::PlantUml project's codebases, issue
-trackers, chat rooms and mailing lists is expected to follow the [code of
-conduct][coc].
+The code within this repository is available as open source under the terms of
+the [Apache 2.0 License][apachev2] and the [contributor's license
+agreement][cla].
 
 [apachev2]:             https://opensource.org/licenses/Apache-2.0
 [cla-badge]:            https://cla-assistant.io/readme/badge/SwedbankPay/jekyll-plantuml-docker
