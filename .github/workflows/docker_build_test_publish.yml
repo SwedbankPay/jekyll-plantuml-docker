@@ -36,7 +36,7 @@ jobs:
         image_name: jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
-        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
+        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/.docker/jekyll-plantuml:/srv/jekyll docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
         pull_image_and_stages: false
       env:
         DEBUG: true
@@ -50,7 +50,7 @@ jobs:
         image_name: swedbankpay/jekyll-plantuml
         image_tag: ${{ steps.version.outputs.version }}
         dockerfile: ".docker/Dockerfile"
-        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
+        push_image_and_stages: docker run --tty --volume ${{ github.workspace }}/.docker/jekyll-plantuml:/srv/jekyll swedbankpay/jekyll-plantuml:${{ steps.version.outputs.version }} jekyll build
         pull_image_and_stages: false
 
   verify-image:

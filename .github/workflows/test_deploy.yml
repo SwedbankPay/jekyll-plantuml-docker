@@ -34,13 +34,25 @@ jobs:
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:${SHA8}
 
-    - name: Run Docker Image
+    - name: Run Docker Image (default command)
+      env:
+        TAG: ${{ steps.sha.outputs.sha8 }}
+        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+      run: ./.github/workflows/docker_run_test.sh
+
+    - name: Run Docker Image (jekyll build, no Gemfile)
+      env:
+        TAG: ${{ steps.sha.outputs.sha8 }}
+        JEKYLL_DIR: ${{ github.workspace }}
+      run: ./.github/workflows/docker_run_test.sh
+
+    - name: Run Docker Image (jekyll build)
       env:
         SHA8: ${{ steps.sha.outputs.sha8 }}
       run: |
         docker run \
           --tty \
-          --volume ${{ github.workspace }}/test/jekyll-plantuml:/srv/jekyll \
+          --volume ${{ github.workspace }}/.docker/jekyll-plantuml:/srv/jekyll \
           swedbankpay/jekyll-plantuml:${SHA8} \
           jekyll build
 
@@ -60,7 +72,7 @@ jobs:
         GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
       run: |
         docker run \
-          --volume ${WORK_DIR}/test/jekyll-plantuml:/srv/jekyll \
+          --volume ${WORK_DIR}/.docker/jekyll-plantuml:/srv/jekyll \
           --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
           --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
           --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
