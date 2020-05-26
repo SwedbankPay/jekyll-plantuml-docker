@@ -90,6 +90,11 @@ If you want a full Jekyll site with local config, custom plugins, etc., you need
 to install Jekyll and initialize the folder you `build` or `serve` with it
 according to [Jekyll's documentation][jekyll-docs].
 
+## License
+
+The Docker is available as open source under the terms of the [Apache 2.0
+License][apachev2].
+
 ## Code of Conduct
 
 Everyone interacting in the Kramdown::PlantUml project's codebases, issue
