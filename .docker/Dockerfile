@@ -1,22 +1,22 @@
 FROM ruby:2.7.1
 
 ENV BUNDLE_HOME="/usr/local/bundle" \
-    BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
-    GEM_PATH="$GEM_HOME" \
-    GEM_BIN="$GEM_HOME/bin" \
     JEKYLL_BIN="/usr/jekyll/bin" \
     JEKYLL_DATA_DIR="/srv/jekyll" \
     JEKYLL_ENV="development" \
     JEKYLL_VAR_DIR="/var/jekyll" \
     JEKYLL_VERSION="4.0.1" \
-    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
     DRAFTS=false \
     FORCE_POLLING=false \
     VERBOSE=false
 
-ENV PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
+    GEM_BIN="$GEM_HOME/bin" \
+    GEM_PATH="$GEM_HOME" \
+    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
+    PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Create all folders needed by RubyGems, Bundler, etc.
 RUN addgroup --system --gid 1000 jekyll && \
