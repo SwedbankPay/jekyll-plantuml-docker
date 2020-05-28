@@ -16,15 +16,10 @@ jobs:
 
     - name: Generate version number
       id: version
-      run: |
-        ref="${{ github.ref }}"
-        if [[ "$ref" == refs/tags/* ]]; then
-          version="${ref#refs/tags/}"
-        else
-          version="${{ github.sha }}"
-        fi
-        echo "Version: ${version}"
-        echo "::set-output name=version::${version}"
+      env:
+        REF: ${{ github.ref }}
+        SHA: ${{ github.sha }}
+      run: ./.github/workflows/version.sh
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
