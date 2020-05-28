@@ -4,7 +4,7 @@ initialize() {
 	docker_tag=${TAG:-latest}
 	local_directory=${JEKYLL_DIR:-"$PWD"}
 	search_string=${OUTPUT:-"Server running"}
-    jekyll_command=${COMMAND}
+    jekyll_command="$*"
 }
 
 docker_run() {
@@ -30,8 +30,7 @@ docker_run_and_test() {
 }
 
 main() {
-	initialize
-	docker_run_and_test
+	initialize "$@" && docker_run_and_test
 }
 
-main
+main "$@"
