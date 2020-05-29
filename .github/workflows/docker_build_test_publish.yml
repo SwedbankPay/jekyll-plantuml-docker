@@ -22,7 +22,7 @@ jobs:
       env:
         REF: ${{ github.ref }}
         SHA: ${{ github.sha }}
-      run: ./.github/workflows/version.sh
+      run: ./.github/workflows/variables.sh
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
