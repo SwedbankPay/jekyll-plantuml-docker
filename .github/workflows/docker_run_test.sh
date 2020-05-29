@@ -15,13 +15,13 @@ docker_run() {
         --volume "${local_directory}:/srv/jekyll" \
         "${docker_image_name}:${docker_tag}" \
         $jekyll_command \
-        & echo $! > pid;
+        & echo $! > .pid;
 }
 
 docker_test() {
     grep -m1 "${search_string}" \
-        && kill -9 "$(cat pid)" \
-        && rm pid;
+        && kill -9 "$(cat .pid)" \
+        && rm .pid;
 }
 
 docker_run_and_test() {
