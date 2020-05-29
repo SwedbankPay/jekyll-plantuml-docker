@@ -47,7 +47,12 @@ docker_run() {
 
 docker_run_and_test() {
     { \
-        docker_run & echo $! > .pid; \
+        docker run \
+            --tty \
+            --volume "${local_directory}:/srv/jekyll" \
+            "${docker_image_name}:${docker_tag}" \
+            $jekyll_command \
+            & echo $! > .pid; \
     } | tee /dev/stderr | { \
         grep -m1 "${search_string}" \
         && kill -9 "$(cat .pid)" \
