@@ -34,25 +34,23 @@ initialize() {
         echo "$help_message"
         exit 1
     fi
+
+    docker_run_command="\
+        docker run
+            --tty
+            --volume "${local_directory}:/srv/jekyll"
+            "${docker_image_name}:${docker_tag}"
+            $jekyll_command"
 }
 
 docker_run() {
-    # shellcheck disable=SC2086
-    docker run \
-        --tty \
-        --volume "${local_directory}:/srv/jekyll" \
-        "${docker_image_name}:${docker_tag}" \
-        $jekyll_command
+    eval $docker_run_command
 }
 
 docker_run_and_test() {
     { \
-        docker run \
-            --tty \
-            --volume "${local_directory}:/srv/jekyll" \
-            "${docker_image_name}:${docker_tag}" \
-            $jekyll_command \
-            & echo $! > .pid; \
+        eval ""$docker_run_command" &"; \
+        echo $! > .pid; \
     } | tee /dev/stderr | { \
         grep -m1 "${search_string}" \
         && kill -9 "$(cat .pid)" \
