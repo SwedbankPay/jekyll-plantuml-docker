@@ -11,18 +11,15 @@ jobs:
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.version.outputs.version }}
-      output2: ${{ steps.version.outputs.version }}
+      output1: ${{ steps.variables.outputs.version }}
+      output2: ${{ steps.variables.outputs.version }}
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Generate version number
-      id: version
-      env:
-        REF: ${{ github.ref }}
-        SHA: ${{ github.sha }}
-      run: ./.github/workflows/variables.sh
+    - name: Generate variables
+      id: variables
+      run: ./.github/workflows/variables.sh ${{ github.sha }} ${{ github.ref }}
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
@@ -32,15 +29,16 @@ jobs:
         password: "${{ secrets.GITHUB_TOKEN }}"
         registry: docker.pkg.github.com
         image_name: jekyll-plantuml
-        image_tag: ${{ steps.version.outputs.version }}
+        image_tag: ${{ steps.variables.outputs.version }}
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
       env:
         DEBUG: true
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-        TAG: ${{ steps.version.outputs.version }}
+        TAG: ${{ steps.variables.outputs.version }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        DATE: ${{ steps.variables.outputs.date }}
 
     - name: Publish stable Docker image to Docker Hub
       if: startsWith(github.ref, 'refs/tags/')
@@ -49,13 +47,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: "${{ secrets.DOCKERHUB_PASSWORD }}"
         image_name: swedbankpay/jekyll-plantuml
-        image_tag: ${{ steps.version.outputs.version }}
+        image_tag: ${{ steps.variables.outputs.version }}
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
       env:
-        TAG: ${{ steps.version.outputs.version }}
+        TAG: ${{ steps.variables.outputs.version }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        DATE: ${{ steps.variables.outputs.date }}
 
   verify-image:
     runs-on: ubuntu-latest
@@ -65,7 +64,7 @@ jobs:
     - name: Download and run image from GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags') != true
       env:
-        TAG: ${{ build-and-publish-docker-image.version.outputs.version }}
+        TAG: ${{ build-and-publish-docker-image.variables.outputs.version }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
       run: |
@@ -76,7 +75,7 @@ jobs:
     - name: Download and run image from Docker Hub
       if: startsWith(github.ref, 'refs/tags')
       env:
-        TAG: ${{ build-and-publish-docker-image.version.outputs.version }}
+        TAG: ${{ build-and-publish-docker-image.variables.outputs.version }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: |
         docker pull swedbankpay/jekyll-plantuml:${TAG}
