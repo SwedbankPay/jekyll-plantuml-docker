@@ -1,5 +1,11 @@
 FROM ruby:2.7.1
 
+LABEL version="${TAG}"
+LABEL release-date="${DATE}"
+LABEL vendor="Swedbank Pay"
+LABEL description="Serve and build Jekyll sites with PlantUML support"
+LABEL maintainer="opensource@swedbankpay.com"
+
 ENV BUNDLE_HOME="/usr/local/bundle" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
