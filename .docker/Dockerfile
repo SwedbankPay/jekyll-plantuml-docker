@@ -1,10 +1,8 @@
 FROM ruby:2.7.1
 
-LABEL version="${TAG}"
-LABEL release-date="${DATE}"
-LABEL vendor="Swedbank Pay"
-LABEL description="Serve and build Jekyll sites with PlantUML support"
-LABEL maintainer="opensource@swedbankpay.com"
+ARG SHA
+ARG DATE
+ARG VERSION
 
 ENV BUNDLE_HOME="/usr/local/bundle" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
@@ -95,6 +93,17 @@ WORKDIR /srv/jekyll
 
 EXPOSE 35729
 EXPOSE 4000
+
+LABEL org.label-schema.build-date="${DATE}" \
+      org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
+      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:${VERSION}" \
+      org.label-schema.name="jekyll-plantuml" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.url="https://hub.docker.com/r/swedbankpay/jekyll-plantuml" \
+      org.label-schema.vcs-ref="${SHA}" \
+      org.label-schema.vcs-url="https://github.com/SwedbankPay/jekyll-plantuml-docker" \
+      org.label-schema.vendor="Swedbank Pay" \
+      org.label-schema.version="${VERSION}"
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 

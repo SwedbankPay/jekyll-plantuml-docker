@@ -10,25 +10,37 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Fetch all history for all tags and branches
+      run: git fetch --prune --unshallow
+
     - name: Shellcheck
       uses: bewuethr/shellcheck-action@v2
 
     - name: Control Character Check
       run: ./.github/workflows/control_character_finder.sh
 
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.3
+      with:
+        versionSpec: '5.x.x'
+
+    - name: GitVersion
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.9.3
+
     - name: Generate variables
       id: variables
-      run: ./.github/workflows/variables.sh ${{ github.sha }} ${{ github.ref }}
+      run: ./.github/workflows/variables.sh ${{ github.sha }} ${{ github.ref }} ${{ steps.gitversion.outputs.fullSemVer }}
 
     - name: Build Docker Image
-      env:
-        TAG: ${{ steps.variables.outputs.sha8 }}
-        DATE: ${{ steps.variables.outputs.date }}
       run: |
         docker build \
           . \
           --file ./.docker/Dockerfile \
-          --tag swedbankpay/jekyll-plantuml:${TAG}
+          --build-arg SHA="${{ steps.variables.outputs.sha8 }}" \
+          --build-arg DATE="${{ steps.variables.outputs.date }}" \
+          --build-arg VERSION="${{ steps.variables.outputs.version }}" \
+          --tag swedbankpay/jekyll-plantuml:${{ steps.variables.outputs.sha8 }}
 
     - name: Run Docker Image (default command)
       env:
