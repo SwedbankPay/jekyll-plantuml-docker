@@ -2,6 +2,7 @@
 
 initialize() {
 	docker_tag=${TAG:-latest}
+    docker_image_name=${IMAGE_NAME:-"swedbankpay/jekyll-plantuml"}
 	local_directory=${JEKYLL_DIR:-"$PWD"}
 	search_string=${OUTPUT:-"Server running"}
     jekyll_command="$*"
@@ -12,7 +13,7 @@ docker_run() {
     docker run \
         --tty \
         --volume "${local_directory}:/srv/jekyll" \
-        "swedbankpay/jekyll-plantuml:${docker_tag}" \
+        "${docker_image_name}:${docker_tag}" \
         $jekyll_command \
         & echo $! > pid;
 }
