@@ -52,7 +52,7 @@ jobs:
         TAG: ${{ steps.sha.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         TEST: false
-      run: ./.github/docker_run_test.sh build
+      run: ./.github/workflows/docker_run_test.sh build
 
     - name: Generate Branch Name
       id: branch
