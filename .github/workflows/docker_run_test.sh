@@ -38,16 +38,18 @@ initialize() {
     docker_run_command="\
         docker run
             --tty
-            --volume "${local_directory}:/srv/jekyll"
-            "${docker_image_name}:${docker_tag}"
+            --volume \"${local_directory}:/srv/jekyll\"
+            \"${docker_image_name}:${docker_tag}\"
             $jekyll_command"
 }
 
 docker_run() {
+    # shellcheck disable=SC2086
     eval $docker_run_command
 }
 
 docker_run_and_test() {
+    # shellcheck disable=SC2027,SC2086
     { \
         eval ""$docker_run_command" &"; \
         echo $! > .pid; \
