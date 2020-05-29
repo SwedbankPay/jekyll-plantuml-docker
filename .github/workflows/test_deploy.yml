@@ -44,17 +44,13 @@ jobs:
       env:
         TAG: ${{ steps.sha.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}
-      run: ./.github/workflows/docker_run_test.sh
+      run: ./.github/workflows/docker_run_test.sh jekyll build
 
     - name: Run Docker Image (jekyll build)
       env:
-        SHA8: ${{ steps.sha.outputs.sha8 }}
-      run: |
-        docker run \
-          --tty \
-          --volume ${{ github.workspace }}/.docker/jekyll-plantuml:/srv/jekyll \
-          swedbankpay/jekyll-plantuml:${SHA8} \
-          jekyll build
+        TAG: ${{ steps.sha.outputs.sha8 }}
+        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+      run: ./.github/docker_run_test.sh jekyll build
 
     - name: Generate Branch Name
       id: branch
