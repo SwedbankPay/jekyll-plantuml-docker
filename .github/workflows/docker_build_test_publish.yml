@@ -76,9 +76,10 @@ jobs:
     - name: Download and run image from GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags') != true
       env:
-        IMAGE_TAG: ${{ needs.build-and-publish-docker-image.variables.outputs.version }}
+        IMAGE_TAG: ${{ needs.build-and-publish-docker-image.variables.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+        DEBUG: true
       run: |
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
         docker pull ${IMAGE_NAME}:${IMAGE_TAG}
