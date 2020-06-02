@@ -84,11 +84,9 @@ jobs:
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         DEBUG: true
       run: |
-        IMAGE="${IMAGE_NAME}:${IMAGE_TAG}"
-        echo "$IMAGE"
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
-        docker pull $IMAGE
-        ./.github/workflows/docker_run_test.sh build
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        ${{ github.workspace }}/.github/workflows/docker_run_test.sh build
 
     - name: Download and run image from Docker Hub
       if: startsWith(github.ref, 'refs/tags')
@@ -97,4 +95,4 @@ jobs:
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: |
         docker pull swedbankpay/jekyll-plantuml:${IMAGE_TAG}
-        ./.github/workflows/docker_run_test.sh build
+        ${{ github.workspace }}/.github/workflows/docker_run_test.sh build
