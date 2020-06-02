@@ -11,8 +11,11 @@ jobs:
   build-and-publish-docker-image:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.variables.outputs.version }}
-      output2: ${{ steps.variables.outputs.version }}
+      ref: ${{ steps.variables.outputs.ref }}
+      sha: ${{ steps.variables.outputs.sha }}
+      sha8: ${{ steps.variables.outputs.sha8 }}
+      date: ${{ steps.variables.outputs.date }}
+      version: ${{ steps.variables.outputs.version }}
 
     steps:
     - uses: actions/checkout@v2
