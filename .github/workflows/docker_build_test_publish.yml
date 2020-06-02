@@ -45,9 +45,9 @@ jobs:
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
-        build_extra_args: --build-arg REF="$REF" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
+        build_extra_args: --build-arg SHA="$SHA" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
       env:
-        REF: ${{ steps.variables.outputs.ref }}
+        SHA: ${{ steps.variables.outputs.sha }}
         TAG: ${{ steps.variables.outputs.version }}
         DATE: ${{ steps.variables.outputs.date }}
         VERSION: ${{ steps.variables.outputs.version }}
@@ -66,9 +66,9 @@ jobs:
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
-        build_extra_args: --build-arg REF="$REF" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
+        build_extra_args: --build-arg SHA="$SHA" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
       env:
-        REF: ${{ steps.variables.outputs.ref }}
+        SHA: ${{ steps.variables.outputs.sha }}
         TAG: ${{ steps.variables.outputs.version }}
         DATE: ${{ steps.variables.outputs.date }}
         VERSION: ${{ steps.variables.outputs.version }}
