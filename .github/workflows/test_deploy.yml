@@ -44,20 +44,20 @@ jobs:
 
     - name: Run Docker Image (default command)
       env:
-        TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: ./.github/workflows/docker_run_test.sh serve
 
     - name: Run Docker Image (jekyll build, no Gemfile)
       env:
-        TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}
         TEST: false
       run: ./.github/workflows/docker_run_test.sh build
 
     - name: Run Docker Image (jekyll build)
       env:
-        TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         TEST: false
       run: ./.github/workflows/docker_run_test.sh build
