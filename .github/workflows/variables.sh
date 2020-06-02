@@ -3,11 +3,12 @@ set -o errexit #abort if any command fails
 me=$(basename "$0")
 
 help_message="\
-Usage: $me <sha> <ref>
-Generates variables based on the provided <sha> and <ref>.
+Usage: $me <sha> <ref> <version>
+Generates variables based on the provided <sha>, <ref> and <version>.
 
-<sha>: The SHA of the curretn Git commit.
-<ref>: The name of the ref of the current Git commit."
+<sha>:      The SHA of the curretn Git commit.
+<ref>:      The name of the ref of the current Git commit.
+<version>:  The version number corresponding to the current Git commit."
 
 initialize() {
 	sha="$1"
@@ -31,6 +32,9 @@ initialize() {
         echo "$help_message"
         exit 1
     fi
+
+    # Replace + in the version number with a dot.
+    version="${version/+/.}"
 }
 
 generate_variables() {
