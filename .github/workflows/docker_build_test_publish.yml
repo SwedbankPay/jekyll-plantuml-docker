@@ -41,18 +41,15 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         image_name: jekyll-plantuml
-        image_tag: ${IMAGE_TAG}
+        image_tag: ${{ steps.variables.outputs.sha8 }}
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
-        build_extra_args: --build-arg SHA="$SHA" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
+        build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
       env:
-        SHA: ${{ steps.variables.outputs.sha }}
-        DATE: ${{ steps.variables.outputs.date }}
-        VERSION: ${{ steps.variables.outputs.version }}
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
         DEBUG: true
 
     - name: Publish stable Docker image to Docker Hub
@@ -62,16 +59,13 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: "${{ secrets.DOCKERHUB_PASSWORD }}"
         image_name: swedbankpay/jekyll-plantuml
-        image_tag: ${IMAGE_TAG}
+        image_tag: ${{ steps.variables.outputs.version }}
         dockerfile: .docker/Dockerfile
         push_image_and_stages: ./.github/workflows/docker_run_test.sh build
         pull_image_and_stages: false
-        build_extra_args: --build-arg SHA="$SHA" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
+        build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
       env:
-        SHA: ${{ steps.variables.outputs.sha }}
         IMAGE_TAG: ${{ steps.variables.outputs.version }}
-        DATE: ${{ steps.variables.outputs.date }}
-        VERSION: ${{ steps.variables.outputs.version }}
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
 
   verify-image:
