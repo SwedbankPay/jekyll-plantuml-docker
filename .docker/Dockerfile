@@ -1,22 +1,26 @@
 FROM ruby:2.7.1
 
+ARG SHA
+ARG DATE
+ARG VERSION
+
 ENV BUNDLE_HOME="/usr/local/bundle" \
-    BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
-    GEM_PATH="$GEM_HOME" \
-    GEM_BIN="$GEM_HOME/bin" \
     JEKYLL_BIN="/usr/jekyll/bin" \
     JEKYLL_DATA_DIR="/srv/jekyll" \
     JEKYLL_ENV="development" \
     JEKYLL_VAR_DIR="/var/jekyll" \
-    JEKYLL_VERSION="4.0.1" \
-    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
+    JEKYLL_VERSION="4.1.0" \
     DRAFTS=false \
     FORCE_POLLING=false \
     VERBOSE=false
 
-ENV PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
+    GEM_BIN="$GEM_HOME/bin" \
+    GEM_PATH="$GEM_HOME" \
+    GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
+    PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Create all folders needed by RubyGems, Bundler, etc.
 RUN addgroup --system --gid 1000 jekyll && \
@@ -89,6 +93,17 @@ WORKDIR /srv/jekyll
 
 EXPOSE 35729
 EXPOSE 4000
+
+LABEL org.label-schema.build-date="${DATE}" \
+      org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
+      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:${VERSION}" \
+      org.label-schema.name="jekyll-plantuml" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.url="https://hub.docker.com/r/swedbankpay/jekyll-plantuml" \
+      org.label-schema.vcs-ref="${SHA}" \
+      org.label-schema.vcs-url="https://github.com/SwedbankPay/jekyll-plantuml-docker" \
+      org.label-schema.vendor="Swedbank Pay" \
+      org.label-schema.version="${VERSION}"
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
