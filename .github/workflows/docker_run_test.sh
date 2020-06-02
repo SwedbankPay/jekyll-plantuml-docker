@@ -1,5 +1,8 @@
 #!/bin/bash
 set -o errexit #abort if any command fails
+
+[ "${DEBUG:-false}" = "true" ] && set -x
+
 me=$(basename "$0")
 
 help_message="\
