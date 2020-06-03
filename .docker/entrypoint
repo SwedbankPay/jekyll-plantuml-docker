@@ -19,9 +19,9 @@ if [[ "$1" == "deploy" ]]; then
   echo "Deploying..."
 
   if [ -n "$DEFAULT_CONFIG" ]; then
-    bundle exec jekyll build --config "$DEFAULT_CONFIG" JEKYLL_ENV=production --verbose
+    JEKYLL_ENV=production bundle exec jekyll build --config "$DEFAULT_CONFIG" --verbose
   else
-    bundle exec jekyll build JEKYLL_ENV=production --verbose
+    JEKYLL_ENV=production bundle exec jekyll build --verbose
   fi
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ "$1" == "jekyll" ]]; then
