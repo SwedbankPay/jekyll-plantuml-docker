@@ -108,3 +108,18 @@ LABEL org.label-schema.build-date="${DATE}" \
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
 ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
+
+# How to build this Dockerfile (from the repository root directory):
+#
+# docker build . \
+#        --file ./.docker/Dockerfile \
+#        --build-arg SHA="0252c90062dd3251985a97108354d980d2de7a10" \
+#        --build-arg DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+#        --build-arg VERSION="1.2.3" \
+#        --tag swedbankpay/jekyll-plantuml:1.2.3
+#
+# How to run this Dockerfile after building:
+#
+# docker run --volume \$(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:1.2.3 [command]
+#
+# [command]: The optional Jekyll command to run. Defaults to 'jekyll serve'.
