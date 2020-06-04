@@ -6,7 +6,7 @@ set -o errexit #abort if any command fails
 #Spin up docker
 docker run --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/jekyll swedbankpay/jekyll-plantuml:latest -d
 
-bundle install rake
+bundle install --gemfile ./.docker/rake/Gemfile
 
 rake -f ./rake/Rakefile
 
