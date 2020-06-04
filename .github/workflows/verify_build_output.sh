@@ -5,7 +5,7 @@ set -o errexit #abort if any command fails
 
 #Spin up docker
 # shellcheck disable=SC2046
-docker run --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/jekyll swedbankpay/jekyll-plantuml:latest -d
+docker run -d -p 4000:4000 --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/jekyll swedbankpay/jekyll-plantuml:latest
 
 bundle install --gemfile ./.docker/rake/Gemfile
 
