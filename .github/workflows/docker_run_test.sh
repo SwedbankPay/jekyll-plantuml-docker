@@ -16,9 +16,9 @@ Execute <jekyll-command> in the Docker container and optionally test the output.
                   found, otherwise fails."
 
 initialize() {
-	docker_image_tag=${IMAGE_TAG:-latest}
+    docker_image_tag=${IMAGE_TAG:-latest}
     docker_image_name=${IMAGE_NAME:-"swedbankpay/jekyll-plantuml"}
-	local_directory=${JEKYLL_DIR:-"$PWD"}
+    local_directory=${JEKYLL_DIR:-"$PWD"}
     input_command="$1"
 
     if [[ -z "$input_command" ]]; then
@@ -64,7 +64,7 @@ docker_run_and_test() {
 }
 
 main() {
-	initialize "$@"
+    initialize "$@"
 
     echo "Running swedbankpay/jekyll-plantuml:${docker_image_tag} $input_command..."
 

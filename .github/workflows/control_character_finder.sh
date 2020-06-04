@@ -5,8 +5,10 @@ files_with_control_characters=$(\
         --line-number \
         --byte-offset \
         --exclude-dir='.git' \
+        --exclude-dir='.jekyll-cache' \
+        --exclude-dir='_site' \
         --recursive \
-        "[\x80-\xFF]" \
+        "[\x00-\x1F\x80-\xFF]" \
         . \
 )
 if [ -n "$files_with_control_characters" ]; then

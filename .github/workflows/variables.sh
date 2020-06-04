@@ -11,7 +11,7 @@ Generates variables based on the provided <sha>, <ref> and <version>.
 <version>:  The version number corresponding to the current Git commit."
 
 initialize() {
-	sha="$1"
+    sha="$1"
     ref="$2"
     version="$3"
 
@@ -59,7 +59,7 @@ generate_variables() {
 }
 
 main() {
-	initialize "$@"
+    initialize "$@"
     generate_variables
 }
 
