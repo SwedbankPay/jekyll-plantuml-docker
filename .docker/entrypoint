@@ -26,13 +26,15 @@ if [[ "$1" == "deploy" ]]; then
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ "$1" == "jekyll" ]]; then
   echo "Running Jekyll command '${*:2}'..."
+  deploy_config_file="/_config.deploy.yaml"
 
   # If the DEFAULT_CONFIG is assigned and the jekyll command supports '--config',
   # apply the default config by performing some positional argument magic.
   if [ -n "$DEFAULT_CONFIG" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
-    exec bundle exec jekyll "$2" --config "$DEFAULT_CONFIG" "${@:3}"
+    exec bundle exec jekyll "$2" --config "$DEFAULT_CONFIG,$deploy_config_file" "${@:3}"
   else
-    exec bundle exec jekyll "${@:2}"
+    config_files=$(find . -name _config.y*ml)
+    exec bundle exec jekyll --config _config "$config_files,$deploy_config_file" "${@:2}"
   fi
 elif [[ -z "$*" ]]; then
   echo "Running default command 'jekyll serve'..."
