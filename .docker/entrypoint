@@ -33,7 +33,7 @@ elif [[ "$1" == "jekyll" ]]; then
   if [ -n "$DEFAULT_CONFIG" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
     exec bundle exec jekyll "$2" --config "$DEFAULT_CONFIG,$deploy_config_file" "${@:3}"
   else
-    config_files=$(find . -name _config.y*ml)
+    config_files=$(find . -name "_config.y*ml")
     exec bundle exec jekyll --config _config "$config_files,$deploy_config_file" "${@:2}"
   fi
 elif [[ -z "$*" ]]; then
