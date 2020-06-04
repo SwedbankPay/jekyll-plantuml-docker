@@ -9,18 +9,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Generate variables
-      id: variables
-      run: ./.github/workflows/variables.sh ${{ github.sha }} ${{ github.ref }} ${{ steps.gitversion.outputs.fullSemVer }}
-
     - name: Build Docker Image
       run: |
         docker build \
           . \
           --file ./.docker/Dockerfile \
-          --build-arg SHA="${{ steps.variables.outputs.sha8 }}" \
-          --build-arg DATE="${{ steps.variables.outputs.date }}" \
-          --build-arg VERSION="${{ steps.variables.outputs.version }}" \
           --tag swedbankpay/jekyll-plantuml:latest
 
     - name: Verify build output
