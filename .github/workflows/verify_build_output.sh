@@ -9,7 +9,9 @@ docker run -d -p 4000:4000 --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/j
 
 gem install bundler
 bundle install --gemfile ./.docker/rake/Gemfile
+#Rake requires liburl
+sudo apt-get install libcurl3 libcurl3-gnutls libcurl4-openssl-dev
 
-rake -f ./rake/Rakefile
+rake -f ./.docker/./rake/Rakefile
 
-docker stop swedbankpay/jekyll-plantuml:latest
+docker rm $(docker stop $(docker ps -a -q --filter ancestor=swedbankpay/jekyll-plantuml:latest --format="{{.ID}}"))
