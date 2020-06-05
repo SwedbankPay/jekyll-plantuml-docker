@@ -60,6 +60,9 @@ jobs:
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: ./.github/workflows/docker_run_test.sh build
 
+    - name: Verify build output
+      run: ./.github/workflows/verify_build_output.sh
+
     - name: Generate Branch Name
       id: branch
       run: |
