@@ -34,14 +34,17 @@ jobs:
       run: ./.github/workflows/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
 
     - name: Build Docker Image
-      run: |
-        docker build \
-          . \
-          --file ./.docker/Dockerfile \
-          --build-arg SHA="${{ steps.variables.outputs.sha8 }}" \
-          --build-arg DATE="${{ steps.variables.outputs.date }}" \
-          --build-arg VERSION="${{ steps.variables.outputs.version }}" \
-          --tag swedbankpay/jekyll-plantuml:${{ steps.variables.outputs.sha8 }}
+      uses: whoan/docker-build-with-cache-action@v5.3.3
+      with:
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        image_name: jekyll-plantuml
+        image_tag: ${{ steps.variables.outputs.sha8 }}
+        dockerfile: .docker/Dockerfile
+        push_image_and_stages: true
+        pull_image_and_stages: true
+        build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
 
     - name: Run Docker Image (default command)
       env:
