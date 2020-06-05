@@ -82,7 +82,10 @@ jobs:
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
-      run: ./.github/workflows/docker_run_test.sh serve
+      run: |
+        docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        ./.github/workflows/docker_run_test.sh serve
 
   test-no-gemfile:
     runs-on: ubuntu-latest
@@ -96,7 +99,10 @@ jobs:
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}
-      run: ./.github/workflows/docker_run_test.sh build
+      run: |
+        docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        ./.github/workflows/docker_run_test.sh build
 
   test-build:
     runs-on: ubuntu-latest
@@ -110,7 +116,10 @@ jobs:
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
-      run: ./.github/workflows/docker_run_test.sh build
+      run: |
+        docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        ./.github/workflows/docker_run_test.sh build
 
   test-output:
     runs-on: ubuntu-latest
@@ -134,7 +143,10 @@ jobs:
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         DEBUG: true
-      run: ./.github/workflows/verify_build_output.sh
+      run: |
+        docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        ./.github/workflows/verify_build_output.sh
 
   test-deploy:
     runs-on: ubuntu-latest
@@ -150,14 +162,18 @@ jobs:
         GIT_DEPLOY_DIR: _site
         GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
         GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
+        IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+        IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
       run: |
+        docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
         docker run \
           --volume ${WORK_DIR}/.docker/jekyll-plantuml:/srv/jekyll \
           --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
           --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
           --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
           --env DEBUG="true" \
-          swedbankpay/jekyll-plantuml:${SHA8} \
+          ${IMAGE_NAME}:${IMAGE_TAG} \
           deploy
 
   cleanup:
