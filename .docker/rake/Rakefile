@@ -5,7 +5,7 @@ require 'html-proofer'
 # Test generated output has valid HTML and links.
 task :test do
   options = { :assume_extension => true }
-  HTMLProofer.check_directory("$(pwd)/_site", options).run
+  HTMLProofer.check_directory("$(pwd)../../_site", options).run
 end
 
 task :default => ["test"]
