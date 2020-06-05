@@ -55,6 +55,10 @@ jobs:
 
     - name: Build Docker Image
       uses: whoan/docker-build-with-cache-action@v5.3.3
+      env:
+        SHA: ${{ needs.variables.outputs.sha }}
+        DATE: ${{ needs.variables.outputs.date }}
+        VERSION: ${{ needs.variables.outputs.version }}
       with:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -64,7 +68,7 @@ jobs:
         dockerfile: .docker/Dockerfile
         push_image_and_stages: true
         pull_image_and_stages: true
-        build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
+        build_extra_args: --build-arg SHA="$SHA" --build-arg DATE="$DATE" --build-arg VERSION="$VERSION"
 
   test-default:
     runs-on: ubuntu-latest
