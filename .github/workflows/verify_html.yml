@@ -18,6 +18,8 @@ jobs:
           . \
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:latest
+      with:
+        DEBUG: true
 
     - name: Verify build output
       run: ./.github/workflows/verify_build_output.sh
