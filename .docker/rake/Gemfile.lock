@@ -79,9 +79,6 @@ GEM
     unicode-display_width (1.7.0)
     yell (2.2.2)
 
-PLATFORMS
-  x64-mingw32
-
 DEPENDENCIES
   html-proofer
   html-proofer-unrendered-markdown
