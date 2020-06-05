@@ -1,10 +1,9 @@
-name: Test Deploy
+name: Test
 
 on: [push, pull_request]
 
 jobs:
-  test-deploy:
-    name: Test Deploy
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +12,7 @@ jobs:
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
 
-    - name: Shellcheck
+    - name: ShellCheck
       uses: bewuethr/shellcheck-action@v2
 
     - name: Control Character Check
