@@ -13,13 +13,14 @@ jobs:
         ruby-version: 2.7
 
     - name: Build Docker Image
+      env:
+        DEBUG: true
       run: |
         docker build \
           . \
           --file ./.docker/Dockerfile \
           --tag swedbankpay/jekyll-plantuml:latest
-      with:
-        DEBUG: true
+      
 
     - name: Verify build output
       run: ./.github/workflows/verify_build_output.sh
