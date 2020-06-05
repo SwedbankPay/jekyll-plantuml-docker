@@ -9,6 +9,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
 
