@@ -10,7 +10,7 @@ docker run -d -p 4000:4000 --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/j
 gem install bundler
 bundle install --gemfile ./.docker/rake/Gemfile
 #Rake requires liburl
-sudo apt-get install libcurl3 libcurl3-gnutls libcurl4-openssl-dev
+sudo apt-get install libcurl4
 
 rake -f ./.docker/./rake/Rakefile
 
