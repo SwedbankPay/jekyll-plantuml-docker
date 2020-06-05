@@ -22,6 +22,8 @@ docker run \
     "$docker_image_fqn"
 
 gem install bundler
+
+bundle config path vendor/bundle
 bundle install --gemfile ./.docker/rake/Gemfile
 # Rake requires liburl
 sudo apt-get install libcurl4
