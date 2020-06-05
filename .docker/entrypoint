@@ -34,8 +34,8 @@ elif [[ "$1" == "jekyll" ]]; then
   # apply the default config by performing some positional argument magic.
   if [ -n "$DEFAULT_CONFIG" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
     exec bundle exec jekyll "$2" --config "$DEFAULT_CONFIG" "${@:3}"
-  else    
-    exec bundle exec jekyll  "${@:2}"
+  else
+    exec bundle exec jekyll "${@:2}"
   fi
 elif [[ -z "$*" ]]; then
   echo "Running default command 'jekyll serve'..."
