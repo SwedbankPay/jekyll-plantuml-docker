@@ -8,7 +8,7 @@ set -o errexit #abort if any command fails
 docker run -d -p 4000:4000 --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/jekyll swedbankpay/jekyll-plantuml:latest
 
 gem install bundler
-bundle install --gemfile ./.docker/rake/Gemfile --deployment
+bundle install --gemfile ./.docker/rake/Gemfile
 #Rake requires liburl
 sudo apt-get install libcurl3 libcurl3-gnutls libcurl4-openssl-dev
 
