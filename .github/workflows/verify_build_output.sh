@@ -14,4 +14,4 @@ sudo apt-get install libcurl4
 
 rake -f ./.docker/./rake/Rakefile
 
-docker stop $(docker ps -a -q --filter ancestor=swedbankpay/jekyll-plantuml:latest --format="{{.ID}}")
+docker stop "$(docker ps -a -q --filter ancestor=swedbankpay/jekyll-plantuml:latest --format="{{.ID}}")"
