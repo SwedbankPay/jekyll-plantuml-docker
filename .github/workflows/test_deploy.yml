@@ -71,6 +71,7 @@ jobs:
       env:
         IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+        DEBUG: true
       run: ./.github/workflows/verify_build_output.sh
 
     - name: Test Deploy
