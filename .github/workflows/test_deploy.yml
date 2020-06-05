@@ -61,6 +61,8 @@ jobs:
       run: ./.github/workflows/docker_run_test.sh build
 
     - name: Verify build output
+      env:
+        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
       run: ./.github/workflows/verify_build_output.sh
 
     - name: Generate Branch Name
