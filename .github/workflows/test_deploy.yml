@@ -3,30 +3,21 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-  test:
+  variables:
     runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ needs.variables.outputs.ref }}
+      sha: ${{ needs.variables.outputs.sha }}
+      sha8: ${{ needs.variables.outputs.sha8 }}
+      date: ${{ needs.variables.outputs.date }}
+      version: ${{ needs.variables.outputs.version }}
+      branch_name: ${{ needs.variables.outputs.branch_name }}
 
     steps:
     - uses: actions/checkout@v2
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-
-    - uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: ${{ runner.os }}-gems-
-
     - name: Fetch all history for all tags and branches
       run: git fetch --prune --unshallow
-
-    - name: ShellCheck
-      uses: bewuethr/shellcheck-action@v2
-
-    - name: Control Character Check
-      run: ./.github/workflows/control_character_finder.sh
 
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.3
@@ -43,6 +34,25 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: ./.github/workflows/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
 
+  verify-bash:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: ShellCheck
+      uses: bewuethr/shellcheck-action@v2
+
+    - name: Control Character Check
+      run: ./.github/workflows/control_character_finder.sh
+
+  build:
+    runs-on: ubuntu-latest
+    needs: variables
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Build Docker Image
       uses: whoan/docker-build-with-cache-action@v5.3.3
       with:
@@ -50,46 +60,91 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         image_name: jekyll-plantuml
-        image_tag: ${{ steps.variables.outputs.sha8 }}
+        image_tag: ${{ needs.variables.outputs.sha8 }}
         dockerfile: .docker/Dockerfile
         push_image_and_stages: true
         pull_image_and_stages: true
-        build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
+        build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
+
+  test-default:
+    runs-on: ubuntu-latest
+    needs: [variables, build]
+
+    steps:
+    - uses: actions/checkout@v2
 
     - name: Run Docker Image (default command)
       env:
-        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: ./.github/workflows/docker_run_test.sh serve
 
+  test-no-gemfile:
+    runs-on: ubuntu-latest
+    needs: [variables, build]
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Run Docker Image (jekyll build, no Gemfile)
       env:
-        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}
       run: ./.github/workflows/docker_run_test.sh build
 
+  test-build:
+    runs-on: ubuntu-latest
+    needs: [variables, build]
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Run Docker Image (jekyll build)
       env:
-        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
       run: ./.github/workflows/docker_run_test.sh build
 
+  test-output:
+    runs-on: ubuntu-latest
+    needs: [variables, build]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+
+    - uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-gems-
+
     - name: Verify build output
       env:
-        IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
+        IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         DEBUG: true
       run: ./.github/workflows/verify_build_output.sh
 
+  test-deploy:
+    runs-on: ubuntu-latest
+    needs: [variables, build]
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Test Deploy
       env:
-        SHA8: ${{ steps.variables.outputs.sha8 }}
+        SHA8: ${{ needs.variables.outputs.sha8 }}
         WORK_DIR: ${{ github.workspace }}
         GIT_DEPLOY_DIR: _site
-        GIT_DEPLOY_BRANCH: ${{ steps.variables.outputs.branch_name }}
+        GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
         GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
       run: |
         docker run \
@@ -101,10 +156,17 @@ jobs:
           swedbankpay/jekyll-plantuml:${SHA8} \
           deploy
 
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [test-deploy, variables]
+
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Cleanup
       if: always()
       env:
-        GIT_DEPLOY_BRANCH: ${{ steps.branch.outputs.name }}
+        GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
       run: |
           git checkout --force ${{ github.sha }}
           if git show-ref --verify --quiet "refs/heads/${GIT_DEPLOY_BRANCH}"; then
