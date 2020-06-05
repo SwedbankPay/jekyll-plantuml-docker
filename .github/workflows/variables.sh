@@ -6,7 +6,7 @@ help_message="\
 Usage: $me <sha> <ref> <version>
 Generates variables based on the provided <sha>, <ref> and <version>.
 
-<sha>:      The SHA of the curretn Git commit.
+<sha>:      The SHA of the current Git commit.
 <ref>:      The name of the ref of the current Git commit.
 <version>:  The version number corresponding to the current Git commit."
 
