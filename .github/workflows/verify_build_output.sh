@@ -13,22 +13,22 @@ docker_image_fqn="$docker_image_name:$IMAGE_TAG"
 
 echo "Running $docker_image_fqn"
 
+cd test
+
 # Spin up docker
 docker run \
     --detach \
     --publish 4000:4000 \
     --tty \
-    --volume "$(pwd)/.docker/jekyll-plantuml:/srv/jekyll" \
+    --volume "$(pwd)/test:/srv/jekyll" \
     "$docker_image_fqn"
 
 gem install bundler
 
 bundle config path vendor/bundle
-bundle install --gemfile ./.docker/rake/Gemfile
-# Rake requires liburl
-sudo apt-get install libcurl4
+bundle install
 
-rake -f ./.docker/rake/Rakefile
+rake
 
 container_id=$(docker ps -a -q --filter ancestor="$docker_image_fqn" --format="{{.ID}}")
 
