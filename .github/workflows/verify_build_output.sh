@@ -5,7 +5,7 @@ set -o errexit #abort if any command fails
 
 #Spin up docker
 # shellcheck disable=SC2046
-docker run -d -p 4000:4000 --tty --volume $(pwd)/.docker/jekyll-plantuml/:/srv/jekyll swedbankpay/jekyll-plantuml:latest
+docker run -d -p 4000:4000 --tty --volume $(pwd)/:/srv/jekyll swedbankpay/jekyll-plantuml:latest
 
 gem install bundler
 bundle install --gemfile ./.docker/rake/Gemfile
@@ -14,4 +14,4 @@ sudo apt-get install libcurl4
 
 rake -f ./.docker/./rake/Rakefile
 
-docker rm "$(docker stop "$(docker ps -a -q --filter ancestor=swedbankpay/jekyll-plantuml:latest --format="{{.ID}})")")"
+docker stop $(docker ps -a -q --filter ancestor=swedbankpay/jekyll-plantuml:latest --format="{{.ID}}")
