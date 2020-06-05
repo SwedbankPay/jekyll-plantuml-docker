@@ -8,15 +8,26 @@ if [[ -z "$IMAGE_TAG" ]]; then
     exit 1
 fi
 
-#Spin up docker
-# shellcheck disable=SC2046
-docker run -d -p 4000:4000 --tty --volume $(pwd)/:/srv/jekyll "swedbankpay/jekyll-plantuml:$IMAGE_TAG"
+image_fqn="swedbankpay/jekyll-plantuml:$IMAGE_TAG"
+
+echo "Running $image_fqn"
+
+# Spin up docker
+docker run \
+    --detach \
+    --publish 4000:4000 \
+    --tty \
+    --volume "$(pwd)/.docker/jekyll-plantuml:/srv/jekyll" \
+    "$image_fqn"
 
 gem install bundler
 bundle install --gemfile ./.docker/rake/Gemfile
-#Rake requires liburl
+# Rake requires liburl
 sudo apt-get install libcurl4
 
-rake -f ./.docker/./rake/Rakefile
+rake -f ./.docker/rake/Rakefile
 
-docker stop "$(docker ps -a -q --filter ancestor="swedbankpay/jekyll-plantuml:$IMAGE_TAG" --format="{{.ID}}")"
+container_id=$(docker ps -a -q --filter ancestor="$image_fqn" --format="{{.ID}}")
+
+echo "Stopping $container_id"
+docker stop "$container_id"
