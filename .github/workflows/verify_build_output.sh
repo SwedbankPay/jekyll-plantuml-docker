@@ -11,21 +11,23 @@ fi
 docker_image_name="${IMAGE_NAME:-swedbankpay/jekyll-plantuml}"
 docker_image_fqn="$docker_image_name:$IMAGE_TAG"
 
-echo "Running $docker_image_fqn"
-
 cd test
+
+echo "Running $docker_image_fqn"
 
 # Spin up docker
 docker run \
     --detach \
     --publish 4000:4000 \
     --tty \
-    --volume "$(pwd)/test:/srv/jekyll" \
+    --volume "$(pwd):/srv/jekyll" \
     "$docker_image_fqn"
+
+echo "Installing gems"
 
 gem install bundler
 
-bundle config path vendor/bundle
+bundle config path "$(pwd)/vendor/bundle"
 bundle install
 
 rake
