@@ -30,7 +30,7 @@ gem install bundler
 bundle config path "$(pwd)/vendor/bundle"
 bundle install
 
-rake
+bundle exec rake
 
 container_id=$(docker ps -a -q --filter ancestor="$docker_image_fqn" --format="{{.ID}}")
 
