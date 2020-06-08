@@ -30,10 +30,14 @@ task :test do
     raise stderr
   end
 
-  while !log_stdout.include? "Server running"
-    puts stdout
+  # Scan docker log until we find that the server is running
+  while log_stdrr.empty? && !log_stdout.include?("Server running")
+    log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
     sleep 1
   end
+
+  # Very practical for debug purposes to have the Docker log
+  puts log_stdout
 
   options = { :assume_extension => true }
   site_folder = File.join(Dir.pwd, "_site")
