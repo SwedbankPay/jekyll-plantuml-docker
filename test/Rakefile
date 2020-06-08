@@ -5,7 +5,9 @@ require 'open3'
 
 # Test generated output has valid HTML and links.
 task :test do
-  docker_image_fqn=ARGV[0]
+  image_name=ENV["IMAGE_NAME"]
+  image_tag=ENV["IMAGE_TAG"]
+
   # Spin up docker
   cmd = %Q(
         docker run \
@@ -13,7 +15,7 @@ task :test do
         --publish 4000:4000 \
         --tty \
         --volume "#{Dir.pwd}:/srv/jekyll" \
-        "swedbankpay/jekyll-plantuml:latest"
+        "#{image_name}:#{image_tag}"
         )
 
   stdout, stderr, _ = Open3.capture3(cmd)
