@@ -25,7 +25,7 @@ if [[ "$1" == "deploy" ]]; then
   fi
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ "$1" == "jekyll" ]]; then
-  echo "Running Jekyll command '${*:2}'..."
+  echo "Running Jekyll command '${*:2}' (JEKYLL_ENV: ${JEKYLL_ENV})..."
 
   # If the DEFAULT_CONFIG is assigned and the jekyll command supports '--config',
   # apply the default config by performing some positional argument magic.
@@ -35,7 +35,7 @@ elif [[ "$1" == "jekyll" ]]; then
     exec bundle exec jekyll "${@:2}"
   fi
 elif [[ -z "$*" ]]; then
-  echo "Running default command 'jekyll serve'..."
+  echo "Running default command 'jekyll serve' (JEKYLL_ENV: ${JEKYLL_ENV})..."
 
   if [ -n "$DEFAULT_CONFIG" ]; then
     exec bundle exec jekyll serve --config "$DEFAULT_CONFIG" --livereload --incremental --force_polling --watch --host 0.0.0.0
@@ -43,6 +43,6 @@ elif [[ -z "$*" ]]; then
     exec bundle exec jekyll serve --livereload --incremental --force_polling --watch --host 0.0.0.0
   fi
 else
-  echo "Running '$*'..."
+  echo "Running '$*' (JEKYLL_ENV: ${JEKYLL_ENV})..."
   exec "$@"
 fi
