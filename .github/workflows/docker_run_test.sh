@@ -18,6 +18,7 @@ Execute <jekyll-command> in the Docker container and optionally test the output.
 initialize() {
     docker_image_tag=${IMAGE_TAG:-latest}
     docker_image_name=${IMAGE_NAME:-"swedbankpay/jekyll-plantuml"}
+    docker_image_fqn="${docker_image_name}:${docker_image_tag}"
     local_directory=${JEKYLL_DIR:-"$PWD"}
     input_command="$1"
 
@@ -42,7 +43,7 @@ initialize() {
         docker run
             --tty
             --volume \"${local_directory}:/srv/jekyll\"
-            \"${docker_image_name}:${docker_image_tag}\"
+            \"${docker_image_fqn}\"
             $jekyll_command"
 }
 
@@ -66,7 +67,7 @@ docker_run_and_test() {
 main() {
     initialize "$@"
 
-    echo "Running swedbankpay/jekyll-plantuml:${docker_image_tag} $input_command..."
+    echo "Running ${docker_image_fqn} $input_command..."
 
     if [[ -n "$search_string" ]]; then
         docker_run_and_test
