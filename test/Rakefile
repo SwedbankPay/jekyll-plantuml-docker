@@ -13,6 +13,7 @@ task :test do
         docker run \
         --detach \
         --publish 4000:4000 \
+        --env JEKYLL_ENV=production \
         --tty \
         --volume "#{Dir.pwd}:/srv/jekyll" \
         "#{image_name}:#{image_tag}"
