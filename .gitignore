@@ -4,5 +4,4 @@ _site/
 .jekyll-metadata
 .bundle/
 .pid
-.test/vendor
-
+test/vendor/
