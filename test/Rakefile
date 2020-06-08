@@ -41,6 +41,9 @@ task :test do
   # Very practical for debug purposes to have the Docker log
   puts log_stdout
 
+  puts "Checking these files:"
+  puts Dir.entries( File.join(Dir.pwd, "_site"))
+
   options = { :assume_extension => true }
   site_folder = File.join(Dir.pwd, "_site")
   HTMLProofer.check_directory(site_folder, options).run
