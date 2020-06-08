@@ -5,3 +5,7 @@ gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'
 gem 'rake'
 gem "open3", "~> 0.1.0"
+
+gem "kramdown-plantuml", "~> 1.0"
+gem "jekyll-material-icon-tag", "~> 1.1"
+gem "jemoji", "~> 0.12.0"
