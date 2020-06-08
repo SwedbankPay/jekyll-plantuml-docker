@@ -21,7 +21,8 @@ docker run \
     --publish 4000:4000 \
     --tty \
     --volume "$(pwd):/srv/jekyll" \
-    "$docker_image_fqn"
+    "$docker_image_fqn" \
+    jekyll build
 
 echo "Installing gems"
 
