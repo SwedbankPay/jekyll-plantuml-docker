@@ -5,7 +5,7 @@ require "html-proofer"
 # Test generated output has valid HTML and links.
 task :test do
   options = { :assume_extension => true }
-  site_folder = File.join(Dir.pwd, ".docker", "jekyll-plantuml", "_site")
+  site_folder = File.join(Dir.pwd, "..", ".docker", "jekyll-plantuml", "_site")
   HTMLProofer.check_directory(site_folder, options).run
 end
 
