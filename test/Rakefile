@@ -39,11 +39,13 @@ task :test do
     timout_counter += 1
   end
 
+  site_dir = File.join(Dir.pwd, "_site")
+
   # Very practical for debug purposes to have the Docker log
   puts log_stdout
 
-  puts "Checking these files:"
-  puts Dir.entries(File.join(Dir.pwd, "_site"))
+  puts "Checking files in #{site_dir}:"
+  puts Dir.entries(site_dir)
 
   options = {
     :assume_extension => true,
@@ -52,8 +54,7 @@ task :test do
     :only_4xx => true,
     :check_unrendered_link => true,
   }
-  site_folder = File.join(Dir.pwd, "_site")
-  HTMLProofer.check_directory(site_folder, options).run
+  HTMLProofer.check_directory(site_dir, options).run
 
   Open3.capture3("docker stop #{stdout}")
 end
