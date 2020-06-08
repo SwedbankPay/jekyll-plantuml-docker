@@ -7,14 +7,23 @@ require 'open3'
 task :test do
   docker_image_fqn=ARGV[0]
   # Spin up docker
-  cmd = 'docker run'\
-        '--detach'\
-        '--publish 4000:4000'\
-        '--tty'\
-        '--volume "$(pwd):/srv/jekyll"'\
-        '"swedbankpay/jekyll-plantuml:latest"'
+  cmd = 'docker run '\
+        '--detach '\
+        '--publish 4000:4000 '\
+        '--tty '\
+        '--volume "$(pwd):/srv/jekyll" '\
+        '"swedbankpay/jekyll-plantuml:latest" '
 
   stdout, stderr, _ = Open3.capture3(cmd)
+
+  unless stderr.empty?
+    raise stderr
+  end
+
+  while !stdout.include? "serve"
+    puts "Waiting for 'serve' to be found"
+    sleep 1
+  end
 
   options = { :assume_extension => true }
   site_folder = File.join(Dir.pwd, "_site")
