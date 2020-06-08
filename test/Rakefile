@@ -44,7 +44,13 @@ task :test do
   puts "Checking these files:"
   puts Dir.entries( File.join(Dir.pwd, "_site"))
 
-  options = { :assume_extension => true }
+  options = { 
+    :assume_extension => true,
+    :check_html => true,
+    :enforce_https => true,
+    :only_4xx => true,
+    :check_unrendered_link => true
+   }
   site_folder = File.join(Dir.pwd, "_site")
   HTMLProofer.check_directory(site_folder, options).run
 
