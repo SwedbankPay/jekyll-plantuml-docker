@@ -4,3 +4,4 @@ gem 'jekyll', '~> 4.1', group: :jekyll_plugins
 gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'
 gem 'rake'
+gem "open3", "~> 0.1.0"

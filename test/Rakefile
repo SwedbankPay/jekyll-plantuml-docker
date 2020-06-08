@@ -1,9 +1,21 @@
 # coding: utf-8
 require "jekyll"
 require "html-proofer"
+require 'open3'
 
 # Test generated output has valid HTML and links.
 task :test do
+  docker_image_fqn=ARGV[0]
+  # Spin up docker
+  cmd = 'docker run'\
+        '--detach'\
+        '--publish 4000:4000'\
+        '--tty'\
+        '--volume "$(pwd):/srv/jekyll"'\
+        '"swedbankpay/jekyll-plantuml:latest"'
+
+  stdout, stderr, _ = Open3.capture3(cmd)
+
   options = { :assume_extension => true }
   site_folder = File.join(Dir.pwd, "_site")
   HTMLProofer.check_directory(site_folder, options).run
