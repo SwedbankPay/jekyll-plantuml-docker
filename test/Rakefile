@@ -1,12 +1,12 @@
 # coding: utf-8
 require "jekyll"
 require "html-proofer"
-require 'open3'
+require "open3"
 
 # Test generated output has valid HTML and links.
 task :test do
-  image_name=ENV["IMAGE_NAME"]
-  image_tag=ENV["IMAGE_TAG"]
+  image_name = ENV["IMAGE_NAME"]
+  image_tag = ENV["IMAGE_TAG"]
 
   # Spin up docker
   cmd = %Q(
@@ -26,7 +26,7 @@ task :test do
   end
 
   log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
-  
+
   unless log_stdrr.empty?
     raise stderr
   end
@@ -36,22 +36,22 @@ task :test do
   while log_stdrr.empty? && !log_stdout.include?("Server running") && timout_counter < 300
     log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
     sleep 1
-    timout_counter +=1
+    timout_counter += 1
   end
 
   # Very practical for debug purposes to have the Docker log
   puts log_stdout
 
   puts "Checking these files:"
-  puts Dir.entries( File.join(Dir.pwd, "_site"))
+  puts Dir.entries(File.join(Dir.pwd, "_site"))
 
-  options = { 
+  options = {
     :assume_extension => true,
     :check_html => true,
     :enforce_https => true,
     :only_4xx => true,
-    :check_unrendered_link => true
-   }
+    :check_unrendered_link => true,
+  }
   site_folder = File.join(Dir.pwd, "_site")
   HTMLProofer.check_directory(site_folder, options).run
 

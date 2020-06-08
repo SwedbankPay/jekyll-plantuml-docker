@@ -1,9 +1,9 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'jekyll', '~> 4.1', group: :jekyll_plugins
-gem 'html-proofer'
-gem 'html-proofer-unrendered-markdown'
-gem 'rake'
+gem "jekyll", "~> 4.1", group: :jekyll_plugins
+gem "html-proofer"
+gem "html-proofer-unrendered-markdown"
+gem "rake"
 gem "open3", "~> 0.1.0"
 
 gem "kramdown-plantuml", "~> 1.0"
