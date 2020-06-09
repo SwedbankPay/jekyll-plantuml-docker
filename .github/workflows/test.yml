@@ -148,6 +148,12 @@ jobs:
         docker pull ${IMAGE_NAME}:${IMAGE_TAG}
         ./.github/workflows/verify_build_output.sh
 
+    - name: Upload build output artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: html
+        path: test/_site/*.html
+
   test-deploy:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
