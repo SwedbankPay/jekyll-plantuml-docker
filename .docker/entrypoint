@@ -17,7 +17,7 @@ bundle check || bundle install
 
 if [[ "$1" == "deploy" ]]; then
   echo "Deploying..."
-  deploy_config_file="/_config.deploy.yaml"
+  deploy_config_file="${JEKYLL_VAR_DIR}/_config.deploy.yml"
 
   if [ -n "$default_config_file" ]; then
     JEKYLL_ENV=production bundle exec jekyll build --config "$default_config_file,$deploy_config_file" --verbose

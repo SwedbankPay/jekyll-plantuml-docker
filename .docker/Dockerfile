@@ -65,7 +65,8 @@ RUN gem install jekyll \
 
 COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/Gemfile.lock ${JEKYLL_VAR_DIR}/
-COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/_config.default.yml ${JEKYLL_VAR_DIR}/_config.default.yml
+COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/_config.default.yml ${JEKYLL_VAR_DIR}/
+COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/_config.deploy.yml ${JEKYLL_VAR_DIR}/
 
 RUN bundle config build --use-system-libraries && \
     bundle install --gemfile=${JEKYLL_VAR_DIR}/Gemfile
@@ -83,7 +84,6 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
-COPY --chown=jekyll:jekyll .docker/_config.deploy.yaml ${JEKYLL_BIN}/_config.deploy.yaml
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
