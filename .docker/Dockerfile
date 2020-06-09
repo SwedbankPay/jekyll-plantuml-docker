@@ -65,7 +65,7 @@ RUN gem install jekyll \
 
 COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/Gemfile ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/Gemfile.lock ${JEKYLL_VAR_DIR}/
-COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/_config.yml ${JEKYLL_VAR_DIR}/_config.yml
+COPY --chown=jekyll:jekyll .docker/jekyll-plantuml/_config.default.yml ${JEKYLL_VAR_DIR}/_config.default.yml
 
 RUN bundle config build --use-system-libraries && \
     bundle install --gemfile=${JEKYLL_VAR_DIR}/Gemfile

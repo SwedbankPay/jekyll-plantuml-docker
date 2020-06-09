@@ -9,8 +9,8 @@ if [ ! -f "Gemfile" ]; then
 fi
 
 if [ ! -f "_config.yml" ]; then
-  export DEFAULT_CONFIG="${JEKYLL_VAR_DIR}/_config.yml"
-  echo "No _config.yml found. Using default: ${DEFAULT_CONFIG}" 1>&2
+  export default_config_file="${JEKYLL_VAR_DIR}/_config.default.yml"
+  echo "No _config.yml found. Using default: ${default_config_file}" 1>&2
 fi
 
 bundle check || bundle install
@@ -19,8 +19,8 @@ if [[ "$1" == "deploy" ]]; then
   echo "Deploying..."
   deploy_config_file="/_config.deploy.yaml"
 
-  if [ -n "$DEFAULT_CONFIG" ]; then
-    JEKYLL_ENV=production bundle exec jekyll build --config "$DEFAULT_CONFIG,$deploy_config_file" --verbose
+  if [ -n "$default_config_file" ]; then
+    JEKYLL_ENV=production bundle exec jekyll build --config "$default_config_file,$deploy_config_file" --verbose
   else
     config_files=$(find . -name "_config.y*ml")
     JEKYLL_ENV=production bundle exec jekyll build --verbose --config "$config_files,$deploy_config_file"
@@ -29,18 +29,18 @@ if [[ "$1" == "deploy" ]]; then
 elif [[ "$1" == "jekyll" ]]; then
   echo "Running Jekyll command '${*:2}' (JEKYLL_ENV: ${JEKYLL_ENV})..."
 
-  # If the DEFAULT_CONFIG is assigned and the jekyll command supports '--config',
+  # If the default_config_file is assigned and the jekyll command supports '--config',
   # apply the default config by performing some positional argument magic.
-  if [ -n "$DEFAULT_CONFIG" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
-    exec bundle exec jekyll "$2" --config "$DEFAULT_CONFIG" "${@:3}"
+  if [ -n "$default_config_file" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
+    exec bundle exec jekyll "$2" --config "$default_config_file" "${@:3}"
   else
     exec bundle exec jekyll "${@:2}"
   fi
 elif [[ -z "$*" ]]; then
   echo "Running default command 'jekyll serve' (JEKYLL_ENV: ${JEKYLL_ENV})..."
 
-  if [ -n "$DEFAULT_CONFIG" ]; then
-    exec bundle exec jekyll serve --config "$DEFAULT_CONFIG" --livereload --incremental --force_polling --watch --host 0.0.0.0
+  if [ -n "$default_config_file" ]; then
+    exec bundle exec jekyll serve --config "$default_config_file" --livereload --incremental --force_polling --watch --host 0.0.0.0
   else
     exec bundle exec jekyll serve --livereload --incremental --force_polling --watch --host 0.0.0.0
   fi
