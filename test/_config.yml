@@ -1,3 +1,4 @@
+repository: SwedbankPay/jekyll-plantuml-docker
 plugins:
   - jemoji
   - jekyll-material-icon-tag
