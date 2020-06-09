@@ -17,11 +17,13 @@ bundle check || bundle install
 
 if [[ "$1" == "deploy" ]]; then
   echo "Deploying..."
+  deploy_config_file="/_config.deploy.yaml"
 
   if [ -n "$DEFAULT_CONFIG" ]; then
-    JEKYLL_ENV=production bundle exec jekyll build --config "$DEFAULT_CONFIG" --verbose
+    JEKYLL_ENV=production bundle exec jekyll build --config "$DEFAULT_CONFIG,$deploy_config_file" --verbose
   else
-    JEKYLL_ENV=production bundle exec jekyll build --verbose
+    config_files=$(find . -name "_config.y*ml")
+    JEKYLL_ENV=production bundle exec jekyll build --verbose --config "$config_files,$deploy_config_file"
   fi
   exec /usr/jekyll/bin/deploy.sh --verbose
 elif [[ "$1" == "jekyll" ]]; then
