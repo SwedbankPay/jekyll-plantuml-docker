@@ -16,8 +16,8 @@ end
 
 # Test generated output has valid HTML and links.
 task :test do
-  image_name = ENV["IMAGE_NAME"]
-  image_tag = ENV["IMAGE_TAG"]
+  image_name = ENV.fetch("IMAGE_NAME", "swedbankpay/jekyll-plantuml")
+  image_tag = ENV.fetch("IMAGE_TAG", "latest")
 
   # Spin up docker
   cmd = %Q(
