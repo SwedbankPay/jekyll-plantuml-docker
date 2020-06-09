@@ -145,7 +145,7 @@ jobs:
         DEBUG: true
       run: |
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
-        docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+        docker pull "${IMAGE_NAME}:${IMAGE_TAG}"
         ./.github/workflows/verify_build_output.sh
 
     - name: Upload build output artifacts
