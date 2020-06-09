@@ -36,31 +36,33 @@ task :test do
     raise stderr
   end
 
-  log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
-
-  unless log_stdrr.empty?
-    raise stderr
-  end
-
-  timout_counter = 0
-  # Scan docker log until we find that the server is running
-  while log_stdrr.empty? && !log_stdout.include?("Server running") && timout_counter < 300
+  begin
     log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
-    sleep 1
-    timout_counter += 1
+
+    unless log_stdrr.empty?
+      raise stderr
+    end
+
+    timout_counter = 0
+    # Scan docker log until we find that the server is running
+    while log_stdrr.empty? && !log_stdout.include?("Server running") && timout_counter < 300
+      log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
+      sleep 1
+      timout_counter += 1
+    end
+
+    site_dir = File.join(Dir.pwd, "_site")
+
+    # Very practical for debug purposes to have the Docker log
+    puts log_stdout
+
+    puts "Checking files in #{site_dir}:"
+    puts Dir.entries(site_dir)
+
+    verify(site_dir)
+  ensure
+    Open3.capture3("docker stop #{stdout}")
   end
-
-  site_dir = File.join(Dir.pwd, "_site")
-
-  # Very practical for debug purposes to have the Docker log
-  puts log_stdout
-
-  puts "Checking files in #{site_dir}:"
-  puts Dir.entries(site_dir)
-
-  verify(site_dir)
-
-  Open3.capture3("docker stop #{stdout}")
 end
 
 task :verify_output do
