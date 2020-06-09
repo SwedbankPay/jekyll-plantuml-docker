@@ -1,7 +1,8 @@
 repository: SwedbankPay/jekyll-plantuml-docker
 plugins:
+  - jekyll-github-metadata
   - jemoji
   - jekyll-material-icon-tag
-  - "kramdown-plantuml"
+  - kramdown-plantuml
 github:
   branch: master
