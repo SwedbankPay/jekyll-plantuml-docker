@@ -150,8 +150,9 @@ jobs:
 
     - name: Upload build output artifacts
       uses: actions/upload-artifact@v2
+      if: always()
       with:
-        name: html
+        name: build-output-html
         path: test/_site/*.html
 
   test-deploy:
