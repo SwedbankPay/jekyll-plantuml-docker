@@ -3,7 +3,7 @@ require "jekyll"
 require "html-proofer"
 require "open3"
 
-def verify(site_dir: "_site")
+def verify(site_dir)
   options = {
     :assume_extension => true,
     :check_html => true,
