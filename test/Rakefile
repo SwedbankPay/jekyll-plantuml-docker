@@ -3,6 +3,17 @@ require "jekyll"
 require "html-proofer"
 require "open3"
 
+def verify(site_dir: "_site")
+  options = {
+    :assume_extension => true,
+    :check_html => true,
+    :enforce_https => true,
+    :only_4xx => true,
+    :check_unrendered_link => true,
+  }
+  HTMLProofer.check_directory(site_dir, options).run
+end
+
 # Test generated output has valid HTML and links.
 task :test do
   image_name = ENV["IMAGE_NAME"]
@@ -47,16 +58,14 @@ task :test do
   puts "Checking files in #{site_dir}:"
   puts Dir.entries(site_dir)
 
-  options = {
-    :assume_extension => true,
-    :check_html => true,
-    :enforce_https => true,
-    :only_4xx => true,
-    :check_unrendered_link => true,
-  }
-  HTMLProofer.check_directory(site_dir, options).run
+  verify(site_dir)
 
   Open3.capture3("docker stop #{stdout}")
 end
 
+task :verify_output do
+  verify
+end
+
 task :default => ["test"]
+task :verify => ["verify_output"]
