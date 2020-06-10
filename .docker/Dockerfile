@@ -83,7 +83,7 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $JEKYLL_BIN && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
-COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_BIN}/entrypoint
+COPY --chown=jekyll:jekyll .docker/entrypoint.sh ${JEKYLL_BIN}/entrypoint
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
@@ -108,7 +108,7 @@ LABEL org.label-schema.build-date="${DATE}" \
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
-ENTRYPOINT ["/usr/jekyll/bin/entrypoint"]
+ENTRYPOINT ["/usr/jekyll/bin/entrypoint.sh"]
 
 # How to build this Dockerfile (from the repository root directory):
 #
