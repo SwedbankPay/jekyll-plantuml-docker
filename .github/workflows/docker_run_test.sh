@@ -45,6 +45,8 @@ initialize() {
             --volume \"${local_directory}:/srv/jekyll\"
             \"${docker_image_fqn}\"
             $jekyll_command"
+
+    echo "$docker_run_command"
 }
 
 docker_run() {
