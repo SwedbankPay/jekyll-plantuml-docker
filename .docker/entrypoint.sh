@@ -10,4 +10,4 @@ fi
 
 bundle check || bundle install
 
-exec bundle exec ruby entrypoint.rb
+exec bundle exec ruby "${JEKYLL_BIN}/entrypoint.rb"
