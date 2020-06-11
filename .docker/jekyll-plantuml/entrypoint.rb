@@ -30,12 +30,6 @@ def get_config(command)
   jekyll_config
 end
 
-unless File.file?(File.join(Dir.pwd, "Gemfile"))
-  default_gemfile_path = File.join(JEKYLL_VAR_DIR, "Gemfile")
-  puts "No Gemfile found. Using default: #{default_gemfile_path}"
-  ENV["BUNDLE_GEMFILE"] = default_gemfile_path
-end
-
 if ARGV.length == 0
   puts "Running default command 'jekyll serve' (JEKYLL_ENV: #{JEKYLL_ENV})..."
   jekyll_config = get_config("serve")
