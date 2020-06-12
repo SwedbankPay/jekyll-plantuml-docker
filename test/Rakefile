@@ -17,25 +17,6 @@ end
 
 # Test generated output has valid HTML and links.
 task :test do
-  image_name = ENV.fetch("IMAGE_NAME", "swedbankpay/jekyll-plantuml")
-  image_tag = ENV.fetch("IMAGE_TAG", "latest")
-
-  # Spin up docker
-  cmd = %Q(
-    docker run \
-      --env JEKYLL_ENV=production \
-      --tty \
-      --volume "#{__dir__}:/srv/jekyll" \
-      "#{image_name}:#{image_tag}"
-      jekyll build
-  )
-
-  _, stderr, _ = Open3.capture3(cmd)
-
-  unless stderr.empty?
-    raise stderr
-  end
-
   site_dir = File.join(__dir__, "_site")
 
   puts "Checking files in #{site_dir}:"
