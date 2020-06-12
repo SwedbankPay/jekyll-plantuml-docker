@@ -10,6 +10,7 @@ def verify(site_dir)
     :enforce_https => true,
     :only_4xx => true,
     :check_unrendered_link => true,
+    :check_opengraph => true,
   }
   HTMLProofer.check_directory(site_dir, options).run
 end
@@ -29,7 +30,7 @@ task :test do
       jekyll build
   )
 
-  stdout, stderr, _ = Open3.capture3(cmd)
+  _, stderr, _ = Open3.capture3(cmd)
 
   unless stderr.empty?
     raise stderr
