@@ -31,10 +31,17 @@ docker run \
     "$docker_image_fqn" \
     jekyll build
 
-bundle exec htmlproofer \
-    _site \
-    --check-html \
-    --assume-extension \
-    --enforce-https \
-    --only-4xx \
-    --check-opengraph
+result=$(\
+    bundle exec htmlproofer \
+        _site \
+        --check-html \
+        --assume-extension \
+        --enforce-https \
+        --only-4xx \
+        --check-opengraph \
+)
+
+if [[ $result == *"0 files"* ]]; then
+    echo "No files checked! Is _site empty?"
+    exit 1
+fi
