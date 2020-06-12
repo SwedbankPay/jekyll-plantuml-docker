@@ -31,4 +31,10 @@ docker run \
     "$docker_image_fqn" \
     jekyll build
 
-bundle exec rake
+bundle exec htmlproofer \
+    _site \
+    --check-html \
+    --assume-extension \
+    --enforce-https \
+    --only-4xx \
+    --check-opengraph
