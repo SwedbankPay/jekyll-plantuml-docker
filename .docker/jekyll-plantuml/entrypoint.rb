@@ -1,4 +1,5 @@
 require "jekyll"
+require "jekyll-github-metadata"
 
 JEKYLL_VAR_DIR = ENV.fetch("JEKYLL_VAR_DIR")
 JEKYLL_ENV = ENV.fetch("JEKYLL_ENV", "production")
@@ -6,16 +7,26 @@ JEKYLL_ENV = ENV.fetch("JEKYLL_ENV", "production")
 def get_config(command)
   config_file_path = File.join(Dir.pwd, "_config.yml")
 
-  jekyll_config = {
-    "config" => config_file_path,
-    "incremental" => true,
-  }
-
   unless File.file?(config_file_path)
     default_config_file_path = File.join(JEKYLL_VAR_DIR, "_config.default.yml")
     puts "No _config.yml found. Using default: #{default_config_file_path}"
-    jekyll_config["config"] = default_config_file_path
+    config_file_path = default_config_file_path
   end
+
+  jekyll_config = Jekyll.configuration({
+    "config" => config_file_path,
+    "incremental" => true,
+    "base_url" => "",
+  })
+
+  ghm = Jekyll::GitHubMetadata
+  ghm.site = Jekyll::Site.new(jekyll_config)
+  gh_client = Jekyll::GitHubMetadata::Client.new
+  pages = gh_client.pages(ghm.repository.nwo)
+
+  jekyll_config.merge({
+    "url" => pages.html_url,
+  })
 
   if command == "serve"
     jekyll_config.merge({
