@@ -20,18 +20,13 @@ task :test do
   image_tag = ENV.fetch("IMAGE_TAG", "latest")
 
   # Spin up docker
-  # TODO: It should be enough to do `jekyll build` since HTMLProofer doesn't
-  # do HTTP requests for internal links, it only checks them against other
-  # HTML files within the _site folder as far as I can understand. We need
-  # to do the below TODO first, though.
   cmd = %Q(
     docker run \
-      --detach \
-      --publish 4000:4000 \
       --env JEKYLL_ENV=production \
       --tty \
-      --volume "#{Dir.pwd}:/srv/jekyll" \
+      --volume "#{__dir__}:/srv/jekyll" \
       "#{image_name}:#{image_tag}"
+      jekyll build
   )
 
   stdout, stderr, _ = Open3.capture3(cmd)
@@ -40,34 +35,12 @@ task :test do
     raise stderr
   end
 
-  begin
-    log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
+  site_dir = File.join(__dir__, "_site")
 
-    unless log_stdrr.empty?
-      raise stderr
-    end
+  puts "Checking files in #{site_dir}:"
+  puts Dir.entries(site_dir)
 
-    timout_counter = 0
-    # Scan docker log until we find that the server is running
-    # TODO: Scan for the folder `_site` to exist instead.
-    while log_stdrr.empty? && !log_stdout.include?("Server running") && timout_counter < 300
-      log_stdout, log_stdrr, _ = Open3.capture3("docker logs #{stdout}")
-      sleep 1
-      timout_counter += 1
-    end
-
-    site_dir = File.join(Dir.pwd, "_site")
-
-    # Very practical for debug purposes to have the Docker log
-    puts log_stdout
-
-    puts "Checking files in #{site_dir}:"
-    puts Dir.entries(site_dir)
-
-    verify(site_dir)
-  ensure
-    Open3.capture3("docker stop #{stdout}")
-  end
+  verify(site_dir)
 end
 
 task :verify_output do
