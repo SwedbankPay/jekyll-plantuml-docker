@@ -26,7 +26,8 @@ echo "Running $docker_image_fqn..."
 
 docker run \
     --env JEKYLL_ENV=production \
-    --tty \
+    --env PAGES_REPO_NWO="${PAGES_REPO_NWO}" \
+    --env JEKYLL_GITHUB_TOKEN="${JEKYLL_GITHUB_TOKEN}" \
     --volume "$(pwd):/srv/jekyll" \
     "$docker_image_fqn" \
     jekyll build
