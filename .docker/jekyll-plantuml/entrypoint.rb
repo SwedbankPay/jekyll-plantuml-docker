@@ -10,45 +10,59 @@ module Jekyll::PlantUml
 
     def execute
       if ARGV.length == 0
-        puts "Running default command 'jekyll serve' (env: #{@jekyll_env})..."
-        jekyll_config = get_config("serve")
-        Jekyll::Commands::Serve.process(jekyll_config)
+        execute_default()
       elsif ARGV[0] == "deploy"
-        puts "Deploying..."
-        jekyll_config = get_config("deploy")
-        Jekyll::Commands::Build.process(jekyll_config)
-        exec("/usr/jekyll/bin/deploy.sh --verbose")
+        execute_deploy()
       elsif ARGV[0] == "jekyll"
-        requested_jekyll_command = ARGV[1]
-
-        if requested_jekyll_command.empty?
-          raise "No jekyll command provided."
-        end
-
-        requested_jekyll_command = requested_jekyll_command.downcase
-        jekyll_config = get_config(requested_jekyll_command)
-
-        case requested_jekyll_command.downcase
-        when "build"
-          Jekyll::Commands::Build.process(jekyll_config)
-        when "serve"
-          Jekyll::Commands::Serve.process(jekyll_config)
-        end
-
-        # If the default_config_file is assigned and the jekyll command supports '--config',
-        # apply the default config by performing some positional argument magic.
-        # if default_config_file_path #" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
-        #   exec("bundle exec jekyll $2 --config $default_config_file ${@:3}")
-        # else
-        #   exec("bundle exec jekyll ${@:2}")
-        # end
+        execute_jekyll_command(ARGV[1])
       else
-        puts "Running '$*' (env: #{@jekyll_env})..."
-        exec "$@"
+        execute_unknown()
       end
     end
 
     private
+
+    def execute_default
+      puts "Running default command 'jekyll serve' (env: #{@jekyll_env})..."
+      jekyll_config = get_config("serve")
+      Jekyll::Commands::Serve.process(jekyll_config)
+    end
+
+    def execute_deploy
+      puts "Deploying..."
+      jekyll_config = get_config("deploy")
+      Jekyll::Commands::Build.process(jekyll_config)
+      exec("/usr/jekyll/bin/deploy.sh --verbose")
+    end
+
+    def execute_jekyll_command(requested_jekyll_command)
+      if requested_jekyll_command.empty?
+        raise "No jekyll command provided."
+      end
+
+      requested_jekyll_command = requested_jekyll_command.downcase
+      jekyll_config = get_config(requested_jekyll_command)
+
+      case requested_jekyll_command.downcase
+      when "build"
+        Jekyll::Commands::Build.process(jekyll_config)
+      when "serve"
+        Jekyll::Commands::Serve.process(jekyll_config)
+      end
+
+      # If the default_config_file is assigned and the jekyll command supports '--config',
+      # apply the default config by performing some positional argument magic.
+      # if default_config_file_path #" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
+      #   exec("bundle exec jekyll $2 --config $default_config_file ${@:3}")
+      # else
+      #   exec("bundle exec jekyll ${@:2}")
+      # end
+    end
+
+    def execute_unknown
+      puts "Running '$*' (env: #{@jekyll_env})..."
+      exec "$@"
+    end
 
     def get_config(command)
       config_file_path = File.join(Dir.pwd, "_config.yml")
