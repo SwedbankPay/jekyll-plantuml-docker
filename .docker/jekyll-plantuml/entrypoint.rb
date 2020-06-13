@@ -65,14 +65,21 @@ module Jekyll::PlantUml
         "base_url" => "",
       })
 
-      ghm = Jekyll::GitHubMetadata
-      ghm.site = Jekyll::Site.new(jekyll_config)
-      gh_client = Jekyll::GitHubMetadata::Client.new
-      pages = gh_client.pages(ghm.repository.nwo)
+      begin
+        ghm = Jekyll::GitHubMetadata
+        ghm.site = Jekyll::Site.new(jekyll_config)
+        gh_client = Jekyll::GitHubMetadata::Client.new
+        pages = gh_client.pages(ghm.repository.nwo)
 
-      jekyll_config.merge({
-        "url" => pages.html_url,
-      })
+        jekyll_config.merge({
+          "url" => pages.html_url,
+        })
+      rescue => exception
+        puts "Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML."
+        puts "Defining the JEKYLL_GITHUB_TOKEN environment variable may help. See the following issue for details:"
+        puts "https://github.com/github/pages-gem/issues/399#issuecomment-450799841"
+        puts exception
+      end
 
       if command == "serve"
         jekyll_config.merge({
