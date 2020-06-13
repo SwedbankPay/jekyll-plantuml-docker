@@ -39,9 +39,19 @@ initialize() {
         exit 1
     fi
 
+    environment=""
+
+    if [[ -n "${PAGES_REPO_NWO}" ]]; then
+        environment="--env PAGES_REPO_NWO=\"${PAGES_REPO_NWO}\""
+    fi
+
+    if [[ -n "${JEKYLL_GITHUB_TOKEN}" ]]; then
+        environment="$environment --env JEKYLL_GITHUB_TOKEN=\"${JEKYLL_GITHUB_TOKEN}\""
+    fi
+
     docker_run_command="\
         docker run
-            --tty
+            --tty $environment \
             --volume \"${local_directory}:/srv/jekyll\"
             \"${docker_image_fqn}\"
             $jekyll_command"

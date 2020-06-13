@@ -113,6 +113,8 @@ jobs:
 
     - name: Run Docker Image (jekyll build)
       env:
+        PAGES_REPO_NWO: ${{ github.repository }}
+        JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
