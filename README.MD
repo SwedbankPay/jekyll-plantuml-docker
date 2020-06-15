@@ -107,7 +107,7 @@ agreement][cla].
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
 [coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
 [coc]:                  ./CODE_OF_CONDUCT.md
-[config]:               ./.docker/jekyll-plantuml/_config.default.yml
+[config]:               ./.docker/entrypoint/_config.default.yml
 [dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
 [dependabot]:           https://dependabot.com
 [docker-pull-badge]:    https://img.shields.io/docker/pulls/swedbankpay/jekyll-plantuml
@@ -115,7 +115,7 @@ agreement][cla].
 [docker]:               https://hub.docker.com/r/swedbankpay/jekyll-plantuml
 [entrypoint]:           ./.docker/entrypoint
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
-[gemfile]:              ./.docker/jekyll-plantuml/Gemfile
+[gemfile]:              ./.docker/entrypoint/Gemfile
 [github]:               https://github.com/SwedbankPay/jekyll-plantuml-docker
 [jekyll-docs]:          https://jekyllrb.com/docs/
 [jekyll]:               https://jekyllrb.com/

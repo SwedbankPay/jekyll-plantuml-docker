@@ -81,7 +81,7 @@ jobs:
       env:
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/.docker/entrypoint
       run: |
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
         docker pull ${IMAGE_NAME}:${IMAGE_TAG}
@@ -117,7 +117,7 @@ jobs:
         JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/.docker/entrypoint
       run: |
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
         docker pull ${IMAGE_NAME}:${IMAGE_TAG}
@@ -179,7 +179,7 @@ jobs:
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
         docker pull ${IMAGE_NAME}:${IMAGE_TAG}
         docker run \
-          --volume ${WORK_DIR}/.docker/jekyll-plantuml:/srv/jekyll \
+          --volume ${WORK_DIR}/.docker/entrypoint:/srv/jekyll \
           --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
           --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
           --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
