@@ -84,8 +84,8 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $JEKYLL_BIN && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
-COPY --chown=jekyll:jekyll .docker/entrypoint.sh ${JEKYLL_BIN}/
-COPY --chown=jekyll:jekyll .docker/entrypoint/entrypoint.rb ${JEKYLL_BIN}/
+COPY --chown=jekyll:jekyll .docker/entrypoint/entrypoint.sh ${JEKYLL_BIN}/
+COPY --chown=jekyll:jekyll .docker/entrypoint/lib/entrypoint.rb ${JEKYLL_BIN}/
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
