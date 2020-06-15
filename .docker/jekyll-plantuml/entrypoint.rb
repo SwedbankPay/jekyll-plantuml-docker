@@ -1,67 +1,91 @@
 require "jekyll"
 require "jekyll-github-metadata"
+require "./argument-parser"
+require "./command-line-argument-error"
+
+# Extend string to allow for bold text.
+class String
+  def bold
+    "\033[1m#{self}\033[0m"
+  end
+end
 
 module Jekyll::PlantUml
   class Entrypoint
-    def initialize
-      @jekyll_var_dir = ENV.fetch("JEKYLL_VAR_DIR")
-      @jekyll_env = ENV.fetch("JEKYLL_ENV", "production")
+    def initialize(jekyll_env, jekyll_var_dir, docker_image_name, docker_image_version)
+      @argument_parser = ArgumentParser.new(docker_image_name, docker_image_version)
+      @jekyll_env = jekyll_env
+      @jekyll_var_dir = jekyll_var_dir
     end
 
     def execute
-      if ARGV.length == 0
-        execute_default()
-      elsif ARGV[0] == "deploy"
-        execute_deploy()
-      elsif ARGV[0] == "jekyll"
-        execute_jekyll_command(ARGV[1])
-      else
-        execute_unknown()
+      begin
+        args = @argument_parser.parse
+        # puts args
+        execute_args(args)
+      rescue Docopt::Exit => e
+        puts e.message
+      rescue CommandLineArgumentError => e
+        puts "Error! #{e}.".bold
+        puts ""
+        puts @argument_parser.help
+        exit 1
       end
     end
 
     private
 
-    def execute_default
-      puts "Running default command 'jekyll serve' (env: #{@jekyll_env})..."
-      jekyll_config = get_config("serve")
-      Jekyll::Commands::Serve.process(jekyll_config)
+    def execute_args(args)
+      command = args["<command>"]
+      case command
+      when "deploy"
+        dry_run = args["--dry-run"]
+        verify = args["--verify"]
+        execute_deploy(dry_run, verify)
+      when "jekyll"
+        jekyll_command = args["<jekyll-command>"]
+        execute_jekyll_command(jekyll_command)
+      else
+        raise CommandLineArgumentError.new("Unknown command '#{command}'")
+      end
     end
 
-    def execute_deploy
-      puts "Deploying..."
+    def execute_deploy(dry_run, verify)
+      message = "Deploying"
+      deploy_cmd = "/usr/jekyll/bin/deploy.sh --verbose"
+
+      if verify
+        message += ", verified"
+        deploy_cmd += " --verify"
+      end
+
+      if dry_run
+        message += ", dry-run"
+        deploy_cmd += " --dry-run"
+      end
+
+      message += "…"
+
       jekyll_config = get_config("deploy")
       Jekyll::Commands::Build.process(jekyll_config)
-      exec("/usr/jekyll/bin/deploy.sh --verbose")
+      exec(deploy_cmd)
     end
 
     def execute_jekyll_command(requested_jekyll_command)
-      if requested_jekyll_command.empty?
-        raise "No jekyll command provided."
-      end
+      jekyll_command_class = nil
+      jekyll_command = requested_jekyll_command.downcase
 
-      requested_jekyll_command = requested_jekyll_command.downcase
-      jekyll_config = get_config(requested_jekyll_command)
-
-      case requested_jekyll_command.downcase
+      case jekyll_command
       when "build"
-        Jekyll::Commands::Build.process(jekyll_config)
+        jekyll_command_class = Jekyll::Commands::Build
       when "serve"
-        Jekyll::Commands::Serve.process(jekyll_config)
+        jekyll_command_class = Jekyll::Commands::Serve
+      else
+        raise CommandLineArgumentError.new("Unsupported Jekyll command '#{requested_jekyll_command}'")
       end
 
-      # If the default_config_file is assigned and the jekyll command supports '--config',
-      # apply the default config by performing some positional argument magic.
-      # if default_config_file_path #" ] && bundle exec jekyll "$2" --help | grep '\-\-config' > /dev/null; then
-      #   exec("bundle exec jekyll $2 --config $default_config_file ${@:3}")
-      # else
-      #   exec("bundle exec jekyll ${@:2}")
-      # end
-    end
-
-    def execute_unknown
-      puts "Running '$*' (env: #{@jekyll_env})..."
-      exec "$@"
+      jekyll_config = get_config(jekyll_command)
+      jekyll_command_class.process(jekyll_config)
     end
 
     def get_config(command)
@@ -84,6 +108,8 @@ module Jekyll::PlantUml
         ghm.site = Jekyll::Site.new(jekyll_config)
         gh_client = Jekyll::GitHubMetadata::Client.new
         pages = gh_client.pages(ghm.repository.nwo)
+
+        puts "Setting site.url to <#{pages.html_url}>."
 
         jekyll_config.merge({
           "url" => pages.html_url,
@@ -110,4 +136,20 @@ module Jekyll::PlantUml
   end
 end
 
-Jekyll::PlantUml::Entrypoint.new.execute
+module Jekyll::PlantUml
+  class Main
+    def initialize
+      @jekyll_env = ENV.fetch("JEKYLL_ENV", "production")
+      @jekyll_var_dir = ENV.fetch("JEKYLL_VAR_DIR")
+      @docker_image_name = ENV.fetch("DOCKER_IMAGE_NAME")
+      @docker_image_version = ENV.fetch("VERSION")
+    end
+
+    def execute
+      entrypoint = Jekyll::PlantUml::Entrypoint.new(@jekyll_env, @jekyll_var_dir, @docker_image_name, @docker_image_version)
+      entrypoint.execute
+    end
+  end
+end
+
+Jekyll::PlantUml::Main.new.execute

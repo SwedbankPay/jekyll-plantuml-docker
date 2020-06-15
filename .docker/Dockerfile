@@ -14,7 +14,8 @@ ENV BUNDLE_HOME="/usr/local/bundle" \
     JEKYLL_VERSION="4.1.0" \
     DRAFTS=false \
     FORCE_POLLING=false \
-    VERBOSE=false
+    VERBOSE=false \
+    DOCKER_IMAGE_NAME="swedbankpay/jekyll-plantuml"
 
 ENV BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
     GEM_BIN="$GEM_HOME/bin" \
@@ -98,7 +99,7 @@ EXPOSE 4000
 
 LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
-      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:${VERSION}" \
+      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll ${DOCKER_IMAGE_NAME}:${VERSION}" \
       org.label-schema.name="jekyll-plantuml" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.url="https://hub.docker.com/r/swedbankpay/jekyll-plantuml" \
