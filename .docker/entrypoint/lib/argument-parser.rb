@@ -11,9 +11,8 @@ Runs the #{docker_image_name} container's entrypoint.
 Usage:
   #{docker_image_fqn} [-h | --help] [--version]
                       <command> [--dry-run] [--verify]
-                      [<jekyll-command>]
 
-Options:
+                      Options:
   -h --help     Print this screen.
   --version     Print the version of #{docker_image_name}.
   --dry-run     On a dry-run, the the deploy command will not push the changes
@@ -23,8 +22,10 @@ Options:
 
 Commands:
   deploy        Builds the website with `jekyll build` and then deploys
-                it to a branch and pushes it to the remote `origin`.
-  jekyll        Executes the following Jekyll command.
+                it to a branch (default `gh-pages`) and pushes it to the remote
+                `origin`.
+  build         Executes the `jekyll build` command.
+  serve         Executes the `jekyll serve` command.
 DOCOPT
     end
 
