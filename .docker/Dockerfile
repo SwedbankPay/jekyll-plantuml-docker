@@ -1,9 +1,5 @@
 FROM ruby:2.7.1
 
-ARG SHA
-ARG DATE
-ARG VERSION
-
 ENV BUNDLE_HOME="/usr/local/bundle" \
     BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
@@ -95,6 +91,10 @@ WORKDIR /srv/jekyll
 
 EXPOSE 35729
 EXPOSE 4000
+
+ARG SHA
+ARG DATE
+ARG VERSION
 
 LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
