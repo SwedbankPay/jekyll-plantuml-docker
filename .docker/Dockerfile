@@ -62,7 +62,7 @@ RUN gem install jekyll \
 
 COPY .dockerignore ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_VAR_DIR}/entrypoint
-RUN ${JEKYLL_VAR_DIR}/entrypoint/delete_ignored_files.sh ${JEKYLL_VAR_DIR}/entrypoint
+RUN ${JEKYLL_VAR_DIR}/entrypoint/sh/delete_ignored_files.sh ${JEKYLL_VAR_DIR}/entrypoint
 
 RUN bundle config build --use-system-libraries && \
     bundle install --gemfile=${JEKYLL_VAR_DIR}/entrypoint/Gemfile
@@ -79,7 +79,6 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $JEKYLL_BIN && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
-COPY --chown=jekyll:jekyll .docker/entrypoint/entrypoint.sh ${JEKYLL_BIN}/
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
@@ -110,7 +109,7 @@ ENV DOCKER_IMAGE_VERSION="${VERSION}"
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
-ENTRYPOINT ["/usr/jekyll/bin/entrypoint.sh"]
+ENTRYPOINT ["/var/jekyll/entrypoint/sh/entrypoint.sh"]
 
 # How to build this Dockerfile (from the repository root directory):
 #
