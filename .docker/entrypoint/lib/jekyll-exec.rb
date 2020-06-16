@@ -6,10 +6,9 @@ require_relative "string-bold"
 
 module Jekyll::PlantUml
   class JekyllExec
-    def initialize(jekyll_env, jekyll_var_dir, docker_image_name, docker_image_version)
+    def initialize(jekyll_env, docker_image_name, docker_image_version)
       @argument_parser = ArgumentParser.new(docker_image_name, docker_image_version)
       @jekyll_env = jekyll_env
-      @jekyll_var_dir = jekyll_var_dir
     end
 
     def execute
@@ -88,7 +87,7 @@ module Jekyll::PlantUml
       config_file_path = File.join(Dir.pwd, "_config.yml")
 
       unless File.file?(config_file_path)
-        default_config_file_path = File.join(@jekyll_var_dir, "_config.default.yml")
+        default_config_file_path = File.join(__dir__, "..", "_config.default.yml")
         puts "No _config.yml found. Using default: #{default_config_file_path}"
         config_file_path = default_config_file_path
       end

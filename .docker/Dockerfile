@@ -60,12 +60,12 @@ RUN gem install jekyll \
     --version $JEKYLL_VERSION \
     -- --use-system-libraries
 
-COPY --chown=jekyll:jekyll .docker/entrypoint/Gemfile ${JEKYLL_VAR_DIR}/
-COPY --chown=jekyll:jekyll .docker/entrypoint/Gemfile.lock ${JEKYLL_VAR_DIR}/
-COPY --chown=jekyll:jekyll .docker/entrypoint/_config.default.yml ${JEKYLL_VAR_DIR}/
+COPY .dockerignore ${JEKYLL_VAR_DIR}/
+COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_VAR_DIR}/entrypoint
+RUN ${JEKYLL_VAR_DIR}/entrypoint/delete_ignored_files.sh ${JEKYLL_VAR_DIR}/entrypoint
 
 RUN bundle config build --use-system-libraries && \
-    bundle install --gemfile=${JEKYLL_VAR_DIR}/Gemfile
+    bundle install --gemfile=${JEKYLL_VAR_DIR}/entrypoint/Gemfile
 
 # Clean up cache folders, as they aren't needed in a Docker container.
 RUN rm -rf /root/.gem && \
@@ -80,7 +80,6 @@ RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
 COPY --chown=jekyll:jekyll .docker/entrypoint/entrypoint.sh ${JEKYLL_BIN}/
-COPY --chown=jekyll:jekyll .docker/entrypoint/lib/entrypoint.rb ${JEKYLL_BIN}/
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
     ${JEKYLL_BIN}/deploy.sh
@@ -106,6 +105,8 @@ LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.vcs-url="https://github.com/SwedbankPay/jekyll-plantuml-docker" \
       org.label-schema.vendor="Swedbank Pay" \
       org.label-schema.version="${VERSION}"
+
+ENV DOCKER_IMAGE_VERSION="${VERSION}"
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 

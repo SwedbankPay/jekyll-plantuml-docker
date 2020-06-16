@@ -29,7 +29,7 @@ DOCOPT
     end
 
     def parse
-      Docopt::docopt(@doc, params = { :version => @docker_image_version })
+      Docopt.docopt(@doc, { :version => @docker_image_version })
     end
 
     def help
@@ -37,7 +37,7 @@ DOCOPT
     end
 
     def usage
-      Docopt::printable_usage(@doc)
+      Docopt.printable_usage(@doc)
     end
   end
 end
