@@ -1,17 +1,11 @@
 require "jekyll"
 require "jekyll-github-metadata"
-require "./argument-parser"
-require "./command-line-argument-error"
-
-# Extend string to allow for bold text.
-class String
-  def bold
-    "\033[1m#{self}\033[0m"
-  end
-end
+require_relative "argument-parser"
+require_relative "command-line-argument-error"
+require_relative "string-bold"
 
 module Jekyll::PlantUml
-  class Entrypoint
+  class JekyllExec
     def initialize(jekyll_env, jekyll_var_dir, docker_image_name, docker_image_version)
       @argument_parser = ArgumentParser.new(docker_image_name, docker_image_version)
       @jekyll_env = jekyll_env
@@ -135,21 +129,3 @@ module Jekyll::PlantUml
     end
   end
 end
-
-module Jekyll::PlantUml
-  class Main
-    def initialize
-      @jekyll_env = ENV.fetch("JEKYLL_ENV", "production")
-      @jekyll_var_dir = ENV.fetch("JEKYLL_VAR_DIR")
-      @docker_image_name = ENV.fetch("DOCKER_IMAGE_NAME")
-      @docker_image_version = ENV.fetch("VERSION")
-    end
-
-    def execute
-      entrypoint = Jekyll::PlantUml::Entrypoint.new(@jekyll_env, @jekyll_var_dir, @docker_image_name, @docker_image_version)
-      entrypoint.execute
-    end
-  end
-end
-
-Jekyll::PlantUml::Main.new.execute
