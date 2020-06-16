@@ -49,16 +49,18 @@ module Jekyll::PlantUml
       deploy_cmd = "/usr/jekyll/bin/deploy.sh --verbose"
 
       if verify
-        message += ", verified"
-        deploy_cmd += " --verify"
+        message << ", verified"
+        deploy_cmd << " --verify"
       end
 
       if dry_run
-        message += ", dry-run"
-        deploy_cmd += " --dry-run"
+        message << ", dry-run"
+        deploy_cmd << " --dry-run"
       end
 
-      message += "…"
+      message << "…"
+
+      puts message
 
       jekyll_config = get_config("deploy")
       Jekyll::Commands::Build.process(jekyll_config)
