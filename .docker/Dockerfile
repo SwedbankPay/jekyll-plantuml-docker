@@ -67,7 +67,6 @@ RUN gem install jekyll \
 COPY --chown=jekyll:jekyll .docker/entrypoint/Gemfile ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/entrypoint/Gemfile.lock ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/entrypoint/_config.default.yml ${JEKYLL_VAR_DIR}/
-COPY --chown=jekyll:jekyll .docker/entrypoint/_config.deploy.yml ${JEKYLL_VAR_DIR}/
 
 RUN bundle config build --use-system-libraries && \
     bundle install --gemfile=${JEKYLL_VAR_DIR}/Gemfile
