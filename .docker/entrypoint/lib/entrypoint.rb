@@ -8,7 +8,7 @@ module Jekyll::PlantUml
       @docker_image_name = ENV.fetch("DOCKER_IMAGE_NAME")
       @docker_image_version = ENV.fetch("DOCKER_IMAGE_VERSION")
 
-      if not Dir.exists? @jekyll_data_dir
+      unless Dir.exists? @jekyll_data_dir
         raise "#{@jekyll_data_dir} does not exist"
       end
     end

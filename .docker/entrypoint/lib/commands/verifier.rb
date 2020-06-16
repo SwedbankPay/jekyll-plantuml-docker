@@ -13,13 +13,13 @@ module Jekyll::PlantUml
     end
 
     def verify
-      if not @jekyll_config.has_key? "destination"
+      unless @jekyll_config.has_key? "destination"
         raise "No 'destination' key found in the Jekyll config"
       end
 
       jekyll_destination_dir = @jekyll_config["destination"]
 
-      if not Dir.exist?(jekyll_destination_dir)
+      unless Dir.exist?(jekyll_destination_dir)
         raise "#{@jekyll_destination_dir} does not exist"
       end
 
