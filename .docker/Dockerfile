@@ -65,6 +65,7 @@ COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_VAR_DIR}/entrypoint
 RUN ${JEKYLL_VAR_DIR}/entrypoint/sh/delete_ignored_files.sh ${JEKYLL_VAR_DIR}/entrypoint
 
 RUN bundle config build --use-system-libraries && \
+    bundle config build.nokogiri --use-system-libraries && \
     bundle install --gemfile=${JEKYLL_VAR_DIR}/entrypoint/Gemfile
 
 # Clean up cache folders, as they aren't needed in a Docker container.
