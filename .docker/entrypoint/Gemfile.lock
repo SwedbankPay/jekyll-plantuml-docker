@@ -157,6 +157,7 @@ DEPENDENCIES
   jekyll-material-icon-tag
   jemoji
   kramdown-plantuml
+  rouge
 
 BUNDLED WITH
    2.1.4
