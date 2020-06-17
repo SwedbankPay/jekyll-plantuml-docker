@@ -20,10 +20,8 @@ module Jekyll
 
         puts "Sourcing gems from #{@secondary_gemfile_path}..." if @debug
 
-        primary_gemfile = File.open(@primary_gemfile_path)
-        secondary_gemfile = File.open(@secondary_gemfile_path)
-        primary_gemfile_lines = primary_gemfile.readlines
-        secondary_gemfile_lines = secondary_gemfile.readlines
+        primary_gemfile_lines = read_lines(@primary_gemfile_path)
+        secondary_gemfile_lines = read_lines(@secondary_gemfile_path)
 
         pad_length = secondary_gemfile_lines.length.to_s.length
         padding = "%#{pad_length}s" % "" + " "
@@ -70,6 +68,12 @@ module Jekyll
         end
 
         -1
+      end
+
+      def read_lines(file_path)
+        File.open(file_path) do |file|
+          file.readlines
+        end
       end
     end
   end
