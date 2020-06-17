@@ -12,3 +12,15 @@ gem "docopt"
 gem "html-proofer"
 gem "html-proofer-unrendered-markdown"
 gem "rouge"
+
+def merge_gemfiles
+  require_relative "lib/gemfile-merger"
+
+  jekyll_data_dir = ENV.fetch("JEKYLL_DATA_DIR")
+  secondary_gemfile_path = File.join(jekyll_data_dir, "Gemfile")
+  primary_gemfile_path = __FILE__
+  gemfile_merger = Jekyll::PlantUml::GemfileMerger.new(primary_gemfile_path, secondary_gemfile_path)
+  gemfile_merger.merge()
+end
+
+merge_gemfiles()
