@@ -105,7 +105,7 @@ LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.vendor="Swedbank Pay" \
       org.label-schema.version="${VERSION}"
 
-CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
+CMD ["serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
 ENTRYPOINT ["/var/jekyll/entrypoint/sh/entrypoint.sh"]
 
