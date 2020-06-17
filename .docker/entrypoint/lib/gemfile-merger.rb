@@ -35,16 +35,7 @@ module Jekyll
           # Only care about lines starting with "gem"
           next unless line.start_with? "gem"
 
-          gem_part = line
-
-          # If the line contains a comma, get everything before the comma
-          # (ignoring version and group for now)
-          if line.include? ","
-            puts "#{padding} Comma found, splitting." if @debug
-            gem_part = line.split(",")[0]
-          end
-
-          gem_part.strip!
+          gem_part = get_gem_part(line)
 
           # If we already have the gem mentioned in this very Gemfile, skip it
           match_index = lines_index_of_substring(primary_gemfile_lines, gem_part)
@@ -55,12 +46,22 @@ module Jekyll
             next
           end
 
-          puts "#{padding} Loading #{line}." if @debug
+          puts "#{padding} Loading #{line.strip}." if @debug
           instance_eval line
         end
       end
 
       private
+
+      def get_gem_part(line)
+        gem_part = line
+
+        # If the line contains a comma, get everything before the comma
+        # (ignoring version and group for now)
+        gem_part = line.split(",")[0] if line.include? ","
+
+        gem_part.strip
+      end
 
       def lines_index_of_substring(lines, substring)
         lines.each_with_index do |line, index|
