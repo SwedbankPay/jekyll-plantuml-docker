@@ -25,8 +25,13 @@ module Jekyll
         primary_gemfile_lines = primary_gemfile.readlines
         secondary_gemfile_lines = secondary_gemfile.readlines
 
+        pad_length = secondary_gemfile_lines.length.to_s.length
+        padding = "%#{pad_length}s" % "" + " "
+
         secondary_gemfile_lines.each_with_index do |line, index|
           line_number = index + 1
+          line_number = "%#{pad_length}d" % line_number
+
           puts "#{line_number}: #{line}" if @debug
 
           # Only care about lines starting with "gem"
@@ -37,7 +42,7 @@ module Jekyll
           # If the line contains a comma, get everything before the comma
           # (ignoring version and group for now)
           if line.include? ","
-            puts "   Comma found, splitting" if @debug
+            puts "#{padding} Comma found, splitting." if @debug
             gem_part = line.split(",")[0]
           end
 
@@ -48,11 +53,11 @@ module Jekyll
 
           if match_index >= 0
             matching_line_number = match_index + 1
-            puts "   #{gem_part} found on line #{matching_line_number}. Skipping"
+            puts "#{padding} #{gem_part} found on line #{matching_line_number}. Skipping."
             next
           end
 
-          puts "   Loading #{line}." if @debug
+          puts "#{padding} Loading #{line}." if @debug
           instance_eval line
         end
       end
