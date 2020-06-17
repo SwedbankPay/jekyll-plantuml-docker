@@ -62,7 +62,6 @@ RUN bundle config build --use-system-libraries && \
     bundle config build.nokogiri --use-system-libraries && \
     bundle config set system 'true' && \
     bundle config set clean 'true' && \
-    bundle config set deployment 'true' && \
     bundle install \
         --gemfile="${JEKYLL_VAR_DIR}/entrypoint/Gemfile" \
         --jobs=4
