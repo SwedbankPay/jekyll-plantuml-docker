@@ -44,20 +44,27 @@ module Jekyll
           gem_part.strip!
 
           # If we already have the gem mentioned in this very Gemfile, skip it
-          if lines_include(primary_gemfile_lines, gem_part)
-            puts "   #{gem_part} is already loaded. Skipping." if @debug
+          match_index = lines_index_of_substring(primary_gemfile_lines, gem_part)
+
+          if match_index >= 0
+            matching_line_number = match_index + 1
+            puts "   #{gem_part} found on line #{matching_line_number}. Skipping"
             next
           end
 
-          puts "   Loading #{gem_part}." if @debug
+          puts "   Loading #{line}." if @debug
           instance_eval line
         end
       end
 
-      def lines_include(lines, substring)
-        lines.each do |line|
-          return true if line.include? substring
+      private
+
+      def lines_index_of_substring(lines, substring)
+        lines.each_with_index do |line, index|
+          return index if line.include? substring
         end
+
+        -1
       end
     end
   end
