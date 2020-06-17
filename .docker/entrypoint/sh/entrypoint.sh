@@ -8,6 +8,15 @@ if [ ! -f "Gemfile" ]; then
   export BUNDLE_GEMFILE="$DEFAULT_GEMFILE"
 fi
 
-bundle check || bundle install
+# bundle check --path $BUNDLE_PATH || bundle install
+
+bundle config build --use-system-libraries && \
+    bundle config build.jekyll --use-system-libraries && \
+    bundle config build.nokogiri --use-system-libraries && \
+    bundle config set system 'true' && \
+    bundle config set clean 'true' && \
+    bundle config set deployment 'true' && \
+    bundle check || \
+    bundle install
 
 exec bundle exec ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/entrypoint.rb" "$@"
