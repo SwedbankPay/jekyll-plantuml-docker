@@ -3,6 +3,8 @@
 .gitignore
 *.md
 .env
+tests/*
+.github/*
 
 # Jekyll
 _site
