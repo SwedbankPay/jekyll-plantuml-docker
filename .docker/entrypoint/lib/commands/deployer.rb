@@ -2,13 +2,15 @@ require "jekyll"
 
 module Jekyll::PlantUml
   class Deployer
-    def initialize(jekyll_config)
+    def initialize(jekyll_config, jekyll_var_dir)
       @jekyll_config = jekyll_config
+      @jekyll_var_dir = jekyll_var_dir
     end
 
     def deploy(dry_run)
       message = "Deploying"
-      deploy_cmd = "/usr/jekyll/bin/deploy.sh --verbose"
+      deploy_script_path = File.join(@jekyll_var_dir, "deploy.sh")
+      deploy_cmd = "#{deploy_script_path} --verbose"
 
       if verify
         message << ", verified"

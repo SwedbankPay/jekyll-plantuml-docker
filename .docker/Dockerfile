@@ -1,30 +1,28 @@
 FROM ruby:2.7.1
 
-ENV BUNDLE_HOME="/usr/local/bundle" \
-    BUNDLE_SILENCE_ROOT_WARNING=1 \
+ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
-    JEKYLL_BIN="/usr/jekyll/bin" \
     JEKYLL_DATA_DIR="/srv/jekyll" \
     JEKYLL_ENV="development" \
     JEKYLL_VAR_DIR="/var/jekyll" \
-    JEKYLL_VERSION="4.1.0" \
     DRAFTS=false \
     FORCE_POLLING=false \
     VERBOSE=false \
     DOCKER_IMAGE_NAME="swedbankpay/jekyll-plantuml"
 
-ENV BUNDLE_APP_CONFIG="$BUNDLE_HOME" \
+ENV BUNDLE_HOME="$GEM_HOME" \
+    BUNDLE_APP_CONFIG="$GEM_HOME" \
+    BUNDLE_PATH="$GEM_HOME" \
     GEM_BIN="$GEM_HOME/bin" \
     GEM_PATH="$GEM_HOME" \
     GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
-    PATH="${JEKYLL_BIN}:${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    PATH="${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Create all folders needed by RubyGems, Bundler, etc.
 RUN addgroup --system --gid 1000 jekyll && \
     adduser --system --gid 1000 jekyll && \
     mkdir -p $JEKYLL_VAR_DIR && \
-    mkdir -p $JEKYLL_DATA_DIR && \
-    mkdir -p $JEKYLL_BIN
+    mkdir -p $JEKYLL_DATA_DIR
 
 RUN apt-get clean && \
     apt-get update && \
@@ -54,19 +52,20 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US
 
 RUN gem update --system && gem install --force bundler
-RUN gem install jekyll \
-    --install-dir $JEKYLL_VAR_DIR \
-    --bindir $JEKYLL_BIN \
-    --version $JEKYLL_VERSION \
-    -- --use-system-libraries
 
 COPY .dockerignore ${JEKYLL_VAR_DIR}/
 COPY --chown=jekyll:jekyll .docker/entrypoint ${JEKYLL_VAR_DIR}/entrypoint
 RUN ${JEKYLL_VAR_DIR}/entrypoint/sh/delete_ignored_files.sh ${JEKYLL_VAR_DIR}/entrypoint
 
 RUN bundle config build --use-system-libraries && \
+    bundle config build.jekyll --use-system-libraries && \
     bundle config build.nokogiri --use-system-libraries && \
-    bundle install --gemfile=${JEKYLL_VAR_DIR}/entrypoint/Gemfile
+    bundle config set system 'true' && \
+    bundle config set clean 'true' && \
+    bundle config set deployment 'true' && \
+    bundle install \
+        --gemfile="${JEKYLL_VAR_DIR}/entrypoint/Gemfile" \
+        --jobs=4
 
 # Clean up cache folders, as they aren't needed in a Docker container.
 RUN rm -rf /root/.gem && \
@@ -77,13 +76,12 @@ RUN rm -rf /root/.gem && \
 # Make sure jekyll:jekyll owns everything.
 RUN chown -R jekyll:jekyll $JEKYLL_DATA_DIR && \
     chown -R jekyll:jekyll $JEKYLL_VAR_DIR && \
-    chown -R jekyll:jekyll $JEKYLL_BIN && \
     chown -R jekyll:jekyll $BUNDLE_HOME
 
 ADD --chown=jekyll:jekyll \
     https://github.com/SwedbankPay/git-directory-deploy/raw/1.0.4/deploy.sh \
-    ${JEKYLL_BIN}/deploy.sh
-RUN chmod +x ${JEKYLL_BIN}/deploy.sh
+    ${JEKYLL_VAR_DIR}/deploy.sh
+RUN chmod +x ${JEKYLL_VAR_DIR}/deploy.sh
 
 VOLUME  /srv/jekyll
 WORKDIR /srv/jekyll
@@ -94,19 +92,18 @@ EXPOSE 4000
 ARG SHA
 ARG DATE
 ARG VERSION
+ENV DOCKER_IMAGE_VERSION="${VERSION}"
 
 LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
       org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll ${DOCKER_IMAGE_NAME}:${VERSION}" \
       org.label-schema.name="jekyll-plantuml" \
       org.label-schema.schema-version="1.0" \
-      org.label-schema.url="https://hub.docker.com/r/swedbankpay/jekyll-plantuml" \
+      org.label-schema.url="https://hub.docker.com/r/${DOCKER_IMAGE_NAME}" \
       org.label-schema.vcs-ref="${SHA}" \
       org.label-schema.vcs-url="https://github.com/SwedbankPay/jekyll-plantuml-docker" \
       org.label-schema.vendor="Swedbank Pay" \
       org.label-schema.version="${VERSION}"
-
-ENV DOCKER_IMAGE_VERSION="${VERSION}"
 
 CMD ["jekyll", "serve", "--livereload", "--incremental", "--force_polling", "--watch", "--host", "0.0.0.0"]
 
