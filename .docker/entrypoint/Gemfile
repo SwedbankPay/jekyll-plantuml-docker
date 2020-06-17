@@ -14,7 +14,7 @@ gem "html-proofer-unrendered-markdown"
 gem "rouge"
 
 def merge_gemfiles
-  require_relative "lib/gemfile-merger"
+  require_relative "lib/gemfile-differ"
 
   jekyll_data_dir = ENV.fetch("JEKYLL_DATA_DIR")
   secondary_gemfile_path = File.join(jekyll_data_dir, "Gemfile")
