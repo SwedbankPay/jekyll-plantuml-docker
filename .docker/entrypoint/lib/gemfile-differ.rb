@@ -1,27 +1,24 @@
 module Jekyll
   module PlantUml
-    class GemfileMerger
-      def initialize(primary_gemfile_path, secondary_gemfile_path)
-        @debug = ENV.fetch("DEBUG", false)
+    class GemfileDiffer
+      def initialize(debug)
+        @debug = debug
+      end
 
+      def diff(primary_gemfile_path, secondary_gemfile_path)
         unless File.exists? primary_gemfile_path
           raise "#{primary_gemfile_path} cannot be found."
         end
 
-        @primary_gemfile_path = primary_gemfile_path
-        @secondary_gemfile_path = secondary_gemfile_path
-      end
-
-      def merge
-        unless File.exists? @secondary_gemfile_path
-          puts "#{@secondary_gemfile_path} not found." if @debug
-          return
+        unless File.exists? secondary_gemfile_path
+          puts "#{secondary_gemfile_path} not found." if @debug
+          nil
         end
 
-        puts "Sourcing gems from #{@secondary_gemfile_path}..." if @debug
+        puts "Sourcing gems from #{secondary_gemfile_path}..." if @debug
 
-        primary_gemfile_lines = read_lines(@primary_gemfile_path)
-        secondary_gemfile_lines = read_lines(@secondary_gemfile_path)
+        primary_gemfile_lines = read_lines(primary_gemfile_path)
+        secondary_gemfile_lines = read_lines(secondary_gemfile_path)
 
         pad_length = secondary_gemfile_lines.length.to_s.length
         padding = "%#{pad_length}s" % "" + " "
@@ -46,8 +43,8 @@ module Jekyll
             next
           end
 
-          puts "#{padding} Loading #{line.strip}." if @debug
-          instance_eval line
+          puts "#{padding} Yielding #{line.strip}." if @debug
+          yield line
         end
       end
 
