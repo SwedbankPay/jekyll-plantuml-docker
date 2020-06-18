@@ -13,20 +13,20 @@ gem "html-proofer"
 gem "html-proofer-unrendered-markdown"
 gem "rouge"
 
-def diff_gemfiles
-  require_relative "lib/gemfile-differ"
-
-  @debug = ENV.fetch("DEBUG", false)
-  jekyll_data_dir = ENV.fetch("JEKYLL_DATA_DIR")
-  secondary_gemfile_path = File.join(jekyll_data_dir, "Gemfile")
-  primary_gemfile_path = __FILE__
-  gemfile_differ = Jekyll::PlantUml::GemfileDiffer.new(@debug)
-  gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
-    yield line
-  end
-end
-
-diff_gemfiles do |line|
-  puts "    Loading #{line.strip}." if @debug
-  instance_eval line
-end
+#def diff_gemfiles
+#  require_relative "lib/gemfile-differ"
+#
+#  @debug = ENV.fetch("DEBUG", false)
+#  jekyll_data_dir = ENV.fetch("JEKYLL_DATA_DIR")
+#  secondary_gemfile_path = File.join(jekyll_data_dir, "Gemfile")
+#  primary_gemfile_path = __FILE__
+#  gemfile_differ = Jekyll::PlantUml::GemfileDiffer.new(@debug)
+#  gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
+#    yield line
+#  end
+#end
+#
+#diff_gemfiles do |line|
+#  puts "    Loading #{line.strip}." if @debug
+#  instance_eval line
+#end
