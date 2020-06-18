@@ -133,6 +133,12 @@ jobs:
       with:
         ruby-version: 2.7
 
+    - uses: actions/cache@v2
+      with:
+        path: .docker/entrypoint/vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-gems-
+
     - name: Bundle Install
       run: cd .docker/entrypoint && bundle install
 
