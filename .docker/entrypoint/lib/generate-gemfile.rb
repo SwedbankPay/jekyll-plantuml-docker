@@ -20,9 +20,7 @@ module Jekyll
         gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
            generated_file << line
         end
-
-        File.open(generated_file_path, 'w') { |file| file.puts(generated_file) }
-
+        File.open(primary_gemfile_path, 'w') { |file| file.puts(generated_file) }
       end
     end
   end
