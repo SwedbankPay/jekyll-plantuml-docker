@@ -143,7 +143,7 @@ jobs:
       run: cd .docker/entrypoint && bundle install
 
     - name: RSpec
-      run: cd .docker/entrypoint && rake
+      run: cd .docker/entrypoint && bundle exec rake
 
   verify-output:
     runs-on: ubuntu-latest
