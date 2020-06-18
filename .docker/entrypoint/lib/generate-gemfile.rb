@@ -10,8 +10,8 @@ module Jekyll
       end
 
       def generate
-        primary_gemfile_path = File.join(@jekyll_data_dir, "Gemfile")
-        secondary_gemfile_path = File.join(@jekyll_var_dir, "Gemfile")
+        primary_gemfile_path = File.join(@jekyll_var_dir, "/entrypoint/","Gemfile")
+        secondary_gemfile_path = File.join(@jekyll_data_dir, "Gemfile")
         generated_file_path = File.join(@jekyll_var_dir, "Gemfile_generated")
         original_file = File.readlines File.join(primary_gemfile_path)
         generated_file = original_file
