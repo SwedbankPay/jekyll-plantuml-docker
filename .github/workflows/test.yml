@@ -134,10 +134,10 @@ jobs:
         ruby-version: 2.7
 
     - name: Bundle Install
-      run: cd tests && bundle install
+      run: cd .docker/entrypoint && bundle install
 
     - name: RSpec
-      run: cd tests && rake
+      run: cd .docker/entrypoint && rake
 
   verify-output:
     runs-on: ubuntu-latest

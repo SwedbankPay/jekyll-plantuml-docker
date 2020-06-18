@@ -12,3 +12,8 @@ gem "docopt"
 gem "html-proofer"
 gem "html-proofer-unrendered-markdown"
 gem "rouge"
+gem "rake", "~> 13.0"
+
+group :development, :test do
+  gem "rspec"
+end

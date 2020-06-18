@@ -20,6 +20,9 @@ cache
 .ruby-gemset
 .rvmrc
 vendor
+Rakefile
+spec
+.rspec
 
 #
 # OS X
