@@ -1,7 +1,7 @@
 module Jekyll
   module PlantUml
     class GemfileDiffer
-      def initialize(debug)
+      def initialize(debug = false)
         @debug = debug
       end
 
