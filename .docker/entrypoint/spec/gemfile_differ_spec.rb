@@ -1,4 +1,4 @@
-require_relative "../../.docker/entrypoint/lib/gemfile-differ"
+require "gemfile-differ"
 
 describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }
