@@ -9,10 +9,9 @@ module Jekyll::PlantUml
 Runs the #{docker_image_name} container's entrypoint.
 
 Usage:
-  #{docker_image_fqn} [-h | --help] [--version]
-                      <command> [--dry-run] [--verify]
+  #{docker_image_fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
 
-                      Options:
+Options:
   -h --help     Print this screen.
   --version     Print the version of #{docker_image_name}.
   --dry-run     On a dry-run, the the deploy command will not push the changes
