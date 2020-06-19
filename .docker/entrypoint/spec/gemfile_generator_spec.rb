@@ -8,6 +8,10 @@ describe Jekyll::PlantUml::GemfileGenerator do
     let(:secondary_gemfile_path) { File.join(__dir__, "Gemfile.secondary") }
     let(:generated_gemfile_path) { File.join(__dir__, "Gemfile.generated") }
 
+    after(:each) do
+      File.delete generated_gemfile_path if File.exist? generated_gemfile_path
+    end
+
     context "non-existent primary gemfile" do
       it "should raise" do
         expect { generator.generate("abc", "efg", "xyz") }.to raise_error ("abc cannot be found.")
@@ -21,10 +25,8 @@ describe Jekyll::PlantUml::GemfileGenerator do
     end
 
     context "existing gemfiles" do
-      let(:_) {
-        generator.generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
-      }
       it {
+        generator.generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
         expect(File).to exist(generated_gemfile_path)
       }
     end
