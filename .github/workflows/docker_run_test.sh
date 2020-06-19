@@ -30,9 +30,9 @@ initialize() {
 
     if [[ "$input_command" == "serve" ]]; then
         search_string="Server running..."
-        jekyll_command="jekyll serve"
+        jekyll_command="serve"
     elif [[ "$input_command" == "build" ]]; then
-        jekyll_command="jekyll build"
+        jekyll_command="build"
     else
         echo "Invalid command specified: $input_command" >&2
         echo "$help_message"
