@@ -38,8 +38,9 @@ module Jekyll::PlantUml
       case command
       when "deploy"
         dry_run = args["--dry-run"]
+        verify = args["--verify"]
         deployer = Deployer.new(jekyll_config, @jekyll_var_dir)
-        deployer.deploy(dry_run)
+        deployer.deploy(dry_run, verify)
       when "build", "serve"
         if args["--dry-run"]
           puts "Warning: --dry-run has no effect on the `jekyll #{command}` command."

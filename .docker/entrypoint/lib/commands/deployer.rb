@@ -7,19 +7,19 @@ module Jekyll::PlantUml
       @jekyll_var_dir = jekyll_var_dir
     end
 
-    def deploy(dry_run)
+    def deploy(dry_run, verify)
       message = "Deploying"
       deploy_script_path = File.join(@jekyll_var_dir, "deploy.sh")
       deploy_cmd = "#{deploy_script_path} --verbose"
 
-      if verify
-        message << ", verified"
-        deploy_cmd << " --verify"
-      end
-
       if dry_run
         message << ", dry-run"
         deploy_cmd << " --dry-run"
+      end
+
+      if verify
+        message << ", verified"
+        deploy_cmd << " --verify"
       end
 
       message << "…"
