@@ -64,7 +64,7 @@ jobs:
         dockerfile: .docker/Dockerfile
         push_image_and_stages: true
         pull_image_and_stages: true
-        build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg TAG="${{ needs.variables.outputs.sha8 }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
+        build_extra_args: --build-arg SHA=${{ needs.variables.outputs.sha }} --build-arg TAG=${{ needs.variables.outputs.sha8 }} --build-arg DATE=${{ needs.variables.outputs.date }} --build-arg VERSION=${{ needs.variables.outputs.version }}
 
   test-default:
     runs-on: ubuntu-latest
