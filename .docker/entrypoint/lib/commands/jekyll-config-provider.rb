@@ -36,10 +36,10 @@ module Jekyll::PlantUml
           "url" => pages.html_url,
         })
       rescue => exception
-        log(:error, "Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML. \n
-Defining the JEKYLL_GITHUB_TOKEN environment variable may help. See the following issue for details: \n
-https://github.com/github/pages-gem/issues/399#issuecomment-450799841 \n
-#{exception}")
+        log(:error, "Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.")
+        log(:error, "Defining the JEKYLL_GITHUB_TOKEN environment variable may help. See the following issue for details:")
+        log(:error, "https://github.com/github/pages-gem/issues/399#issuecomment-450799841")
+        log(:error, exception)
       end
 
       if jekyll_command == "serve"
