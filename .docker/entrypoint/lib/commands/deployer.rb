@@ -24,10 +24,17 @@ module Jekyll::PlantUml
 
       message << "…"
 
-      puts message
+      log(:info, message)
+      log(:debug, deploy_cmd)
 
       Jekyll::Commands::Build.process(@jekyll_config)
       exec(deploy_cmd)
+    end
+
+    private
+
+    def log(severity, message)
+      (@logger ||= Jekyll.logger).public_send(severity, "jekyll-plantuml: #{message}")
     end
   end
 end

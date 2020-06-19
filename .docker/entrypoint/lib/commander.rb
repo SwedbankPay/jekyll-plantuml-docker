@@ -20,16 +20,18 @@ module Jekyll::PlantUml
         parsed_args = @argument_parser.parse(args)
         execute_args(parsed_args)
       rescue Docopt::Exit => e
-        puts e.message
+        log(:info, e.message)
       rescue CommandLineArgumentError => e
-        puts "Error! #{e}.".bold
-        puts ""
-        puts @argument_parser.help
+        log(:error, "Error! #{e}.\n#{@argument_parser.help}")
         exit 1
       end
     end
 
     private
+
+    def log(severity, message)
+      (@logger ||= Jekyll.logger).public_send(severity, "jekyll-plantuml: #{message}")
+    end
 
     def execute_args(args)
       command = args["<command>"]
@@ -43,7 +45,7 @@ module Jekyll::PlantUml
         deployer.deploy(dry_run, verify)
       when "build", "serve"
         if args["--dry-run"]
-          puts "Warning: --dry-run has no effect on the `jekyll #{command}` command."
+          log(:warn, "Warning: --dry-run has no effect on the `jekyll #{command}` command.")
         end
 
         jekyll_commander = JekyllCommander.new(jekyll_config)
