@@ -21,5 +21,9 @@ describe Jekyll::PlantUml::Commander do
         # specify { expect { commander.execute([arg]) }.to output(version).to_stdout }
       end
     end
+
+    context "build" do
+      specify { expect { commander.execute(["build"]) }.to output(/Generating...\s+done in/).to_stdout }
+    end
   end
 end
