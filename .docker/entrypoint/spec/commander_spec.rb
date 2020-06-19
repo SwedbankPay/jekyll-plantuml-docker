@@ -2,7 +2,7 @@ require "commander"
 
 describe Jekyll::PlantUml::Commander do
   let(:version) { "0.0.1-test.0" }
-  subject(:commander) { Jekyll::PlantUml::Commander.new("development", __dir__, __dir__, "swedbankpay/jekyll-plantuml", version) }
+  subject(:commander) { Jekyll::PlantUml::Commander.new("development", __dir__, __dir__, "swedbankpay/jekyll-plantuml", version, version) }
 
   describe "#execute" do
     context "when no args" do

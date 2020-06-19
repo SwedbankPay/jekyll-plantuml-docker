@@ -2,9 +2,9 @@ require "docopt"
 
 module Jekyll::PlantUml
   class ArgumentParser
-    def initialize(docker_image_name, docker_image_version)
+    def initialize(docker_image_name, docker_image_tag, docker_image_version)
       @docker_image_version = docker_image_version
-      docker_image_fqn = "#{docker_image_name}:#{docker_image_version}"
+      docker_image_fqn = "#{docker_image_name}:#{docker_image_tag}"
       @doc = <<DOCOPT
 Runs the #{docker_image_name} container's entrypoint.
 

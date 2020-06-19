@@ -88,14 +88,16 @@ WORKDIR /srv/jekyll
 EXPOSE 35729
 EXPOSE 4000
 
+ARG TAG
 ARG SHA
 ARG DATE
 ARG VERSION
-ENV DOCKER_IMAGE_VERSION="${VERSION}"
+ENV DOCKER_IMAGE_TAG=$TAG
+ENV DOCKER_IMAGE_VERSION=$VERSION
 
 LABEL org.label-schema.build-date="${DATE}" \
       org.label-schema.description="Serve and build Jekyll sites with PlantUML support" \
-      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll ${DOCKER_IMAGE_NAME}:${VERSION}" \
+      org.label-schema.docker.cmd="docker run --volume \$(pwd):/srv/jekyll ${DOCKER_IMAGE_NAME}:${TAG}" \
       org.label-schema.name="jekyll-plantuml" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.url="https://hub.docker.com/r/${DOCKER_IMAGE_NAME}" \

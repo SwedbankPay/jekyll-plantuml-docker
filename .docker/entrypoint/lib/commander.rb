@@ -8,8 +8,8 @@ require_relative "commands/jekyll-commander"
 
 module Jekyll::PlantUml
   class Commander
-    def initialize(jekyll_env, jekyll_data_dir, jekyll_var_dir, docker_image_name, docker_image_version)
-      @argument_parser = ArgumentParser.new(docker_image_name, docker_image_version)
+    def initialize(jekyll_env, jekyll_data_dir, jekyll_var_dir, docker_image_name, docker_image_tag, docker_image_version)
+      @argument_parser = ArgumentParser.new(docker_image_name, docker_image_tag, docker_image_version)
       @jekyll_config_provider = JekyllConfigProvider.new(jekyll_data_dir)
       @jekyll_var_dir = jekyll_var_dir
       @jekyll_env = jekyll_env
