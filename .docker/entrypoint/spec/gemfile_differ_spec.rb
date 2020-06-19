@@ -15,7 +15,7 @@ describe Jekyll::PlantUml::GemfileDiffer do
 
     context "non-existent secondary gemfile" do
       it {
-        expect(differ.diff(primary_gemfile_path, "xyz")).to be_nil
+        expect(differ.diff(primary_gemfile_path, "xyz")).to be_empty
       }
       specify { expect { |b| differ.diff(primary_gemfile_path, "xyz", &b) }.not_to yield_control }
     end

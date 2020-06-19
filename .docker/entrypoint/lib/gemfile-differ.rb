@@ -12,7 +12,7 @@ module Jekyll
 
         unless File.exists? secondary_gemfile_path
           puts "#{secondary_gemfile_path} not found." if @debug
-          return nil
+          return []
         end
 
         puts "Sourcing gems from #{secondary_gemfile_path}..." if @debug
