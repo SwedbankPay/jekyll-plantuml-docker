@@ -25,9 +25,15 @@ describe Jekyll::PlantUml::GemfileGenerator do
     end
 
     context "existing gemfiles" do
-      it {
+      let!(:_) {
         generator.generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
+      }
+      subject { File.read(generated_gemfile_path) }
+      it {
         expect(File).to exist(generated_gemfile_path)
+      }
+      it {
+        is_expected.to include("gem \"rouge\"")
       }
     end
   end
