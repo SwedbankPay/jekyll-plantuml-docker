@@ -29,8 +29,10 @@ Commands:
 DOCOPT
     end
 
-    def parse
-      Docopt.docopt(@doc, { :version => @docker_image_version })
+    def parse(args = nil)
+      params = { :version => @docker_image_version }
+      params[:argv] = args if args
+      Docopt.docopt(@doc, params)
     end
 
     def help

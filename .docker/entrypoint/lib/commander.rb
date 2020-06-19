@@ -15,11 +15,10 @@ module Jekyll::PlantUml
       @jekyll_env = jekyll_env
     end
 
-    def execute
+    def execute(args = nil)
       begin
-        args = @argument_parser.parse
-        # puts args
-        execute_args(args)
+        parsed_args = @argument_parser.parse(args)
+        execute_args(parsed_args)
       rescue Docopt::Exit => e
         puts e.message
       rescue CommandLineArgumentError => e
