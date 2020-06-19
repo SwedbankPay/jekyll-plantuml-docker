@@ -15,11 +15,9 @@ describe Jekyll::PlantUml::Commander do
       end
     end
 
-    ["--version", "-v"].each do |arg|
-      context arg do
-        # TODO: Figure out why --version doesn't work.
-        # specify { expect { commander.execute([arg]) }.to output(version).to_stdout }
-      end
+    context "--version" do
+      # TODO: Figure out why --version doesn't work.
+      specify { expect { commander.execute("--version") }.to output(/#{version}/).to_stdout }
     end
 
     context "build" do
