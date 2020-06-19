@@ -6,3 +6,4 @@ _site/
 .pid
 vendor/
 .docker/entrypoint/Gemfile_generated
+*.generated
