@@ -10,7 +10,7 @@ module Jekyll
       end
 
       def generate
-        primary_gemfile_path = File.join(@jekyll_var_dir, "entrypoint","Gemfile")
+        primary_gemfile_path = File.join(@jekyll_var_dir, "entrypoint", "Gemfile")
         secondary_gemfile_path = File.join(@jekyll_data_dir, "Gemfile")
         generated_file_path = File.join(@jekyll_var_dir, "entrypoint", "Gemfile_generated")
         original_file = File.readlines File.join(primary_gemfile_path)
@@ -18,13 +18,12 @@ module Jekyll
 
         gemfile_differ = Jekyll::PlantUml::GemfileDiffer.new(@debug)
         gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
-           generated_file << line
+          generated_file << line
         end
-        File.open(generated_file_path, 'w') { |file| file.puts(generated_file) }
+        File.open(generated_file_path, "w") { |file| file.puts(generated_file) }
       end
     end
   end
 end
 
 Jekyll::PlantUml::GenereateGemfile.new.generate
-

@@ -2,7 +2,7 @@
 
 [ "${DEBUG:-false}" = "true" ] && set -x
 
-ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/generate-gemfile.rb"
+ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/gemfile-generator.rb"
 
 default_gemfile="${JEKYLL_VAR_DIR}/entrypoint/Gemfile_generated"
 
