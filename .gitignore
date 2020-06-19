@@ -5,5 +5,4 @@ _site/
 .bundle/
 .pid
 vendor/
-.docker/entrypoint/Gemfile_generated
 *.generated
