@@ -9,7 +9,7 @@ describe Jekyll::PlantUml::GemfileDiffer do
 
     context "non-existent primary gemfile" do
       it "should raise" do
-        expect { differ.diff("abc", "xyz") }.to raise_error ("abc cannot be found.")
+        expect { differ.diff("abc", secondary_gemfile_path) }.to raise_error ("abc cannot be found.")
       end
     end
 

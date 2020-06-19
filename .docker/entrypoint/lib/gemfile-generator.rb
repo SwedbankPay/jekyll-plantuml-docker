@@ -12,10 +12,6 @@ module Jekyll
           raise "#{primary_gemfile_path} cannot be found."
         end
 
-        unless File.exists? secondary_gemfile_path
-          raise "#{secondary_gemfile_path} cannot be found."
-        end
-
         puts "Reading #{primary_gemfile_path}..." if @debug
         original_file = File.readlines File.join(primary_gemfile_path)
         generated_file = original_file

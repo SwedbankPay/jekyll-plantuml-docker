@@ -14,14 +14,22 @@ describe Jekyll::PlantUml::GemfileGenerator do
 
     context "non-existent primary gemfile" do
       it "should raise" do
-        expect { generator.generate("abc", "efg", "xyz") }.to raise_error ("abc cannot be found.")
+        expect { generator.generate("abc", secondary_gemfile_path, generated_gemfile_path) }.to raise_error ("abc cannot be found.")
       end
     end
 
     context "non-existent secondary gemfile" do
-      it "should raise" do
-        expect { generator.generate(primary_gemfile_path, "efg", "xyz") }.to raise_error ("efg cannot be found.")
-      end
+      let!(:_) {
+        generator.generate(primary_gemfile_path, "efg", generated_gemfile_path)
+      }
+      subject { File.read(generated_gemfile_path) }
+      it {
+        expect(File).to exist(generated_gemfile_path)
+      }
+      it {
+        is_expected.not_to include("gem \"rouge\"")
+        is_expected.to include("gem \"open3\"")
+      }
     end
 
     context "existing gemfiles" do
