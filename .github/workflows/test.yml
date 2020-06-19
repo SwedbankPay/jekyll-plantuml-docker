@@ -170,7 +170,7 @@ jobs:
       run: |
         docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
         docker pull "${IMAGE_NAME}:${IMAGE_TAG}"
-        docker run --volume $(pwd)/tests/full:/srv/jekyll "${IMAGE_NAME}:${IMAGE_TAG}" --dry-run --verify
+        docker run --volume $(pwd)/tests/full:/srv/jekyll "${IMAGE_NAME}:${IMAGE_TAG}" build --verify
 
     - name: Upload build output artifacts
       uses: actions/upload-artifact@v2
