@@ -2,7 +2,7 @@ require_relative "gemfile-differ"
 
 module Jekyll
   module PlantUml
-    class GenereateGemfile
+    class GemfileGenerator
       def initialize
         @debug = ENV.fetch("DEBUG", false)
         @jekyll_data_dir = ENV.fetch("JEKYLL_DATA_DIR", Dir.pwd)
@@ -26,4 +26,4 @@ module Jekyll
   end
 end
 
-Jekyll::PlantUml::GenereateGemfile.new.generate
+Jekyll::PlantUml::GemfileGenerator.new.generate
