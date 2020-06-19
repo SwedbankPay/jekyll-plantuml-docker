@@ -143,10 +143,9 @@ jobs:
       run: cd .docker/entrypoint && bundle install
 
     - name: RSpec
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: cd .docker/entrypoint && bundle exec rake
-
-    - name: Codecov
-      run: bash <(curl -s https://codecov.io/bash)
 
   verify-output:
     runs-on: ubuntu-latest
