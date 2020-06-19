@@ -1,4 +1,6 @@
 require "commander"
+require "spec_logger"
+require "jekyll"
 
 describe Jekyll::PlantUml::Commander do
   let(:version) { "0.0.1-test.0" }
@@ -21,7 +23,13 @@ describe Jekyll::PlantUml::Commander do
     end
 
     context "build" do
-      specify { expect { commander.execute(["build"]) }.to output(/Generating...\s+done in/).to_stdout }
+      # TODO: This should probably be reset before(:each) somehow.
+      let! (:logger) { Jekyll.logger = Jekyll::PlantUml::SpecLogger.new(:info) }
+
+      it {
+        commander.execute(["build"])
+        expect(logger.message).to match(/Generating...\s+done in/)
+      }
     end
   end
 end
