@@ -1,3 +1,5 @@
+require "padder"
+
 module Jekyll
   module PlantUml
     class GemfileDiffer
@@ -20,14 +22,12 @@ module Jekyll
         primary_gemfile_lines = read_lines(primary_gemfile_path)
         secondary_gemfile_lines = read_lines(secondary_gemfile_path)
 
-        pad_length = secondary_gemfile_lines.length.to_s.length
-        padding = "%#{pad_length}s" % "" + " "
+        padder = Padder.new(secondary_gemfile_lines.length.to_s.length)
 
         secondary_gemfile_lines.each_with_index do |line, index|
           line_number = index + 1
-          line_number = "%#{pad_length}d" % line_number
 
-          puts "#{line_number}: #{line}" if @debug
+          padder.puts line, line_number
 
           # Only care about lines starting with "gem"
           next unless line.start_with? "gem"
@@ -39,11 +39,12 @@ module Jekyll
 
           if match_index >= 0
             matching_line_number = match_index + 1
-            puts "#{padding} #{gem_part} found on line #{matching_line_number}. Skipping."
+            padder.puts "#{gem_part} found on line #{matching_line_number}. Skipping."
             next
           end
 
-          puts "#{padding} Yielding #{line.strip}." if @debug
+          padder.puts "Yielding #{line.strip}."
+
           yield line
         end
       end
