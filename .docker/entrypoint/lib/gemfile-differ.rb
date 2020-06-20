@@ -1,4 +1,4 @@
-require "padder"
+require_relative "padder"
 
 module Jekyll
   module PlantUml
