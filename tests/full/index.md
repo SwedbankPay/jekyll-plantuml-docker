@@ -3,11 +3,8 @@ title: Test
 ---
 
 * [Internal, relative link that should work][link].
-* [Link to the site root][root].
-* [Absolute URL to page][absolute-page].
-* [Relative URL to CSS file][relative-css].
+* [Link to the site root]({{ site.url }}).
+* [Absolute URL to page]({{ page.url | absolute_url }}).
+* [Relative URL to CSS file]({{ "/test.css" | relative_url }}).
 
 [link]: link
-[root]: {{ site.url }}
-[absolute-page]: {{ page.url | absolute_url }}
-[relative-css]: {{ "/test.css" | relative_url }}
