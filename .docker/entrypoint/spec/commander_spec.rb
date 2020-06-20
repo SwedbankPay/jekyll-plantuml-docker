@@ -24,7 +24,7 @@ describe Jekyll::PlantUml::Commander do
 
     context "build" do
       # TODO: This should probably be reset before(:each) somehow.
-      let! (:logger) { Jekyll.logger = Jekyll::PlantUml::SpecLogger.new(:info) }
+      let!(:logger) { Jekyll.logger = Jekyll::PlantUml::SpecLogger.new(:info) }
 
       it {
         commander.execute(["build"])

@@ -143,6 +143,9 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: cd .docker/entrypoint && bundle exec rake
 
+    - name: RuboCop
+      run: cd .docker/entrypoint && bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
+
   verify-output:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]

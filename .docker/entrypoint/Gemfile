@@ -16,6 +16,7 @@ gem "rake", "~> 13.0"
 
 group :development, :test do
   gem "rspec"
+  gem "rubocop-rake", require: false
 end
 
 gem "codecov", :require => false, :group => :test

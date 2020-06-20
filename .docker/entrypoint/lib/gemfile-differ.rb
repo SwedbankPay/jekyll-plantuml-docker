@@ -8,11 +8,11 @@ module Jekyll
       end
 
       def diff(primary_gemfile_path, secondary_gemfile_path)
-        unless File.exists? primary_gemfile_path
+        unless File.exist? primary_gemfile_path
           raise "#{primary_gemfile_path} cannot be found."
         end
 
-        unless File.exists? secondary_gemfile_path
+        unless File.exist? secondary_gemfile_path
           puts "#{secondary_gemfile_path} not found." if @debug
           return []
         end
