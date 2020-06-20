@@ -1,16 +1,19 @@
-require_relative "padder"
+# frozen_string_literal: true
 
+require_relative 'padder'
+
+# The Jekyll module contains everything related to Jekyll.
 module Jekyll
+  # The Jekyll::PlantUml module contains everything related to Jekyll::PlantUml.
   module PlantUml
+    # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
       def initialize(debug = false)
         @debug = debug
       end
 
       def diff(primary_gemfile_path, secondary_gemfile_path)
-        unless File.exist? primary_gemfile_path
-          raise "#{primary_gemfile_path} cannot be found."
-        end
+        raise "#{primary_gemfile_path} cannot be found." unless File.exist? primary_gemfile_path
 
         unless File.exist? secondary_gemfile_path
           puts "#{secondary_gemfile_path} not found." if @debug
@@ -28,7 +31,7 @@ module Jekyll
           padder.puts line, index + 1
 
           # Only care about lines starting with "gem"
-          next unless line.start_with? "gem"
+          next unless line.start_with? 'gem'
 
           gem_part = get_gem_part(line)
 
@@ -54,7 +57,7 @@ module Jekyll
 
         # If the line contains a comma, get everything before the comma
         # (ignoring version and group for now)
-        gem_part = line.split(",")[0] if line.include? ","
+        gem_part = line.split(',')[0] if line.include? ','
 
         gem_part.strip
       end
@@ -68,9 +71,7 @@ module Jekyll
       end
 
       def read_lines(file_path)
-        File.open(file_path) do |file|
-          file.readlines
-        end
+        File.open(file_path, &:readlines)
       end
     end
   end

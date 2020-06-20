@@ -1,47 +1,55 @@
-require "gemfile-generator"
+# frozen_string_literal: true
+
+require 'gemfile-generator'
 
 describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }
 
-  describe "#generate" do
-    let(:primary_gemfile_path) { File.join(__dir__, "Gemfile.primary") }
-    let(:secondary_gemfile_path) { File.join(__dir__, "Gemfile.secondary") }
-    let(:generated_gemfile_path) { File.join(__dir__, "Gemfile.generated") }
+  describe '#generate' do
+    let(:primary_gemfile_path) { File.join(__dir__, 'Gemfile.primary') }
+    let(:secondary_gemfile_path) { File.join(__dir__, 'Gemfile.secondary') }
+    let(:generated_gemfile_path) { File.join(__dir__, 'Gemfile.generated') }
 
     after(:each) do
       File.delete generated_gemfile_path if File.exist? generated_gemfile_path
     end
 
-    context "non-existent primary gemfile" do
-      it "should raise" do
-        expect { generator.generate("abc", secondary_gemfile_path, generated_gemfile_path) }.to raise_error "abc cannot be found."
+    context 'non-existent primary gemfile' do
+      it 'should raise' do
+        expect do
+          generator.generate(
+            'abc',
+            secondary_gemfile_path,
+            generated_gemfile_path
+          )
+        end.to raise_error 'abc cannot be found.'
       end
     end
 
-    context "non-existent secondary gemfile" do
-      let!(:_) {
-        generator.generate(primary_gemfile_path, "efg", generated_gemfile_path)
-      }
+    context 'non-existent secondary gemfile' do
+      let!(:_) do
+        generator.generate(primary_gemfile_path, 'efg', generated_gemfile_path)
+      end
       subject { File.read(generated_gemfile_path) }
       it {
         expect(File).to exist(generated_gemfile_path)
       }
       it {
-        is_expected.not_to include("gem \"rouge\"")
-        is_expected.to include("gem \"open3\"")
+        is_expected.not_to include('gem "rouge"')
+        is_expected.to include('gem "open3"')
       }
     end
 
-    context "existing gemfiles" do
-      let!(:_) {
+    context 'existing gemfiles' do
+      let!(:_) do
         generator.generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
-      }
+      end
       subject { File.read(generated_gemfile_path) }
       it {
         expect(File).to exist(generated_gemfile_path)
       }
       it {
-        is_expected.to include("gem \"rouge\"")
+        is_expected.to include('gem "rouge"')
       }
     end
   end
