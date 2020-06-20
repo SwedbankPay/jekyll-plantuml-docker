@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'jekyll'
-require_relative 'argument-parser'
-require_relative 'command-line-argument-error'
+require_relative 'argument_parser'
+require_relative 'command_line_argument_error'
 require_relative 'commands/deployer'
 require_relative 'commands/verifier'
-require_relative 'commands/jekyll-commander'
+require_relative 'commands/jekyll_commander'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll

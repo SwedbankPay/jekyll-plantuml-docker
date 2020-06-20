@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'gemfile-generator'
+require 'gemfile_generator'
 
 describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }

@@ -14,10 +14,10 @@ module Jekyll
         docker_image_fqn = "#{docker_image_name}:#{docker_image_tag}"
         @doc = <<~DOCOPT
           Runs the #{docker_image_name} container's entrypoint.
-          
+
           Usage:
             #{docker_image_fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
-          
+
           Options:
             -h --help     Print this screen.
             --version     Print the version of #{docker_image_name}.
@@ -25,7 +25,7 @@ module Jekyll
                           to the remote `origin`.
             --verify      Verifies the built output before deploying. Can be used in
                           combination with --dry-run in tests and for local debugging.
-          
+
           Commands:
             deploy        Builds the website with `jekyll build` and then deploys
                           it to a branch (default `gh-pages`) and pushes it to the remote

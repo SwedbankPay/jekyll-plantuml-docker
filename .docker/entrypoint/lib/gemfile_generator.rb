@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'gemfile-differ'
+require_relative 'gemfile_differ'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
