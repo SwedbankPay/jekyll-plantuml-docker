@@ -25,9 +25,7 @@ module Jekyll
         padder = Padder.new(secondary_gemfile_lines.length.to_s.length)
 
         secondary_gemfile_lines.each_with_index do |line, index|
-          line_number = index + 1
-
-          padder.puts line, line_number
+          padder.puts line, index + 1
 
           # Only care about lines starting with "gem"
           next unless line.start_with? "gem"
@@ -35,7 +33,7 @@ module Jekyll
           gem_part = get_gem_part(line)
 
           # If we already have the gem mentioned in this very Gemfile, skip it
-          match_index = lines_index_of_substring(primary_gemfile_lines, gem_part)
+          match_index = line_index_of_substring(primary_gemfile_lines, gem_part)
 
           if match_index >= 0
             matching_line_number = match_index + 1
@@ -61,7 +59,7 @@ module Jekyll
         gem_part.strip
       end
 
-      def lines_index_of_substring(lines, substring)
+      def line_index_of_substring(lines, substring)
         lines.each_with_index do |line, index|
           return index if line.include? substring
         end
