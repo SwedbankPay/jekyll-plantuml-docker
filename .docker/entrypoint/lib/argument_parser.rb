@@ -11,27 +11,29 @@ module Jekyll
     class ArgumentParser
       def initialize(docker_image)
         @docker_image_version = docker_image.version
+        # rubocop:disable Layout/HeredocIndentation,Layout/ClosingHeredocIndentation
         @doc = <<~DOCOPT
-          Runs the #{docker_image.name} container's entrypoint.
+Runs the #{docker_image.name} container's entrypoint.
 
-          Usage:
-            #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
+Usage:
+  #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
 
-          Options:
-            -h --help     Print this screen.
-            --version     Print the version of #{docker_image.name}.
-            --dry-run     On a dry-run, the the deploy command will not push the changes
-                          to the remote `origin`.
-            --verify      Verifies the built output before deploying. Can be used in
-                          combination with --dry-run in tests and for local debugging.
+Options:
+  -h --help     Print this screen.
+  --version     Print the version of #{docker_image.name}.
+  --dry-run     On a dry-run, the the deploy command will not push the changes
+                to the remote `origin`.
+  --verify      Verifies the built output before deploying. Can be used in
+                combination with --dry-run in tests and for local debugging.
 
-          Commands:
-            deploy        Builds the website with `jekyll build` and then deploys
-                          it to a branch (default `gh-pages`) and pushes it to the remote
-                          `origin`.
-            build         Executes the `jekyll build` command.
-            serve         Executes the `jekyll serve` command.
-        DOCOPT
+Commands:
+  deploy        Builds the website with `jekyll build` and then deploys
+                it to a branch (default `gh-pages`) and pushes it to the remote
+                `origin`.
+  build         Executes the `jekyll build` command.
+  serve         Executes the `jekyll serve` command.
+DOCOPT
+        # rubocop:enable Layout/HeredocIndentation,Layout/ClosingHeredocIndentation
       end
 
       def parse(args = nil)
