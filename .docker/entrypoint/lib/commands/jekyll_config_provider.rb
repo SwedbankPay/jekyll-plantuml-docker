@@ -47,8 +47,8 @@ module Jekyll
                               })
         rescue StandardError => e
           log(:error, 'Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.')
-          log(:error, 'Defining the JEKYLL_GITHUB_TOKEN environment variable may help. See the following issue for details:')
-          log(:error, 'https://github.com/github/pages-gem/issues/399#issuecomment-450799841')
+          log(:error, 'Defining the JEKYLL_GITHUB_TOKEN environment variable may help.')
+          log(:error, 'See the following issue for details: https://github.com/github/pages-gem/issues/399')
           log(:error, e)
         end
 
