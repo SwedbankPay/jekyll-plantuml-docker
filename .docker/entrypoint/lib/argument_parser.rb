@@ -9,18 +9,17 @@ module Jekyll
     # The Jekyll::PlantUml::ArgumentParser class parses arguments with Docopt
     # and exposes its help and usage command line screens.
     class ArgumentParser
-      def initialize(docker_image_name, docker_image_tag, docker_image_version)
-        @docker_image_version = docker_image_version
-        docker_image_fqn = "#{docker_image_name}:#{docker_image_tag}"
+      def initialize(docker_image)
+        @docker_image_version = docker_image.version
         @doc = <<~DOCOPT
-          Runs the #{docker_image_name} container's entrypoint.
+          Runs the #{docker_image.name} container's entrypoint.
 
           Usage:
-            #{docker_image_fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
+            #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
 
           Options:
             -h --help     Print this screen.
-            --version     Print the version of #{docker_image_name}.
+            --version     Print the version of #{docker_image.name}.
             --dry-run     On a dry-run, the the deploy command will not push the changes
                           to the remote `origin`.
             --verify      Verifies the built output before deploying. Can be used in
