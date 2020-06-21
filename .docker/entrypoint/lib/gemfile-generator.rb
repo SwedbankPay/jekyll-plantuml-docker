@@ -17,17 +17,21 @@ module Jekyll
         raise "#{primary_gemfile_path} cannot be found." unless File.exist? primary_gemfile_path
 
         puts "Reading #{primary_gemfile_path}..." if @debug
-        original_file = File.readlines File.join(primary_gemfile_path)
-        generated_file = original_file
+        original_file_contents = File.readlines primary_gemfile_path
+        generated_file_contents = original_file_contents
+        puts original_file_contents if @debug
 
         puts "Diffing #{secondary_gemfile_path}..." if @debug
         gemfile_differ = Jekyll::PlantUml::GemfileDiffer.new(@debug)
         gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
-          generated_file << line
+          generated_file_contents << line
         end
 
         puts "Generating #{generated_gemfile_path}..." if @debug
-        File.open(generated_gemfile_path, 'w') { |file| file.puts(generated_file) }
+        puts generated_file_contents if @debug
+        File.open(generated_gemfile_path, 'w') do |file|
+          file.puts(generated_file_contents)
+        end
       end
     end
   end

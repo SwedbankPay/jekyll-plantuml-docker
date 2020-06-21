@@ -165,17 +165,16 @@ jobs:
 
       - name: Verify build output
         env:
-          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
-          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-          DEBUG: true
+          IMAGE_FQN: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ needs.variables.outputs.sha8 }}
         run: |
           docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
-          docker pull "${IMAGE_NAME}:${IMAGE_TAG}"
+          docker pull "${IMAGE_FQN}"
           docker run \
             --volume $(pwd)/tests/full:/srv/jekyll \
             --env JEKYLL_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
             --env PAGES_REPO_NWO=${{ github.repository }} \
-            "${IMAGE_NAME}:${IMAGE_TAG}" \
+            --env DEBUG=true \
+            "${IMAGE_FQN}" \
             build \
             --verify
 

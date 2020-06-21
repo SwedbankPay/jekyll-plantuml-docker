@@ -22,7 +22,7 @@ describe Jekyll::PlantUml::GemfileDiffer do
       specify { expect { |b| differ.diff(primary_gemfile_path, 'xyz', &b) }.not_to yield_control }
     end
 
-    context 'two existing files' do
+    context 'existing gemfiles' do
       specify do
         expect do |line|
           differ.diff(primary_gemfile_path, secondary_gemfile_path, &line)
