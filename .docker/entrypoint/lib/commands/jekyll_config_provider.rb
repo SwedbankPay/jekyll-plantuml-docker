@@ -15,6 +15,34 @@ module Jekyll
       end
 
       def get_config(jekyll_command)
+        config_file_path = config_file_path()
+        jekyll_config = config(jekyll_command, config_file_path)
+
+        begin
+          pages_html_url = pages_html_url
+          log(:info, "Setting site.url to <#{pages_html_url}>.")
+          jekyll_config.merge({ 'url' => pages_html_url })
+        rescue StandardError => e
+          unable_to_retrieve_github_metadata(e)
+        end
+
+        jekyll_config
+      end
+
+      private
+
+      def unable_to_retrieve_github_metadata(error)
+        log(:error, 'Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.')
+        log(:error, 'Defining the JEKYLL_GITHUB_TOKEN environment variable may help.')
+        log(:error, 'See the following issue for details: https://github.com/github/pages-gem/issues/399')
+        log(:error, error)
+      end
+
+      def log(severity, message)
+        (@logger ||= Jekyll.logger).public_send(severity, "jekyll-plantuml: #{message}")
+      end
+
+      def config_file_path
         config_file_path = File.join(@jekyll_data_dir, '_config.yml')
 
         unless File.file?(config_file_path)
@@ -24,51 +52,41 @@ module Jekyll
           config_file_path = default_config_file_path
         end
 
-        jekyll_config = Jekyll.configuration(
-          {
-            'config' => config_file_path,
-            'incremental' => true,
-            'base_url' => '',
-            'source' => @jekyll_data_dir,
-            'destination' => File.join(@jekyll_data_dir, '_site')
-          }
-        )
+        config_file_path
+      end
 
-        begin
-          ghm = Jekyll::GitHubMetadata
-          ghm.site = Jekyll::Site.new(jekyll_config)
-          gh_client = Jekyll::GitHubMetadata::Client.new
-          pages = gh_client.pages(ghm.repository.nwo)
-
-          log(:info, "Setting site.url to <#{pages.html_url}>.")
-
-          jekyll_config.merge({
-                                'url' => pages.html_url
-                              })
-        rescue StandardError => e
-          log(:error, 'Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.')
-          log(:error, 'Defining the JEKYLL_GITHUB_TOKEN environment variable may help.')
-          log(:error, 'See the following issue for details: https://github.com/github/pages-gem/issues/399')
-          log(:error, e)
-        end
-
-        if jekyll_command == 'serve'
-          jekyll_config.merge({
-                                'host' => '0.0.0.0',
-                                'port' => '4000',
-                                'livereload' => true,
-                                'force_polling' => true,
-                                'watch' => true
-                              })
-        end
-
+      def config(jekyll_command, config_file_path)
+        jekyll_config = Jekyll.configuration(default_config(config_file_path))
+        jekyll_config.merge(serve_config) if jekyll_command == 'serve'
         jekyll_config
       end
 
-      private
+      def default_config(config_file_path)
+        {
+          'config' => config_file_path,
+          'incremental' => true,
+          'base_url' => '',
+          'source' => @jekyll_data_dir,
+          'destination' => File.join(@jekyll_data_dir, '_site')
+        }
+      end
 
-      def log(severity, message)
-        (@logger ||= Jekyll.logger).public_send(severity, "jekyll-plantuml: #{message}")
+      def serve_config
+        {
+          'host' => '0.0.0.0',
+          'port' => '4000',
+          'livereload' => true,
+          'force_polling' => true,
+          'watch' => true
+        }
+      end
+
+      def pages_html_url
+        ghm = Jekyll::GitHubMetadata
+        ghm.site = Jekyll::Site.new(jekyll_config)
+        gh_client = Jekyll::GitHubMetadata::Client.new
+        pages = gh_client.pages(ghm.repository.nwo)
+        pages.html_url
       end
     end
   end
