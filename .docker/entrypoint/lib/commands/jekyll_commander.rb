@@ -17,19 +17,22 @@ module Jekyll
       end
 
       def execute(requested_jekyll_command)
-        jekyll_command_class = nil
         jekyll_command = requested_jekyll_command.downcase
+        jekyll_command_class = get_jekyll_command_class(jekyll_command)
+        jekyll_command_class.process(@jekyll_config)
+      end
 
+      private
+
+      def get_jekyll_command_class(jekyll_command)
         case jekyll_command
         when 'build'
-          jekyll_command_class = Jekyll::Commands::Build
+          Jekyll::Commands::Build
         when 'serve'
-          jekyll_command_class = Jekyll::Commands::Serve
+          Jekyll::Commands::Serve
         else
           raise CommandLineArgumentError, "Unsupported Jekyll command '#{requested_jekyll_command}'"
         end
-
-        jekyll_command_class.process(@jekyll_config)
       end
     end
   end
