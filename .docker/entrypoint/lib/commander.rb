@@ -40,27 +40,39 @@ module Jekyll
 
       def execute_args(args)
         command = args['<command>']
+        verify = args['--verify']
+        dry_run = args['--dry-run']
         jekyll_config = @jekyll_config_provider.get_config(command)
+        execute_command(jekyll_config, command, dry_run, verify)
+        verify(jekyll_config) if verify
+      end
 
+      def execute_command(jekyll_config, command, dry_run, verify)
         case command
         when 'deploy'
-          dry_run = args['--dry-run']
-          verify = args['--verify']
-          deployer = Deployer.new(jekyll_config, @jekyll_var_dir)
-          deployer.deploy(dry_run, verify)
+          deploy(verify, dry_run)
         when 'build', 'serve'
-          log(:warn, "Warning: --dry-run has no effect on the `jekyll #{command}` command.") if args['--dry-run']
-
-          jekyll_commander = JekyllCommander.new(jekyll_config)
-          jekyll_commander.execute(command)
+          jekyll_command(jekyll_config, command, dry_run)
         else
           raise CommandLineArgumentError, "Unknown command '#{command}'"
         end
+      end
 
-        return unless args['--verify']
-
+      def verify(jekyll_config)
         verifier = Verifier.new(jekyll_config)
         verifier.verify
+      end
+
+      def deploy(jekyll_config, dry_run, verify)
+        deployer = Deployer.new(jekyll_config, @jekyll_var_dir)
+        deployer.deploy(dry_run, verify)
+      end
+
+      def jekyll_command(jekyll_config, command, dry_run)
+        log(:warn, "Warning: --dry-run has no effect on the `jekyll #{command}` command.") if dry_run
+
+        jekyll_commander = JekyllCommander.new(jekyll_config)
+        jekyll_commander.execute(command)
       end
     end
   end
