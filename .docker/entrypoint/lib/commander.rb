@@ -15,11 +15,11 @@ module Jekyll
     # arguments from ArgumentParser, the configuration from JekyllConfigProvider
     # and execute the correct command according to the provided arguments.
     class Commander
-      def initialize(jekyll_environment, docker_image)
+      def initialize(jekyll_env, docker_image)
         @argument_parser = ArgumentParser.new(docker_image)
-        @jekyll_config_provider = JekyllConfigProvider.new(jekyll_environment.data_dir)
-        @jekyll_var_dir = jekyll_environment.var_dir
-        @jekyll_env = jekyll_environment.env
+        @jekyll_config_provider = JekyllConfigProvider.new(jekyll_env.data_dir)
+        @jekyll_var_dir = jekyll_env.var_dir
+        @jekyll_env = jekyll_env.env
       end
 
       def execute(args = nil)

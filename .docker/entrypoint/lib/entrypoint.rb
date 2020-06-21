@@ -18,12 +18,12 @@ module Jekyll
         docker_image_name = ENV.fetch('DOCKER_IMAGE_NAME')
         docker_image_tag = ENV.fetch('DOCKER_IMAGE_TAG')
         docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
-        @jekyll_environment = JekyllEnvironment.new(jekyll_env, jekyll_var_dir, jekyll_data_dir)
+        @jekyll_env = JekyllEnvironment.new(jekyll_env, jekyll_var_dir, jekyll_data_dir)
         @docker_image = DockerImage.new(docker_image_name, docker_image_tag, docker_image_version)
       end
 
       def execute
-        commander = Commander.new(@jekyll_environment, @docker_image)
+        commander = Commander.new(@jekyll_env, @docker_image)
         commander.execute
       end
     end
