@@ -1,0 +1,235 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  variables:
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.variables.outputs.ref }}
+      sha: ${{ steps.variables.outputs.sha }}
+      sha8: ${{ steps.variables.outputs.sha8 }}
+      date: ${{ steps.variables.outputs.date }}
+      version: ${{ steps.variables.outputs.version }}
+      branch_name: ${{ steps.variables.outputs.branch_name }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.3
+        with:
+          versionSpec: "5.x.x"
+
+      - name: GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.3
+
+      - name: Generate variables
+        id: variables
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: ./.github/workflows/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
+
+  verify-bash:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ShellCheck
+        uses: bewuethr/shellcheck-action@v2
+
+      - name: Control Character Check
+        run: ./.github/workflows/control_character_finder.sh
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: variables
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        uses: whoan/docker-build-with-cache-action@v5.3.3
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          image_name: jekyll-plantuml
+          image_tag: ${{ needs.variables.outputs.sha8 }}
+          dockerfile: .docker/Dockerfile
+          push_image_and_stages: true
+          pull_image_and_stages: true
+          build_extra_args: --build-arg SHA=${{ needs.variables.outputs.sha }} --build-arg TAG=${{ needs.variables.outputs.sha8 }} --build-arg DATE=${{ needs.variables.outputs.date }} --build-arg VERSION=${{ needs.variables.outputs.version }}
+
+  test-default:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Docker Image (serve)
+        env:
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh serve
+
+  test-no-gemfile:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Docker Image (build, no Gemfile)
+        env:
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh build
+
+  test-build:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Docker Image (build)
+        env:
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh build
+
+  rspec:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
+      - uses: actions/cache@v2
+        with:
+          path: .docker/entrypoint/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+
+      - name: Bundle Install
+        run: cd .docker/entrypoint && bundle install
+
+      - name: RSpec
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: cd .docker/entrypoint && bundle exec rake
+
+      - name: RuboCop
+        run: cd .docker/entrypoint && bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
+
+  verify-output:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
+      - uses: actions/cache@v2
+        with:
+          path: tests/full/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
+
+      - name: Verify build output
+        env:
+          IMAGE_FQN: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml:${{ needs.variables.outputs.sha8 }}
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull "${IMAGE_FQN}"
+          docker run \
+            --volume $(pwd)/tests/full:/srv/jekyll \
+            --env JEKYLL_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            --env PAGES_REPO_NWO=${{ github.repository }} \
+            --env DEBUG=true \
+            "${IMAGE_FQN}" \
+            build \
+            --verify
+
+      - name: Upload build output artifacts
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: build-output-html
+          path: tests/full/_site/*.html
+
+  test-deploy:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test Deploy
+        env:
+          SHA8: ${{ needs.variables.outputs.sha8 }}
+          WORK_DIR: ${{ github.workspace }}
+          GIT_DEPLOY_DIR: _site
+          GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
+          GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          docker run \
+            --volume ${WORK_DIR}/tests/minimal:/srv/jekyll \
+            --env GIT_DEPLOY_DIR="${GIT_DEPLOY_DIR}" \
+            --env GIT_DEPLOY_BRANCH="${GIT_DEPLOY_BRANCH}" \
+            --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
+            --env PAGES_REPO_NWO="${{ github.repository }}" \
+            --env JEKYLL_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            --env DEBUG="true" \
+            ${IMAGE_NAME}:${IMAGE_TAG} \
+            deploy
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: [test-deploy, variables]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cleanup
+        if: always()
+        env:
+          GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
+        run: |
+          git checkout --force ${{ github.sha }}
+          if git show-ref --verify --quiet "refs/heads/${GIT_DEPLOY_BRANCH}"; then
+              echo "Branch '${GIT_DEPLOY_BRANCH}' found. Deleting"
+              git branch --delete --force "${GIT_DEPLOY_BRANCH}"
+              git push --delete origin "${GIT_DEPLOY_BRANCH}"
+          fi

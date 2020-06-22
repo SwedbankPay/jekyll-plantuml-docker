@@ -83,8 +83,8 @@ initialize a Jekyll site with `jekyll new <name>`, this is not required to
 serve or convert `.md` files with `jekyll-plantuml`.
 
 This is achieved by shipping a [default `Gemfile`][gemfile] and [default
-`_config.yml`][config] with the Docker container that is used in the case that a
-`Gemfile` and/or `_config.yml` file can't be found locally.
+`_config.default.yml`][config] with the Docker container that is used in the
+case that a `Gemfile` and/or `_config.yml` file can't be found locally.
 
 If you want a full Jekyll site with local config, custom plugins, etc., you need
 to install Jekyll and initialize the folder you `build` or `serve` with it
@@ -107,7 +107,7 @@ agreement][cla].
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
 [coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
 [coc]:                  ./CODE_OF_CONDUCT.md
-[config]:               ./.docker/jekyll-plantuml/_config.yml
+[config]:               ./.docker/entrypoint/_config.default.yml
 [dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
 [dependabot]:           https://dependabot.com
 [docker-pull-badge]:    https://img.shields.io/docker/pulls/swedbankpay/jekyll-plantuml
@@ -115,7 +115,7 @@ agreement][cla].
 [docker]:               https://hub.docker.com/r/swedbankpay/jekyll-plantuml
 [entrypoint]:           ./.docker/entrypoint
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
-[gemfile]:              ./.docker/jekyll-plantuml/Gemfile
+[gemfile]:              ./.docker/entrypoint/Gemfile
 [github]:               https://github.com/SwedbankPay/jekyll-plantuml-docker
 [jekyll-docs]:          https://jekyllrb.com/docs/
 [jekyll]:               https://jekyllrb.com/

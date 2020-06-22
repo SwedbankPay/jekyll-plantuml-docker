@@ -16,9 +16,10 @@ Execute <jekyll-command> in the Docker container and optionally test the output.
                   found, otherwise fails."
 
 initialize() {
-	docker_image_tag=${IMAGE_TAG:-latest}
+    docker_image_tag=${IMAGE_TAG:-latest}
     docker_image_name=${IMAGE_NAME:-"swedbankpay/jekyll-plantuml"}
-	local_directory=${JEKYLL_DIR:-"$PWD"}
+    docker_image_fqn="${docker_image_name}:${docker_image_tag}"
+    local_directory=${JEKYLL_DIR:-"$PWD"}
     input_command="$1"
 
     if [[ -z "$input_command" ]]; then
@@ -29,21 +30,33 @@ initialize() {
 
     if [[ "$input_command" == "serve" ]]; then
         search_string="Server running..."
-        jekyll_command="jekyll serve"
+        jekyll_command="serve"
     elif [[ "$input_command" == "build" ]]; then
-        jekyll_command="jekyll build"
+        jekyll_command="build"
     else
         echo "Invalid command specified: $input_command" >&2
         echo "$help_message"
         exit 1
     fi
 
+    environment=""
+
+    if [[ -n "${PAGES_REPO_NWO}" ]]; then
+        environment="--env PAGES_REPO_NWO=\"${PAGES_REPO_NWO}\""
+    fi
+
+    if [[ -n "${JEKYLL_GITHUB_TOKEN}" ]]; then
+        environment="$environment --env JEKYLL_GITHUB_TOKEN=\"${JEKYLL_GITHUB_TOKEN}\""
+    fi
+
     docker_run_command="\
         docker run
-            --tty
+            --tty $environment \
             --volume \"${local_directory}:/srv/jekyll\"
-            \"${docker_image_name}:${docker_image_tag}\"
+            \"${docker_image_fqn}\"
             $jekyll_command"
+
+    echo "$docker_run_command"
 }
 
 docker_run() {
@@ -64,9 +77,9 @@ docker_run_and_test() {
 }
 
 main() {
-	initialize "$@"
+    initialize "$@"
 
-    echo "Running swedbankpay/jekyll-plantuml:${docker_image_tag} $input_command..."
+    echo "Running ${docker_image_fqn} $input_command..."
 
     if [[ -n "$search_string" ]]; then
         docker_run_and_test

@@ -35,7 +35,9 @@ jobs:
 
     - name: Generate variables
       id: variables
-      run: ./.github/workflows/variables.sh ${{ github.sha }} ${{ github.ref }} ${{ steps.gitversion.outputs.fullSemVer }}
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: ./.github/workflows/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
 
     - name: Publish unstable Docker image to GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags/') != true
@@ -51,9 +53,11 @@ jobs:
         pull_image_and_stages: false
         build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
       env:
+        PAGES_REPO_NWO: ${{ github.repository }}
+        JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
         DEBUG: true
 
     - name: Publish stable Docker image to Docker Hub
@@ -69,8 +73,10 @@ jobs:
         pull_image_and_stages: false
         build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
       env:
+        PAGES_REPO_NWO: ${{ github.repository }}
+        JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ steps.variables.outputs.version }}
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
 
   verify:
     name: Verify
@@ -83,8 +89,10 @@ jobs:
     - name: Download and run image from GitHub Package Registry
       if: startsWith(github.ref, 'refs/tags') != true
       env:
+        PAGES_REPO_NWO: ${{ github.repository }}
+        JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ needs.publish.outputs.sha8 }}
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
         IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
         DEBUG: true
       run: |
@@ -95,8 +103,10 @@ jobs:
     - name: Download and run image from Docker Hub
       if: startsWith(github.ref, 'refs/tags')
       env:
+        PAGES_REPO_NWO: ${{ github.repository }}
+        JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         IMAGE_TAG: ${{ needs.publish.outputs.version }}
-        JEKYLL_DIR: ${{ github.workspace }}/.docker/jekyll-plantuml
+        JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
       run: |
         docker pull swedbankpay/jekyll-plantuml:${IMAGE_TAG}
         ./.github/workflows/docker_run_test.sh build
