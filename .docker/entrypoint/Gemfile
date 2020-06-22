@@ -1,12 +1,11 @@
-# frozen_string_literal: true
-
 source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.1', group: :jekyll_plugins
 gem 'jekyll-assets'
 gem 'jemoji'
-# Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
+
 gem 'docopt'
+# Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
 gem 'faraday', '~> 1.0.1'
 gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'
