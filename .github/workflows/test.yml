@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run Docker Image (serve)
+      - name: Run Docker Image (serve, no Gemfile)
         env:
           IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
           IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
@@ -94,7 +94,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
           IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-          JEKYLL_DIR: ${{ github.workspace }}
+          JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
         run: |
           docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
           docker pull ${IMAGE_NAME}:${IMAGE_TAG}
