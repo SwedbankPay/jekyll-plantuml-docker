@@ -49,7 +49,7 @@ module Jekyll
         config_file_path = File.join(@jekyll_data_dir, '_config.yml')
 
         unless File.file?(config_file_path)
-          default_config_file_path = File.join(__dir__, '..', '..', '_config.default.yml')
+          default_config_file_path = File.join(__dir__, '..', '_config.default.yml')
           default_config_file_path = File.expand_path(default_config_file_path)
           log(:info, "No _config.yml found. Using default: #{default_config_file_path}")
           config_file_path = default_config_file_path
@@ -59,8 +59,10 @@ module Jekyll
       end
 
       def config(jekyll_command, config_file_path)
+        raise ArgumentError, 'jekyll_command is nil' if jekyll_command.nil?
+
         jekyll_config = Jekyll.configuration(default_config(config_file_path))
-        jekyll_config.merge(serve_config) if jekyll_command == 'serve'
+        jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
         jekyll_config
       end
 

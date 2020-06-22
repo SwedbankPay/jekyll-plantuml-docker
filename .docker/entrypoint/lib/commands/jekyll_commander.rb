@@ -3,7 +3,7 @@
 require 'jekyll'
 require 'jekyll-github-metadata'
 require_relative '../command_line_argument_error'
-require_relative 'jekyll_config_provider'
+require_relative '../jekyll_config_provider'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
