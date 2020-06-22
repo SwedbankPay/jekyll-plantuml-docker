@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'jekyll'
 
 # The Jekyll module contains everything related to Jekyll.
