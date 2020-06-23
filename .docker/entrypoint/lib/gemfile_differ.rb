@@ -63,7 +63,7 @@ module Jekyll
         if match_index >= 0
           matching_line_number = match_index + 1
           @padder.write "#{gem_part} found on line #{matching_line_number}. Skipping."
-          true
+          return true
         end
 
         false
