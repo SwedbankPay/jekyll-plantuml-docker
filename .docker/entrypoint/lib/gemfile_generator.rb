@@ -11,26 +11,44 @@ module Jekyll
     class GemfileGenerator
       def initialize(debug = false)
         @debug = debug
+        @gemfile_differ = GemfileDiffer.new(@debug)
       end
 
-      def generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
+      def generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path = nil)
         raise "#{primary_gemfile_path} cannot be found." unless File.exist? primary_gemfile_path
 
+        generated_file_contents = generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
+
+        puts "Generating #{generated_gemfile_path}..." if @debug
+        puts generated_file_contents if @debug
+
+        if generated_gemfile_path.nil?
+          puts 'Returning generated Gemfile since generated_gemfile_path is nil.' if @debug
+          return generated_file_contents
+        end
+
+        write_file(generated_gemfile_path, generated_file_contents)
+      end
+
+      private
+
+      def generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
         puts "Reading #{primary_gemfile_path}..." if @debug
         original_file_contents = File.readlines primary_gemfile_path
         generated_file_contents = original_file_contents
         puts original_file_contents if @debug
 
         puts "Diffing #{secondary_gemfile_path}..." if @debug
-        gemfile_differ = Jekyll::PlantUml::GemfileDiffer.new(@debug)
-        gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
+        @gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
           generated_file_contents << line
         end
 
-        puts "Generating #{generated_gemfile_path}..." if @debug
-        puts generated_file_contents if @debug
-        File.open(generated_gemfile_path, 'w') do |file|
-          file.puts(generated_file_contents)
+        generated_file_contents
+      end
+
+      def write_file(path, contents)
+        File.open(path, 'w') do |file|
+          file.puts(contents)
         end
       end
     end

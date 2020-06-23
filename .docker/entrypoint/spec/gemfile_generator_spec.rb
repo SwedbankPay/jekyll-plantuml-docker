@@ -55,22 +55,18 @@ describe Jekyll::PlantUml::GemfileGenerator do
     end
 
     context 'identical gemfiles when primary' do
-      let!(:_) do
-        generator.generate(primary_gemfile_path, primary_gemfile_path, generated_gemfile_path)
-      end
-      subject {File.read(generated_gemfile_path)}
+      subject { generator.generate(primary_gemfile_path, primary_gemfile_path) }
+      subject(:primary_gemfile_contents) { File.read(primary_gemfile_path) }
       it {
-        expect(FileUtils.compare_file(primary_gemfile_path, generated_gemfile_path)).to be_truthy
+        is_expected.to equal(primary_gemfile_contents)
       }
     end
 
     context 'identical gemfiles when secondary' do
-      let!(:_) do
-        generator.generate(secondary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
-      end
-      subject {File.read(generated_gemfile_path)}
+      subject { generator.generate(secondary_gemfile_path, secondary_gemfile_path) }
+      subject(:secondary_gemfile_contents) { File.read(secondary_gemfile_path) }
       it {
-        expect(FileUtils.compare_file(secondary_gemfile_path, generated_gemfile_path)).to be_truthy
+        is_expected.to equal(secondary_gemfile_contents)
       }
     end
   end
