@@ -38,7 +38,7 @@ module Jekyll
       def log(severity, message)
         (@logger ||= Jekyll.logger).public_send(
           severity,
-          "jekyll-plantuml: #{message}"
+          "   jekyll-plantuml: #{message}"
         )
       end
     end
