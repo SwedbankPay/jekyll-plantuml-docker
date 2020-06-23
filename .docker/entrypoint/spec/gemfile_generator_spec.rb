@@ -60,7 +60,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
       end
       subject {File.read(generated_gemfile_path)}
       it {
-        is_expected.to FileUtils.compare_file(generated_gemfile_path,primary_gemfile_path)
+        is_expected.to be_zero FileUtils.compare_file(generated_gemfile_path,primary_gemfile_path)
       }
     end
 
@@ -70,7 +70,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
       end
       subject {File.read(generated_gemfile_path)}
       it {
-        is_expected.to FileUtils.compare_file(generated_gemfile_path,secondary_gemfile_path)
+        is_expected.to be_zero FileUtils.compare_file(generated_gemfile_path,secondary_gemfile_path)
       }
     end
   end
