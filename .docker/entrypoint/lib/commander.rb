@@ -53,7 +53,7 @@ module Jekyll
       def execute_command(jekyll_config, command, dry_run, verify)
         case command
         when 'deploy'
-          deploy(verify, dry_run)
+          deploy(jekyll_config, verify, dry_run)
         when 'build', 'serve'
           jekyll_command(jekyll_config, command, dry_run)
         else
