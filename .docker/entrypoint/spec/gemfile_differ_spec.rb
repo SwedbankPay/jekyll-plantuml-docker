@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'gemfile-differ'
+require 'gemfile_differ'
 
 describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }

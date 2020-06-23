@@ -18,6 +18,7 @@ gem "rouge"
 group :development, :test do
   gem "rspec"
   gem "rubocop-rake", require: false
+  gem "diffy"
 end
 
 gem "codecov", require: false, group: :test

@@ -1,11 +1,12 @@
 # Jekyll PlantUML
 
 ![Test Deploy][test-badge]
-[![CLA assistant][cla-badge]][cla]
+[![codecov][codecov-badge]][codecov]
 [![Docker Pulls][docker-pull-badge]][docker]
 [![Docker Image Version (latest semver)][docker-version-badge]][docker]
 [![License][license-badge]][license]
 [![Dependabot Status][dependabot-badge]][dependabot]
+[![CLA assistant][cla-badge]][cla]
 [![Contributor Covenant][coc-badge]][coc]
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
@@ -107,6 +108,8 @@ agreement][cla].
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
 [coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
 [coc]:                  ./CODE_OF_CONDUCT.md
+[codecov-badge]:        https://codecov.io/gh/SwedbankPay/jekyll-plantuml-docker/branch/master/graph/badge.svg
+[codecov]:              https://codecov.io/gh/SwedbankPay/jekyll-plantuml-docker
 [config]:               ./.docker/entrypoint/_config.default.yml
 [dependabot-badge]:     https://api.dependabot.com/badges/status?host=github&repo=SwedbankPay/jekyll-plantuml-docker
 [dependabot]:           https://dependabot.com

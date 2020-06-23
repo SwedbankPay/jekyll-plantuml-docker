@@ -13,22 +13,36 @@ module Jekyll
       end
 
       def diff(primary_gemfile_path, secondary_gemfile_path)
-        raise "#{primary_gemfile_path} cannot be found." unless File.exist? primary_gemfile_path
+        raise "#{primary_gemfile_path} cannot be found." unless path_valid(primary_gemfile_path)
+        return [] unless path_valid(secondary_gemfile_path)
 
-        unless File.exist? secondary_gemfile_path
-          puts "#{secondary_gemfile_path} not found." if @debug
-          return []
+        puts "\n\n----- Sourcing gems from #{secondary_gemfile_path} -----" if @debug
+
+        primary_gemfile_lines = file_read_lines(primary_gemfile_path)
+        secondary_gemfile_lines = file_read_lines(secondary_gemfile_path)
+
+        puts secondary_gemfile_lines if @debug
+
+        @padder = Padder.new(secondary_gemfile_lines.length.to_s.length, @debug)
+
+        do_read_lines(primary_gemfile_lines, secondary_gemfile_lines) do |line|
+          yield line
         end
+      end
 
-        puts "Sourcing gems from #{secondary_gemfile_path}..." if @debug
+      private
 
-        primary_gemfile_lines = read_lines(primary_gemfile_path)
-        secondary_gemfile_lines = read_lines(secondary_gemfile_path)
+      def path_valid(path)
+        return true if File.exist? path
 
-        padder = Padder.new(secondary_gemfile_lines.length.to_s.length)
+        puts "#{path} not found." if @debug
 
+        false
+      end
+
+      def do_read_lines(primary_gemfile_lines, secondary_gemfile_lines)
         secondary_gemfile_lines.each_with_index do |line, index|
-          padder.puts line, index + 1
+          @padder.write line, index + 1
 
           # Only care about lines starting with "gem"
           next unless line.start_with? 'gem'
@@ -37,20 +51,23 @@ module Jekyll
 
           # If we already have the gem mentioned in this very Gemfile, skip it
           match_index = line_index_of_substring(primary_gemfile_lines, gem_part)
+          next if match?(match_index, gem_part)
 
-          if match_index >= 0
-            matching_line_number = match_index + 1
-            padder.puts "#{gem_part} found on line #{matching_line_number}. Skipping."
-            next
-          end
-
-          padder.puts "Yielding #{line.strip}."
+          @padder.write "Yielding #{line.strip}."
 
           yield line
         end
       end
 
-      private
+      def match?(match_index, gem_part)
+        if match_index >= 0
+          matching_line_number = match_index + 1
+          @padder.write "#{gem_part} found on line #{matching_line_number}. Skipping."
+          return true
+        end
+
+        false
+      end
 
       def get_gem_part(line)
         gem_part = line
@@ -70,7 +87,7 @@ module Jekyll
         -1
       end
 
-      def read_lines(file_path)
+      def file_read_lines(file_path)
         File.open(file_path, &:readlines)
       end
     end

@@ -3,17 +3,15 @@
 require 'commander'
 require 'spec_logger'
 require 'jekyll'
+require 'docker_image'
+require 'jekyll_environment'
 
 describe Jekyll::PlantUml::Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     Jekyll::PlantUml::Commander.new(
-      'development',
-      __dir__,
-      __dir__,
-      'swedbankpay/jekyll-plantuml',
-      version,
-      version
+      Jekyll::PlantUml::JekyllEnvironment.new('development', __dir__, __dir__),
+      Jekyll::PlantUml::DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end
 

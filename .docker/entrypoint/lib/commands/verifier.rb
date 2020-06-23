@@ -13,20 +13,16 @@ module Jekyll
     class Verifier
       def initialize(jekyll_config)
         raise 'Nil or empty Jekyll config' if jekyll_config.nil? || jekyll_config.empty?
+        raise "No 'destination' key found in the Jekyll config" unless jekyll_config.key? 'destination'
 
-        @jekyll_config = jekyll_config
+        @jekyll_destination_dir = jekyll_config['destination']
+        raise "#{@jekyll_destination_dir} does not exist" unless Dir.exist?(@jekyll_destination_dir)
       end
 
       def verify
-        raise "No 'destination' key found in the Jekyll config" unless @jekyll_config.key? 'destination'
+        html_glob = File.join(@jekyll_destination_dir, '**/*.html')
 
-        jekyll_destination_dir = @jekyll_config['destination']
-
-        raise "#{@jekyll_destination_dir} does not exist" unless Dir.exist?(jekyll_destination_dir)
-
-        html_glob = File.join(jekyll_destination_dir, '**/*.html')
-
-        raise "#{jekyll_destination_dir} contains no .html files" if Dir.glob(html_glob).empty?
+        raise "#{@jekyll_destination_dir} contains no .html files" if Dir.glob(html_glob).empty?
 
         options = {
           assume_extension: true,
@@ -36,7 +32,7 @@ module Jekyll
           check_unrendered_link: true
         }
 
-        HTMLProofer.check_directory(jekyll_destination_dir, options).run
+        HTMLProofer.check_directory(@jekyll_destination_dir, options).run
       end
     end
   end

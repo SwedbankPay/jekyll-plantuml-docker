@@ -1,7 +1,11 @@
-require: rubocop-rake
 AllCops:
   NewCops: enable
 Metrics/BlockLength:
   Exclude:
-    - 'Rakefile'
-    - 'spec/**/*.rb'
+    - "Rakefile"
+    - "spec/**/*.rb"
+
+Layout:
+  LineLength: 80
+  IndentationStyle:
+    IndentationWidth: 2

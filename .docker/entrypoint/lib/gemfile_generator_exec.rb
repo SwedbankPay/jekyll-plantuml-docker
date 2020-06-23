@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'gemfile-generator'
+require_relative 'gemfile_generator'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
