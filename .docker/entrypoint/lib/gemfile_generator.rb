@@ -47,9 +47,11 @@ module Jekyll
       end
 
       def write_file(path, contents)
-        File.open(path, 'w') do |file|
-          file.puts(contents)
-        end
+        File.delete path if File.exist? path
+        file = File.open(path, File::CREAT | File::WRONLY | File::TRUNC)
+        file.flock(File::LOCK_EX)
+        file.puts(contents)
+        file.flock(File::LOCK_UN)
       end
     end
   end
