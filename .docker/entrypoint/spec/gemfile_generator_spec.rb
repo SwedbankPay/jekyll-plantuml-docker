@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'gemfile_generator'
+require 'fileutils'
 
 describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }
@@ -50,6 +51,26 @@ describe Jekyll::PlantUml::GemfileGenerator do
       }
       it {
         is_expected.to include('gem "rouge"')
+      }
+    end
+
+    context 'identical gemfiles when primary' do
+      let!(:_) do
+        generator.generate(primary_gemfile_path, primary_gemfile_path, generated_gemfile_path)
+      end
+      subject {File.read(generated_gemfile_path)}
+      it {
+        is_expected.to FileUtils.compare_file(generated_gemfile_path,primary_gemfile_path)
+      }
+    end
+
+    context 'identical gemfiles when secondary' do
+      let!(:_) do
+        generator.generate(secondary_gemfile_path, secondary_gemfile_path, generated_gemfile_path)
+      end
+      subject {File.read(generated_gemfile_path)}
+      it {
+        is_expected.to FileUtils.compare_file(generated_gemfile_path,secondary_gemfile_path)
       }
     end
   end
