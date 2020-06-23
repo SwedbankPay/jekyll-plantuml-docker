@@ -19,7 +19,7 @@ module Jekyll
 
         generated_file_contents = generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
 
-        puts "Generating #{generated_gemfile_path}..." if @debug
+        puts "\n\n----- Generating #{generated_gemfile_path} -----" if @debug
         puts generated_file_contents if @debug
 
         if generated_gemfile_path.nil?
@@ -33,12 +33,12 @@ module Jekyll
       private
 
       def generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
-        puts "Reading #{primary_gemfile_path}..." if @debug
+        puts "\n\n----- Reading #{primary_gemfile_path} -----" if @debug
         original_file_contents = File.readlines primary_gemfile_path
         generated_file_contents = original_file_contents
         puts original_file_contents if @debug
 
-        puts "Diffing #{secondary_gemfile_path}..." if @debug
+        puts "\n\n----- Diffing #{secondary_gemfile_path} -----" if @debug
         @gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
           generated_file_contents << line
         end

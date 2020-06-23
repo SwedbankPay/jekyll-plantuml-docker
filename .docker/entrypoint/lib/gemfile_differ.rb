@@ -16,12 +16,14 @@ module Jekyll
         raise "#{primary_gemfile_path} cannot be found." unless path_valid(primary_gemfile_path)
         return [] unless path_valid(secondary_gemfile_path)
 
-        puts "Sourcing gems from #{secondary_gemfile_path}..." if @debug
+        puts "\n\n----- Sourcing gems from #{secondary_gemfile_path} -----" if @debug
 
         primary_gemfile_lines = file_read_lines(primary_gemfile_path)
         secondary_gemfile_lines = file_read_lines(secondary_gemfile_path)
 
-        @padder = Padder.new(secondary_gemfile_lines.length.to_s.length)
+        puts secondary_gemfile_lines if @debug
+
+        @padder = Padder.new(secondary_gemfile_lines.length.to_s.length, @debug)
 
         do_read_lines(primary_gemfile_lines, secondary_gemfile_lines) do |line|
           yield line
