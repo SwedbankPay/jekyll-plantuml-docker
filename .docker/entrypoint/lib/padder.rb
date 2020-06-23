@@ -13,14 +13,14 @@ module Jekyll
         @padding = ' '.rjust(pad_length)
       end
 
-      def puts(message, line_number = nil)
+      def write(message, line_number = nil)
         unless line_number.nil?
           line_number_s = line_number.to_s.rjust(@pad_length)
           puts "#{line_number_s}: #{message}" if @debug
           return
         end
 
-        puts "#{@padding} #{message}" if @debug
+        puts "#{@padding}  #{message}" if @debug
       end
     end
   end

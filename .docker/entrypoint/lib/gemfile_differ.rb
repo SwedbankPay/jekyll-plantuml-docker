@@ -40,7 +40,7 @@ module Jekyll
 
       def do_read_lines(primary_gemfile_lines, secondary_gemfile_lines)
         secondary_gemfile_lines.each_with_index do |line, index|
-          @padder.puts line, index + 1
+          @padder.write line, index + 1
 
           # Only care about lines starting with "gem"
           next unless line.start_with? 'gem'
@@ -51,7 +51,7 @@ module Jekyll
           match_index = line_index_of_substring(primary_gemfile_lines, gem_part)
           next if match?(match_index, gem_part)
 
-          @padder.puts "Yielding #{line.strip}."
+          @padder.write "Yielding #{line.strip}."
 
           yield line
         end
@@ -60,7 +60,7 @@ module Jekyll
       def match?(match_index, gem_part)
         if match_index >= 0
           matching_line_number = match_index + 1
-          @padder.puts "#{gem_part} found on line #{matching_line_number}. Skipping."
+          @padder.write "#{gem_part} found on line #{matching_line_number}. Skipping."
           true
         end
 
