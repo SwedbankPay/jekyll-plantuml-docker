@@ -69,11 +69,11 @@ module Jekyll
       end
 
       def write_file(path, contents)
-        File.delete path if File.exist? path
-        file = File.open(path, File::CREAT | File::WRONLY | File::TRUNC)
-        file.flock(File::LOCK_EX)
-        file.puts(contents)
-        file.flock(File::LOCK_UN)
+        File.open(path, 'w') do |file|
+          file.puts(contents)
+        end
+
+        Bundler::Definition.build(path, nil, {})
       end
 
       def path_valid?(path)
