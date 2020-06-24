@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 require 'gemfile_generator'
+require 'bundler'
 require 'diffy'
+
+RSpec::Matchers.define :be_valid_gemfile do |_meth, _expected|
+  match do |actual|
+    Bundler::Definition.build(actual, nil, {})
+  end
+end
 
 describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }
@@ -58,6 +65,9 @@ describe Jekyll::PlantUml::GemfileGenerator do
       }
       it {
         is_expected.to include("gem 'rouge'")
+      }
+      it {
+        expect(generated_gemfile_path).to be_valid_gemfile
       }
     end
 

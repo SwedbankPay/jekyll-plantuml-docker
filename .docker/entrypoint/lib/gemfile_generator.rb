@@ -42,7 +42,7 @@ module Jekyll
 
         @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
           user_gemfile_contents = delete(dependency, user_gemfile_contents)
-          default_gemfile_contents << "gem '#{dependency.name}', #{dependency.requirement}"
+          default_gemfile_contents << "gem '#{dependency.name}', '#{dependency.requirement}'"
         end
 
         merged_gemfile_contents = user_gemfile_contents
