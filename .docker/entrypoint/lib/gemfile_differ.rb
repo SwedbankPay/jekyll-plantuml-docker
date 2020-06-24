@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'padder'
+require 'bundler'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -12,27 +12,32 @@ module Jekyll
         @debug = debug
       end
 
-      def diff(primary_gemfile_path, secondary_gemfile_path)
-        raise "#{primary_gemfile_path} cannot be found." unless path_valid(primary_gemfile_path)
-        return [] unless path_valid(secondary_gemfile_path)
+      def diff(default_gemfile_path, user_gemfile_path)
+        raise "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
 
-        puts "\n\n----- Sourcing gems from #{secondary_gemfile_path} -----" if @debug
+        puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
+        user_dependencies = load_dependencies(user_gemfile_path)
 
-        primary_gemfile_lines = file_read_lines(primary_gemfile_path)
-        secondary_gemfile_lines = file_read_lines(secondary_gemfile_path)
+        puts "\n\n----- Sourcing gems from #{default_gemfile_path} -----" if @debug
+        default_dependencies = load_dependencies(default_gemfile_path)
 
-        puts secondary_gemfile_lines if @debug
-
-        @padder = Padder.new(secondary_gemfile_lines.length.to_s.length, @debug)
-
-        do_read_lines(primary_gemfile_lines, secondary_gemfile_lines) do |line|
-          yield line
+        do_diff(user_dependencies, default_dependencies) do |dependency|
+          yield dependency
         end
       end
 
       private
 
-      def path_valid(path)
+      def load_dependencies(path)
+        return [] unless path_valid? path
+
+        definition = Bundler::Definition.build(path, nil, {})
+        dependencies = definition.dependencies
+        puts dependencies if @debug
+        dependencies
+      end
+
+      def path_valid?(path)
         return true if File.exist? path
 
         puts "#{path} not found." if @debug
@@ -40,55 +45,57 @@ module Jekyll
         false
       end
 
-      def do_read_lines(primary_gemfile_lines, secondary_gemfile_lines)
-        secondary_gemfile_lines.each_with_index do |line, index|
-          @padder.write line, index + 1
+      def do_diff(user_dependencies, default_dependencies)
+        # user_dependencies comes from the user's Gemfile.
+        user_dependencies.each do |user_dependency|
+          higher_version_match = find_higher_version_match(default_dependencies, user_dependency)
 
-          # Only care about lines starting with "gem"
-          next unless line.start_with? 'gem'
+          # If we find a matching gem in the entrypoint's Gemfile, yield it.
+          yield higher_version_match unless higher_version_match.nil?
+        end
 
-          gem_part = get_gem_part(line)
+        # default_dependencies comes from the entrypoint's Gemfile.
+        default_dependencies.each do |default_dependency|
+          missing = find_match(user_dependencies, default_dependency)
 
-          # If we already have the gem mentioned in this very Gemfile, skip it
-          match_index = line_index_of_substring(primary_gemfile_lines, gem_part)
-          next if match?(match_index, gem_part)
-
-          @padder.write "Yielding #{line.strip}."
-
-          yield line
+          # If we find a gem that isn't in the user's Gemfile, yield it.
+          yield default_dependency if missing.nil?
         end
       end
 
-      def match?(match_index, gem_part)
-        if match_index >= 0
-          matching_line_number = match_index + 1
-          @padder.write "#{gem_part} found on line #{matching_line_number}. Skipping."
-          return true
+      def find_match(other_dependencies, dependency)
+        other_dependencies.each do |other_dependency|
+          return other_dependency if other_dependency.name == dependency.name
         end
 
-        false
+        nil
       end
 
-      def get_gem_part(line)
-        gem_part = line
+      def find_higher_version_match(other_dependencies, dependency)
+        other_dependency = find_match(other_dependencies, dependency)
 
-        # If the line contains a comma, get everything before the comma
-        # (ignoring version and group for now)
-        gem_part = line.split(',')[0] if line.include? ','
+        return nil if other_dependency.nil?
 
-        gem_part.strip
+        dependency_version = find_version(dependency)
+        other_dependency_version = find_version(other_dependency)
+        version_comparison = version_compare(other_dependency_version, dependency_version)
+
+        return other_dependency if version_comparison.positive?
+
+        nil
       end
 
-      def line_index_of_substring(lines, substring)
-        lines.each_with_index do |line, index|
-          return index if line.include? substring
-        end
+      def find_version(dependency)
+        dependency.requirement.requirements.flatten.find { |r| r.is_a? Gem::Version }
+      end
+
+      def version_compare(version_a, version_b)
+        return 0 if version_a.nil? && version_b.nil?
+        return -1 if version_a.nil? && !version_b.nil?
+        return 1 if !version_a.nil? && version_b.nil?
+        return 1 if version_a > version_b
 
         -1
-      end
-
-      def file_read_lines(file_path)
-        File.open(file_path, &:readlines)
       end
     end
   end

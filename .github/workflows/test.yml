@@ -52,7 +52,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Build Docker Image
         uses: whoan/docker-build-with-cache-action@v5.3.3
         with:
@@ -72,7 +71,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Run Docker Image (serve, no Gemfile)
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
@@ -91,7 +89,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Run Docker Image (build, no Gemfile)
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
@@ -110,7 +107,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Run Docker Image (build)
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
@@ -118,6 +114,24 @@ jobs:
           IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
           IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
           JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh build
+
+  test-gemspec:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Docker Image (build with gemspec)
+        env:
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}/tests/gemspec
         run: |
           docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
           docker pull ${IMAGE_NAME}:${IMAGE_TAG}
