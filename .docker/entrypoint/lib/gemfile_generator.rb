@@ -67,6 +67,11 @@ module Jekyll
 
       def write_file(path, contents)
         puts "\n\n----- Writing #{path} -----" if @debug
+        
+        return unless File.writable? path
+        return unless contents.any?
+
+        puts "\n\n----- With #{contents} -----" if @debug
 
         File.open(path, 'w') do |file|
           file.puts(contents)
