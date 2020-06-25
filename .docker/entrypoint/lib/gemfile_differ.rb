@@ -6,6 +6,16 @@ require 'bundler'
 module Jekyll
   # The Jekyll::PlantUml module contains everything related to Jekyll::PlantUml.
   module PlantUml
+    # Thrown when files are not found
+    class FileNotFoundError < StandardError
+      attr_reader :original
+
+      def initialize(msg, original = nil)
+        super(msg)
+        @original = original
+      end
+    end
+
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
       def initialize(debug = false)
@@ -31,7 +41,14 @@ module Jekyll
       def load_dependencies(path)
         return [] unless path_valid? path
 
-        definition = Bundler::Definition.build(path, nil, {})
+        definition = nil
+
+        begin
+          definition = Bundler::Definition.build(path, nil, {})
+        rescue Bundler::GemfileNotFound => e
+          raise FileNotFoundError.new("#{path} not found", e)
+        end
+
         dependencies = definition.dependencies
         puts dependencies if @debug
         dependencies
