@@ -20,15 +20,7 @@ module Jekyll
 
         generated_file_contents = merge(default_gemfile_path, user_gemfile_path)
 
-        puts "\n\n----- #{generated_gemfile_path} contents -----" if @debug
-        puts generated_file_contents if @debug
-
-        if generated_gemfile_path.nil?
-          puts 'Returning generated Gemfile since generated_gemfile_path is nil.' if @debug
-          return generated_file_contents
-        end
-
-        puts "\n\n----- Writing #{generated_gemfile_path} -----" if @debug
+        return generated_file_contents if return_contents?(generated_gemfile_path, generated_file_contents)
 
         write_file(generated_gemfile_path, generated_file_contents)
       end
@@ -42,6 +34,10 @@ module Jekyll
         puts "\n\n----- Merging #{user_gemfile_path} with #{default_gemfile_path} -----" if @debug
 
         @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
+          # Delete dependencies that override the user's dependencies, most
+          # likely because the default dependency has a higher version number.
+          # Note that the dependencies are only deleted from the in-memory array
+          # and not from the physical file system.
           user_gemfile_contents = delete(dependency, user_gemfile_contents)
           default_gemfile_contents << "gem '#{dependency.name}', '#{dependency.requirement}'"
         end
@@ -70,6 +66,8 @@ module Jekyll
       end
 
       def write_file(path, contents)
+        puts "\n\n----- Writing #{path} -----" if @debug
+
         File.open(path, 'w') do |file|
           file.puts(contents)
         end
@@ -81,6 +79,20 @@ module Jekyll
         return true if File.exist? path
 
         puts "#{path} not found." if @debug
+
+        false
+      end
+
+      def return_contents?(path, contents)
+        if @debug
+          puts "\n\n----- #{path} contents -----"
+          puts contents
+        end
+
+        if path.nil?
+          puts 'Returning contents since the path on which to save it is nil.' if @debug
+          return true
+        end
 
         false
       end

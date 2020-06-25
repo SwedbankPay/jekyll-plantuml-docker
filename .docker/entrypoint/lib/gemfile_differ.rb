@@ -30,7 +30,7 @@ module Jekyll
       private
 
       def load_dependencies(path)
-        return [] unless path_valid? path
+        return [] unless path_valid?(path)
 
         definition = nil
 
