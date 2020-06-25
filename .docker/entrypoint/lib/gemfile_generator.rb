@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'gemfile_differ'
+require_relative 'file_not_found_error'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -15,7 +16,7 @@ module Jekyll
       end
 
       def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
-        raise "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
+        raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
 
         generated_file_contents = merge(default_gemfile_path, user_gemfile_path)
 

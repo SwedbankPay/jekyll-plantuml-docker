@@ -1,21 +1,12 @@
 # frozen_string_literal: true
 
 require 'bundler'
+require_relative 'file_not_found_error'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
   # The Jekyll::PlantUml module contains everything related to Jekyll::PlantUml.
   module PlantUml
-    # Thrown when files are not found
-    class FileNotFoundError < StandardError
-      attr_reader :original
-
-      def initialize(msg, original = nil)
-        super(msg)
-        @original = original
-      end
-    end
-
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
       def initialize(debug = false)
@@ -23,7 +14,7 @@ module Jekyll
       end
 
       def diff(default_gemfile_path, user_gemfile_path)
-        raise "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
+        raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
 
         puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
         user_dependencies = load_dependencies(user_gemfile_path)

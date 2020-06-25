@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require 'gemfile_generator'
-require 'bundler'
 require 'diffy'
+require 'bundler'
+require 'gemfile_generator'
+require 'file_not_found_error'
 
 RSpec::Matchers.define :be_valid_gemfile do |_meth, _expected|
   match do |actual|
@@ -26,7 +27,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
       it 'should raise' do
         expect do
           generator.generate('abc', user_gemfile_path, generated_gemfile_path)
-        end.to raise_error 'abc cannot be found.'
+        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc cannot be found.')
       end
     end
 

@@ -2,6 +2,7 @@
 
 require 'bundler'
 require 'gemfile_differ'
+require 'file_not_found_error'
 
 describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }
@@ -12,7 +13,9 @@ describe Jekyll::PlantUml::GemfileDiffer do
 
     context 'non-existent default gemfile' do
       it 'should raise' do
-        expect { differ.diff('abc', user_gemfile_path) }.to raise_error 'abc cannot be found.'
+        expect do
+          differ.diff('abc', user_gemfile_path)
+        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc cannot be found.')
       end
     end
 
