@@ -4,7 +4,10 @@ Metrics/BlockLength:
   Exclude:
     - "Rakefile"
     - "spec/**/*.rb"
-
+Metrics/MethodLength:
+  Exclude:
+    - "Rakefile"
+    - "spec/**/*.rb"
 Layout:
   LineLength: 80
   IndentationStyle:
