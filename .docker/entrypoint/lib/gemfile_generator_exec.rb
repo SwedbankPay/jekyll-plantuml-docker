@@ -17,8 +17,22 @@ module Jekyll
         user_gemfile_path = File.join(jekyll_data_dir, 'Gemfile')
         generated_gemfile_path = File.join(jekyll_data_dir, 'Gemfile.generated')
 
+        if debug
+          puts 'Gemfiles:'
+          write_debug_info('default', default_gemfile_path)
+          write_debug_info('user', user_gemfile_path)
+          write_debug_info('generated', generated_gemfile_path)
+        end
+
         gemfile_generator = Jekyll::PlantUml::GemfileGenerator.new(debug)
         gemfile_generator.generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path)
+      end
+
+      def write_debug_info(type, gemfile_path)
+        gemfile_exists = File.exist? gemfile_path
+        puts "  - type: #{type}"
+        puts "    path: #{gemfile_path}"
+        puts "    exists: #{gemfile_exists}"
       end
     end
   end
