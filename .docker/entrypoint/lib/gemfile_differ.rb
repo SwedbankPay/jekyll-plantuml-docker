@@ -37,7 +37,7 @@ module Jekyll
         begin
           definition = Bundler::Definition.build(path, nil, {})
         rescue Bundler::GemfileNotFound => e
-          raise FileNotFoundError.new("#{path} not found", e)
+          return []
         end
 
         dependencies = definition.dependencies
@@ -46,7 +46,7 @@ module Jekyll
       end
 
       def path_valid?(path)
-        return true if File.exist? path
+        return true if File.writable? path
 
         puts "#{path} not found." if @debug
 

@@ -76,7 +76,7 @@ module Jekyll
       end
 
       def path_valid?(path)
-        return true if File.exist? path
+        return true if File.writable? path
 
         puts "#{path} not found." if @debug
 
