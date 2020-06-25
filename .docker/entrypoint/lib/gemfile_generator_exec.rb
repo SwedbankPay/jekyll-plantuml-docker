@@ -9,15 +9,16 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      def initialize
+      def initialize(gemfiles = nil)
         @debug = ENV.fetch('DEBUG', false)
         jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR', Dir.pwd)
-        @gemfiles = {
+        gemfiles ||= {
           default: File.join(jekyll_var_dir, 'entrypoint', 'Gemfile'),
           user: File.join(jekyll_data_dir, 'Gemfile'),
           generated: File.join(jekyll_data_dir, 'Gemfile.generated')
         }
+        @gemfiles = gemfiles
       end
 
       def generate
@@ -61,4 +62,7 @@ module Jekyll
   end
 end
 
-Jekyll::PlantUml::GemfileGeneratorExec.new.generate
+if __FILE__ == $PROGRAM_NAME
+  # This will only run if the script was the main, not loaded or required
+  Jekyll::PlantUml::GemfileGeneratorExec.new.generate
+end
