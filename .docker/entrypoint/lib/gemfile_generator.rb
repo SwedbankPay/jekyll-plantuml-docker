@@ -37,7 +37,7 @@ module Jekyll
         user_gemfile_contents = path_valid?(user_gemfile_path) ? File.readlines(user_gemfile_path) : []
         default_gemfile_contents = []
 
-        puts "\n\n----- Merging #{user_gemfile_path} with #{default_gemfile_path} -----" if @debug
+        puts "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----" if @debug
 
         @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
           # Delete dependencies that override the user's dependencies, most
@@ -72,7 +72,7 @@ module Jekyll
       end
 
       def write_file(path, contents)
-        puts "\n\n----- Writing #{path} -----" if @debug
+        puts "\n\n----- Writing <#{path}> -----" if @debug
 
         return if contents.empty?
 
@@ -86,7 +86,7 @@ module Jekyll
       end
 
       def validate_gemfile(path)
-        puts "\n\n----- Validating #{path} -----" if @debug
+        puts "\n\n----- Validating <#{path}> -----" if @debug
 
         if path_valid?(path) && @debug
           puts "#{path} exists."
@@ -98,16 +98,16 @@ module Jekyll
       end
 
       def path_valid?(path)
-        return true if File.exist? path
+        return true if !path.nil? && !path.empty? && File.exist?(path)
 
-        puts "#{path} not found." if @debug
+        puts "<#{path}> not found." if @debug
 
         false
       end
 
       def return_contents?(path, contents)
         if @debug
-          puts "\n\n----- #{path} contents -----"
+          puts "\n\n----- <#{path}> contents -----"
           puts contents
         end
 
