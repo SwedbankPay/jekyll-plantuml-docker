@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit # Immediately abort if any command fails
 
 [ "${DEBUG:-false}" = "true" ] && set -x
 

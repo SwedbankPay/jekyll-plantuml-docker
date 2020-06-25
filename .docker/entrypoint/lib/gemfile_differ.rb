@@ -22,7 +22,7 @@ module Jekyll
         puts "\n\n----- Sourcing gems from #{default_gemfile_path} -----" if @debug
         default_dependencies = load_dependencies(default_gemfile_path)
 
-        do_diff(user_dependencies, default_dependencies) do |dependency|
+        do_diff(default_dependencies, user_dependencies) do |dependency|
           yield dependency
         end
       end
@@ -53,7 +53,7 @@ module Jekyll
         false
       end
 
-      def do_diff(user_dependencies, default_dependencies)
+      def do_diff(default_dependencies, user_dependencies)
         # user_dependencies comes from the user's Gemfile.
         user_dependencies.each do |user_dependency|
           higher_version_match = find_higher_version_match(default_dependencies, user_dependency)
