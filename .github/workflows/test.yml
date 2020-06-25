@@ -65,13 +65,13 @@ jobs:
           pull_image_and_stages: true
           build_extra_args: --build-arg SHA=${{ needs.variables.outputs.sha }} --build-arg TAG=${{ needs.variables.outputs.sha8 }} --build-arg DATE=${{ needs.variables.outputs.date }} --build-arg VERSION=${{ needs.variables.outputs.version }}
 
-  test-default:
+  test-serve:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Run Docker Image (serve, no Gemfile)
+      - name: Run Docker Image (serve)
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +84,43 @@ jobs:
           docker pull ${IMAGE_NAME}:${IMAGE_TAG}
           ./.github/workflows/docker_run_test.sh serve
 
-  test-no-gemfile:
+  test-serve-no-gemfile:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Docker Image (build, no Gemfile)
+        env:
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh serve
+
+  test-build:
+    runs-on: ubuntu-latest
+    needs: [variables, docker-build]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Docker Image (build, no Gemfile)
+        env:
+          PAGES_REPO_NWO: ${{ github.repository }}
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
+          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          JEKYLL_DIR: ${{ github.workspace }}/tests/full
+        run: |
+          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
+          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          ./.github/workflows/docker_run_test.sh build
+
+  test-build-no-gemfile:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
 
@@ -102,25 +138,7 @@ jobs:
           docker pull ${IMAGE_NAME}:${IMAGE_TAG}
           ./.github/workflows/docker_run_test.sh build
 
-  test-build:
-    runs-on: ubuntu-latest
-    needs: [variables, docker-build]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Docker Image (build)
-        env:
-          PAGES_REPO_NWO: ${{ github.repository }}
-          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
-          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
-          JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
-        run: |
-          docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
-          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
-          ./.github/workflows/docker_run_test.sh build
-
-  test-gemspec:
+  test-build-gemspec:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
 
