@@ -9,26 +9,41 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      def generate
-        debug = ENV.fetch('DEBUG', false)
+      def initialize
+        @debug = ENV.fetch('DEBUG', false)
         jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR', Dir.pwd)
-        default_gemfile_path = File.join(jekyll_var_dir, 'entrypoint', 'Gemfile')
-        user_gemfile_path = File.join(jekyll_data_dir, 'Gemfile')
-        generated_gemfile_path = File.join(jekyll_data_dir, 'Gemfile.generated')
-
-        if debug
-          puts 'Gemfiles:'
-          write_debug_info('default', default_gemfile_path)
-          write_debug_info('user', user_gemfile_path)
-          write_debug_info('generated', generated_gemfile_path)
-        end
-
-        gemfile_generator = Jekyll::PlantUml::GemfileGenerator.new(debug)
-        gemfile_generator.generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path)
+        @gemfiles = {
+          default: File.join(jekyll_var_dir, 'entrypoint', 'Gemfile'),
+          user: File.join(jekyll_data_dir, 'Gemfile'),
+          generated: File.join(jekyll_data_dir, 'Gemfile.generated')
+        }
       end
 
-      def write_debug_info(type, gemfile_path)
+      def generate
+        gemfiles_info
+
+        gemfile_generator = Jekyll::PlantUml::GemfileGenerator.new(@debug)
+
+        gemfile_generator.generate(
+          @gemfiles[:default],
+          @gemfiles[:user],
+          @gemfiles[:generated]
+        )
+      end
+
+      private
+
+      def gemfiles_info
+        return unless @debug
+
+        puts 'Gemfiles:'
+        @gemfiles.each do |type, path|
+          gemfile_info(type, path)
+        end
+      end
+
+      def gemfile_info(type, gemfile_path)
         gemfile_exists = File.exist? gemfile_path
 
         puts "  - type: #{type}"

@@ -30,19 +30,24 @@ module Jekyll
       private
 
       def load_dependencies(path)
-        return [] unless path_valid?(path)
-
-        definition = nil
-
-        begin
-          definition = Bundler::Definition.build(path, nil, {})
-        rescue Bundler::GemfileNotFound => e
-          return []
-        end
+        definition = build_definition(path)
+        return [] if definition.nil?
 
         dependencies = definition.dependencies
         puts dependencies if @debug
         dependencies
+      end
+
+      def build_definition(path)
+        return nil unless path_valid?(path)
+
+        begin
+          return Bundler::Definition.build(path, nil, {})
+        rescue Bundler::GemfileNotFound => e
+          puts e if @debug
+        end
+
+        nil
       end
 
       def path_valid?(path)
