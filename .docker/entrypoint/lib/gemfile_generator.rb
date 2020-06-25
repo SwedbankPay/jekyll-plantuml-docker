@@ -73,11 +73,11 @@ module Jekyll
 
       def write_file(path, contents)
         puts "\n\n----- Writing #{path} -----" if @debug
-        
+
         return unless path_valid? path
         return if contents.empty?
 
-        puts "\n\n----- With #{contents} -----" if @debug
+        puts contents if @debug
 
         File.open(path, 'w') do |file|
           file.puts(contents)
@@ -87,7 +87,7 @@ module Jekyll
       end
 
       def path_valid?(path)
-        return true if File.exists? path
+        return true if File.exist? path
 
         puts "#{path} not found." if @debug
 
