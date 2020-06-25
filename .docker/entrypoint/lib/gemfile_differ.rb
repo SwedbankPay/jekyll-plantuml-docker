@@ -15,6 +15,7 @@ module Jekyll
 
       def diff(default_gemfile_path, user_gemfile_path)
         raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
+        raise FileNotFoundError, "#{user_gemfile_path} cannot be found." unless path_valid?(user_gemfile_path)
 
         puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
         user_dependencies = load_dependencies(user_gemfile_path)
