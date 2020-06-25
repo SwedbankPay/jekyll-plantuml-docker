@@ -27,7 +27,6 @@ describe Jekyll::PlantUml::Commander do
     end
 
     context '--version' do
-      # TODO: Figure out why --version doesn't work.
       specify { expect { commander.execute('--version') }.to output(/#{version}/).to_stdout }
     end
 
