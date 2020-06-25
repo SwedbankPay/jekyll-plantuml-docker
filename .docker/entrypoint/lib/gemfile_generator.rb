@@ -82,6 +82,14 @@ module Jekyll
           file.puts(contents)
         end
 
+        puts "\n\n----- Validating #{path} -----" if @debug
+
+        if path_valid? path
+          puts "#{path} exists" if @debug
+        else
+          puts "#{path} DOES NOT EXIST! ALARM!" if @debug
+        end
+
         Bundler::Definition.build(path, nil, {})
       end
 

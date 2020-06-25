@@ -30,9 +30,17 @@ module Jekyll
 
       def write_debug_info(type, gemfile_path)
         gemfile_exists = File.exist? gemfile_path
+
         puts "  - type: #{type}"
         puts "    path: #{gemfile_path}"
         puts "    exists: #{gemfile_exists}"
+
+        return unless gemfile_exists
+
+        uid = File.stat(gemfile_path).uid
+        gid = File.stat(gemfile_path).gid
+        puts "    uid: #{uid}"
+        puts "    gid: #{gid}"
       end
     end
   end
