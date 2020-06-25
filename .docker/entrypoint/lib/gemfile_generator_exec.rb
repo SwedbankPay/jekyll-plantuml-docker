@@ -15,7 +15,7 @@ module Jekyll
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR', Dir.pwd)
         default_gemfile_path = File.join(jekyll_var_dir, 'entrypoint', 'Gemfile')
         user_gemfile_path = File.join(jekyll_data_dir, 'Gemfile')
-        generated_gemfile_path = File.join(jekyll_var_dir, 'entrypoint', 'Gemfile.generated')
+        generated_gemfile_path = File.join(jekyll_data_dir, 'Gemfile.generated')
 
         gemfile_generator = Jekyll::PlantUml::GemfileGenerator.new(debug)
         gemfile_generator.generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path)

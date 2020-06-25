@@ -4,7 +4,7 @@
 
 ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/gemfile_generator_exec.rb"
 
-default_gemfile="${JEKYLL_VAR_DIR}/entrypoint/Gemfile.generated"
+default_gemfile="${JEKYLL_DATA_DIR}/Gemfile.generated"
 
 bundle check --gemfile="$default_gemfile" \
   || bundle install --gemfile="$default_gemfile"
