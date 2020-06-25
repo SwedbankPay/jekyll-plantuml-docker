@@ -82,12 +82,16 @@ module Jekyll
           file.puts(contents)
         end
 
+        validate_gemfile(path)
+      end
+
+      def validate_gemfile(path)
         puts "\n\n----- Validating #{path} -----" if @debug
 
-        if path_valid? path
-          puts "#{path} exists" if @debug
-        else
-          puts "#{path} DOES NOT EXIST! ALARM!" if @debug
+        if path_valid?(path) && @debug
+          puts "#{path} exists."
+        elsif @debug
+          puts "#{path} DOES NOT EXIST! ALARM!"
         end
 
         Bundler::Definition.build(path, nil, {})
