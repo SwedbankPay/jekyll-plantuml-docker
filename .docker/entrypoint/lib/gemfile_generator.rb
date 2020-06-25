@@ -2,6 +2,7 @@
 
 require_relative 'gemfile_differ'
 require_relative 'file_not_found_error'
+require 'fileutils'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -17,6 +18,11 @@ module Jekyll
 
       def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
         raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
+
+        unless path_valid? user_gemfile_path
+          FileUtils.cp(default_gemfile_path, generated_gemfile_path)
+          return
+        end
 
         generated_file_contents = merge(default_gemfile_path, user_gemfile_path)
 
@@ -68,8 +74,8 @@ module Jekyll
       def write_file(path, contents)
         puts "\n\n----- Writing #{path} -----" if @debug
         
-        return unless File.writable? path
-        return unless contents.any?
+        return unless path_valid? path
+        return if contents.empty?
 
         puts "\n\n----- With #{contents} -----" if @debug
 
@@ -81,7 +87,7 @@ module Jekyll
       end
 
       def path_valid?(path)
-        return true if File.writable? path
+        return true if File.exists? path
 
         puts "#{path} not found." if @debug
 
