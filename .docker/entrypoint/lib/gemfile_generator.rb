@@ -74,7 +74,6 @@ module Jekyll
       def write_file(path, contents)
         puts "\n\n----- Writing #{path} -----" if @debug
 
-        return unless path_valid? path
         return if contents.empty?
 
         puts contents if @debug
