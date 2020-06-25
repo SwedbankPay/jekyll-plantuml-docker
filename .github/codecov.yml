@@ -1,2 +1,4 @@
 ignore:
-  - "spec"
+  - ".docker/entrypoint/spec"
+fixes:
+  - "::.docker/entrypoint" # Let Codecov know that all files in the code coverage report is physically placed inside the .docker/entrypoint directory
