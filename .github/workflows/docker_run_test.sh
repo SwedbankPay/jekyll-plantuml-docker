@@ -41,12 +41,16 @@ initialize() {
 
     environment=""
 
-    if [[ -n "${PAGES_REPO_NWO}" ]]; then
-        environment="--env PAGES_REPO_NWO=\"${PAGES_REPO_NWO}\""
+    if [[ -n "$PAGES_REPO_NWO" ]]; then
+        environment="--env PAGES_REPO_NWO=\"$PAGES_REPO_NWO\""
     fi
 
-    if [[ -n "${JEKYLL_GITHUB_TOKEN}" ]]; then
-        environment="$environment --env JEKYLL_GITHUB_TOKEN=\"${JEKYLL_GITHUB_TOKEN}\""
+    if [[ -n "$JEKYLL_GITHUB_TOKEN" ]]; then
+        environment="$environment --env JEKYLL_GITHUB_TOKEN=\"$JEKYLL_GITHUB_TOKEN\""
+    fi
+
+    if [[ $DEBUG ]]; then
+        environment="$environment --env DEBUG=true"
     fi
 
     docker_run_command="\
