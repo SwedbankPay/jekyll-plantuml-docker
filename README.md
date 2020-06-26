@@ -16,29 +16,34 @@ image. The purpose of the image is to have a shared Docker image to run
 
 ## Usage
 
+### Commands
+
+The Docker image is outfitted with an [`entrypoint`][entrypoint] that allows you
+to run a few commands inside the container. these commands are described below.
+
+#### Serve
+
 To have Jekyll serve content from the current working directory, simply execute
 the following:
 
 ```bash
-docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest
+docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest serve
 ```
 
-### Commands
+#### Build
 
-The Docker image is outfitted with an [`entrypoint`][entrypoint] that allows you
-to run any command inside the container. The default command is:
+To build the content in the current working directory and have the results spit
+out to a `_site` sub-directory, execute the following:
 
 ```bash
-jekyll serve --livereload --interactive --force_polling --watch --host 0.0.0.0
+docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest build
 ```
 
-If the default command isn't to your liking, or if you just want to do
-`jekyll build`, you simply write the command you want to execute after the image
-name as such:
+The `build` command also takes an argument:
 
-```bash
-docker run --tty --volume $(pwd):/srv/jekyll swedbankpay/jekyll-plantuml:latest jekyll build
-```
+##### `--verify`
+
+Verifies that the built HTML is valid using [HTMLProofer][html-proofer].
 
 #### Deploy
 
@@ -69,6 +74,12 @@ https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
 ##### `GIT_DEPLOY_BRANCH`
 
 **Optional**. The branch to deploy to. Default `gh-pages`.
+
+The `deploy` command also takes arguments:
+
+##### `--dry-run`
+
+Performs a full deployment, but doesn't push the results to the remote `origin`.
 
 ### Volume
 
@@ -120,6 +131,7 @@ agreement][cla].
 [gdd]:                  https://github.com/SwedbankPay/git-directory-deploy/
 [gemfile]:              ./.docker/entrypoint/Gemfile
 [github]:               https://github.com/SwedbankPay/jekyll-plantuml-docker
+[html-proofer]:         https://github.com/gjtorikian/html-proofer
 [jekyll-docs]:          https://jekyllrb.com/docs/
 [jekyll]:               https://jekyllrb.com/
 [kramdown-plantuml]:    https://github.com/SwedbankPay/kramdown-plantuml
