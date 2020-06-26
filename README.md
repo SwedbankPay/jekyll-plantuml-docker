@@ -2,12 +2,13 @@
 
 ![Test Deploy][test-badge]
 [![codecov][codecov-badge]][codecov]
+[![Codacy Grade][codacy-badge]][codacy]
 [![Docker Pulls][docker-pull-badge]][docker]
 [![Docker Image Version (latest semver)][docker-version-badge]][docker]
-[![License][license-badge]][license]
 [![Dependabot Status][dependabot-badge]][dependabot]
 [![CLA assistant][cla-badge]][cla]
 [![Contributor Covenant][coc-badge]][coc]
+[![License][license-badge]][license]
 
 This is the repositry for the [`swedbankpay/jekyll-plantuml`][docker] Docker
 image. The purpose of the image is to have a shared Docker image to run
@@ -119,6 +120,8 @@ agreement][cla].
 [cla]:                  https://cla-assistant.io/SwedbankPay/jekyll-plantuml-docker
 [coc-badge]:            https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
 [coc]:                  ./CODE_OF_CONDUCT.md
+[codacy-badge]:         https://app.codacy.com/project/badge/Grade/05ad4e8db4fc47d09e24c3a01b2f1b53
+[codacy]:               https://www.codacy.com/gh/SwedbankPay/jekyll-plantuml-docker?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SwedbankPay/jekyll-plantuml-docker&amp;utm_campaign=Badge_Grade
 [codecov-badge]:        https://codecov.io/gh/SwedbankPay/jekyll-plantuml-docker/branch/master/graph/badge.svg
 [codecov]:              https://codecov.io/gh/SwedbankPay/jekyll-plantuml-docker
 [config]:               ./.docker/entrypoint/_config.default.yml
