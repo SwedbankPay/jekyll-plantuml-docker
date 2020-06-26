@@ -1,26 +1,14 @@
-# frozen_string_literal: true
-
 source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.1', group: :jekyll_plugins
 gem 'jekyll-assets'
 gem 'jemoji'
-
-gem 'docopt'
 # Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
 gem 'faraday', '~> 1.0.1'
-gem 'html-proofer'
-gem 'html-proofer-unrendered-markdown'
-gem 'jekyll-github-metadata'
 gem 'jekyll-material-icon-tag'
 gem 'kramdown-plantuml'
-gem 'rake', '~> 13.0'
+gem 'jekyll-github-metadata'
+gem 'docopt'
+gem 'html-proofer'
+gem 'html-proofer-unrendered-markdown'
 gem 'rouge'
-
-group :development, :test do
-  gem 'diffy'
-  gem 'rspec'
-  gem 'rubocop', require: false
-end
-
-gem 'codecov', require: false, group: :test

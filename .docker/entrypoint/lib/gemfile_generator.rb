@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'gemfile_differ'
+require_relative 'file_not_found_error'
+require 'fileutils'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -14,44 +16,107 @@ module Jekyll
         @gemfile_differ = GemfileDiffer.new(@debug)
       end
 
-      def generate(primary_gemfile_path, secondary_gemfile_path, generated_gemfile_path = nil)
-        raise "#{primary_gemfile_path} cannot be found." unless File.exist? primary_gemfile_path
+      def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
+        raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
 
-        generated_file_contents = generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
-
-        puts "\n\n----- Generating #{generated_gemfile_path} -----" if @debug
-        puts generated_file_contents if @debug
-
-        if generated_gemfile_path.nil?
-          puts 'Returning generated Gemfile since generated_gemfile_path is nil.' if @debug
-          return generated_file_contents
+        unless path_valid? user_gemfile_path
+          FileUtils.cp(default_gemfile_path, generated_gemfile_path)
+          return
         end
+
+        generated_file_contents = merge(default_gemfile_path, user_gemfile_path)
+
+        return generated_file_contents if return_contents?(generated_gemfile_path, generated_file_contents)
 
         write_file(generated_gemfile_path, generated_file_contents)
       end
 
       private
 
-      def generate_file_contents(primary_gemfile_path, secondary_gemfile_path)
-        puts "\n\n----- Reading #{primary_gemfile_path} -----" if @debug
-        original_file_contents = File.readlines primary_gemfile_path
-        generated_file_contents = original_file_contents
-        puts original_file_contents if @debug
+      def merge(default_gemfile_path, user_gemfile_path)
+        user_gemfile_contents = path_valid?(user_gemfile_path) ? File.readlines(user_gemfile_path) : []
+        default_gemfile_contents = []
 
-        puts "\n\n----- Diffing #{secondary_gemfile_path} -----" if @debug
-        @gemfile_differ.diff(primary_gemfile_path, secondary_gemfile_path) do |line|
-          generated_file_contents << line
+        puts "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----" if @debug
+
+        @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
+          # Delete dependencies that override the user's dependencies, most
+          # likely because the default dependency has a higher version number.
+          # Note that the dependencies are only deleted from the in-memory array
+          # and not from the physical file system.
+          user_gemfile_contents = delete(dependency, user_gemfile_contents)
+          default_gemfile_contents << "gem '#{dependency.name}', '#{dependency.requirement}'"
         end
 
-        generated_file_contents
+        merged_gemfile_contents = user_gemfile_contents
+        merged_gemfile_contents << default_gemfile_contents
+      end
+
+      def delete(dependency, contents)
+        index = find(dependency, contents)
+        contents.delete_at(index) if index > -1
+        contents
+      end
+
+      def find(dependency, contents)
+        index = -1
+
+        contents.each_with_index do |line, i|
+          next unless line.include? dependency.name
+
+          index = i
+          break
+        end
+
+        index
       end
 
       def write_file(path, contents)
-        File.delete path if File.exist? path
-        file = File.open(path, File::CREAT | File::WRONLY | File::TRUNC)
-        file.flock(File::LOCK_EX)
-        file.puts(contents)
-        file.flock(File::LOCK_UN)
+        puts "\n\n----- Writing <#{path}> -----" if @debug
+
+        return if contents.empty?
+
+        puts contents if @debug
+
+        File.open(path, 'w') do |file|
+          file.puts(contents)
+        end
+
+        validate_gemfile(path)
+      end
+
+      def validate_gemfile(path)
+        puts "\n\n----- Validating <#{path}> -----" if @debug
+
+        if path_valid?(path) && @debug
+          puts "#{path} exists."
+        elsif @debug
+          puts "#{path} DOES NOT EXIST! ALARM!"
+        end
+
+        Bundler::Definition.build(path, nil, {})
+      end
+
+      def path_valid?(path)
+        return true if !path.nil? && !path.empty? && File.exist?(path)
+
+        puts "<#{path}> not found." if @debug
+
+        false
+      end
+
+      def return_contents?(path, contents)
+        if @debug
+          puts "\n\n----- <#{path}> contents -----"
+          puts contents
+        end
+
+        if path.nil?
+          puts 'Returning contents since the path on which to save it is nil.' if @debug
+          return true
+        end
+
+        false
       end
     end
   end

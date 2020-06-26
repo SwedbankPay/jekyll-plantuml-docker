@@ -11,23 +11,42 @@ module Jekyll
     # The Jekyll::PlantUml::Entrypoint class is responsible for bootstrapping
     # the Ruby application exposed through the jekyll-plantuml Docker container.
     class Entrypoint
-      def initialize
-        jekyll_env = ENV.fetch('JEKYLL_ENV', 'production')
-        jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
-        jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR')
-        docker_image_name = ENV.fetch('DOCKER_IMAGE_NAME')
-        docker_image_tag = ENV.fetch('DOCKER_IMAGE_TAG')
-        docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
-        @jekyll_env = JekyllEnvironment.new(jekyll_env, jekyll_var_dir, jekyll_data_dir)
-        @docker_image = DockerImage.new(docker_image_name, docker_image_tag, docker_image_version)
+      def initialize(jekyll_env = nil, docker_image = nil)
+        @jekyll_env = initialize_jekyll_env(jekyll_env)
+        @docker_image = initialize_docker_image(docker_image)
       end
 
       def execute
         commander = Commander.new(@jekyll_env, @docker_image)
         commander.execute
       end
+
+      private
+
+      def initialize_jekyll_env(jekyll_env)
+        return jekyll_env unless jekyll_env.nil?
+
+        env = ENV.fetch('JEKYLL_ENV', 'production')
+        jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
+        jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR')
+
+        JekyllEnvironment.new(env, jekyll_var_dir, jekyll_data_dir)
+      end
+
+      def initialize_docker_image(docker_image)
+        return docker_image unless docker_image.nil?
+
+        docker_image_name = ENV.fetch('DOCKER_IMAGE_NAME')
+        docker_image_tag = ENV.fetch('DOCKER_IMAGE_TAG')
+        docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
+
+        DockerImage.new(docker_image_name, docker_image_tag, docker_image_version)
+      end
     end
   end
 end
 
-Jekyll::PlantUml::Entrypoint.new.execute
+if __FILE__ == $PROGRAM_NAME
+  # This will only run if the script was the main, not loaded or required
+  Jekyll::PlantUml::Entrypoint.new.execute
+end
