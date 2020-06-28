@@ -34,10 +34,6 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
         it {
           is_expected.to include('incremental' => true)
         }
-
-        it {
-          is_expected.to include('base_url' => '')
-        }
       end
     end
 

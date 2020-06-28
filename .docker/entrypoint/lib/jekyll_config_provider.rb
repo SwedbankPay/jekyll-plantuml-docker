@@ -70,7 +70,6 @@ module Jekyll
         {
           'config' => config_file_path,
           'incremental' => true,
-          'base_url' => '',
           'source' => @jekyll_data_dir,
           'destination' => File.join(@jekyll_data_dir, '_site')
         }
