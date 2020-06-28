@@ -19,9 +19,7 @@ module Jekyll
         jekyll_config = config(jekyll_command, config_file_path)
 
         begin
-          pages_html_url = pages_html_url
-          log(:info, "Setting site.url to <#{pages_html_url}>.")
-          jekyll_config.merge({ 'url' => pages_html_url })
+          jekyll_config = configure_pages_html_url(jekyll_config)
         rescue StandardError => e
           unable_to_retrieve_github_metadata(e)
         end
@@ -30,6 +28,19 @@ module Jekyll
       end
 
       private
+
+      def configure_pages_html_url(jekyll_config)
+        pages_html_url = provide_pages_html_url(jekyll_config)
+
+        if pages_html_url.nil? || pages_html_url.empty?
+          log(:info, 'No GitHub Pages URL found.')
+        else
+          log(:info, "Setting site.url to <#{pages_html_url}>.")
+          jekyll_config = jekyll_config.merge({ 'url' => pages_html_url })
+        end
+
+        jekyll_config
+      end
 
       def unable_to_retrieve_github_metadata(error)
         log(:error, 'Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.')
@@ -85,7 +96,7 @@ module Jekyll
         }
       end
 
-      def pages_html_url
+      def provide_pages_html_url(jekyll_config)
         ghm = Jekyll::GitHubMetadata
         ghm.site = Jekyll::Site.new(jekyll_config)
         gh_client = Jekyll::GitHubMetadata::Client.new
