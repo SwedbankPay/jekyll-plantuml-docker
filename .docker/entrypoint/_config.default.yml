@@ -1,4 +1,5 @@
 plugins:
   - jemoji
   - jekyll-material-icon-tag
+  - jekyll-remote-theme
   - kramdown-plantuml
