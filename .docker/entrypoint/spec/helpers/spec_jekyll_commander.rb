@@ -4,8 +4,9 @@ module Jekyll
   module PlantUml
     module Specs
       module Helpers
-        class SpecJekyllBuild
-          def process(_); end
+        class SpecJekyllCommander
+          def initialize(_); end
+          def execute(_); end
         end
       end
     end

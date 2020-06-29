@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'commander'
-require 'helpers/spec_logger'
 require 'jekyll'
 require 'docker_image'
 require 'jekyll_environment'
+require 'helpers/spec_jekyll_commander'
+require 'helpers/spec_logger'
 
 describe Jekyll::PlantUml::Commander do
   let(:version) { '0.0.1-test.0' }
@@ -33,12 +34,21 @@ describe Jekyll::PlantUml::Commander do
 
     context 'build' do
       # TODO: This should probably be reset before(:each) somehow.
-      let!(:logger) { Jekyll.logger = Jekyll::PlantUml::SpecLogger.new(:info) }
+      let!(:logger) { Jekyll.logger = Jekyll::PlantUml::Specs::Helpers::SpecLogger.new(:info) }
 
       it {
         commander.execute(['build'])
         expect(logger.message).to match(/Generating...\s+done in/)
       }
+
+      it do
+        jekyll_commander_class = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
+        jekyll_commander = jekyll_commander_class.new('xyz')
+        allow(jekyll_commander_class).to receive(:new).and_return(jekyll_commander)
+        expect(jekyll_commander).to receive(:execute).with('build')
+        commander.commands[:build] = jekyll_commander_class
+        commander.execute(['build'])
+      end
     end
   end
 end

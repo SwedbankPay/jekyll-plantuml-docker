@@ -15,11 +15,19 @@ module Jekyll
     # arguments from ArgumentParser, the configuration from JekyllConfigProvider
     # and execute the correct command according to the provided arguments.
     class Commander
+      attr_reader :commands
+
       def initialize(jekyll_env, docker_image)
         @argument_parser = ArgumentParser.new(docker_image)
         @jekyll_config_provider = JekyllConfigProvider.new(jekyll_env.data_dir)
         @jekyll_var_dir = jekyll_env.var_dir
         @jekyll_env = jekyll_env.env
+        @commands = {
+          verify: Jekyll::PlantUml::Commands::Verifier,
+          deploy: Jekyll::PlantUml::Commands::Deployer,
+          build: Jekyll::PlantUml::Commands::JekyllCommander,
+          serve: Jekyll::PlantUml::Commands::JekyllCommander
+        }
       end
 
       def execute(args = nil)
@@ -62,20 +70,31 @@ module Jekyll
       end
 
       def verify(jekyll_config)
-        verifier = Verifier.new(jekyll_config)
+        verifier = provide_instance(:verify, jekyll_config)
         verifier.verify
       end
 
       def deploy(jekyll_config, dry_run, verify)
-        deployer = Deployer.new(jekyll_config, @jekyll_var_dir)
+        deployer = provide_instance(:deploy, jekyll_config, @jekyll_var_dir)
         deployer.deploy(dry_run, verify)
       end
 
       def jekyll_command(jekyll_config, command, dry_run)
         log(:warn, "Warning: --dry-run has no effect on the `jekyll #{command}` command.") if dry_run
 
-        jekyll_commander = JekyllCommander.new(jekyll_config)
+        jekyll_commander = provide_instance(command, jekyll_config)
+        # jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
         jekyll_commander.execute(command)
+      end
+
+      def provide_instance(command, *args)
+        command_symbol = command.to_sym
+        class_definition = @commands[command_symbol]
+        raise ArgumentError, "No class definition found for command '#{command}'" if class_definition.nil?
+
+        return class_definition unless class_definition.is_a? Class
+
+        class_definition.new(*args)
       end
     end
   end
