@@ -6,7 +6,10 @@ require 'spec_jekyll_build'
 require 'matchers/invoke_matcher'
 
 describe Jekyll::PlantUml::Deployer do
-  subject(:deployer) { Jekyll::PlantUml::Deployer.new(__dir__, __dir__) }
+  subject(:deployer) do
+    data_dir = File.join(__dir__, 'data')
+    Jekyll::PlantUml::Deployer.new(data_dir, data_dir)
+  end
 
   describe '#deploy' do
     subject! { deployer.jekyll_build = Jekyll::PlantUml::SpecJekyllBuild.new }

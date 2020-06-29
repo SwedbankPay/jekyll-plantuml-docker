@@ -10,9 +10,9 @@ describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }
 
   describe '#generate' do
-    let(:user_gemfile_path) { File.join(__dir__, 'Gemfile.user') }
-    let(:default_gemfile_path) { File.join(__dir__, 'Gemfile.default') }
-    let(:generated_gemfile_path) { File.join(__dir__, 'Gemfile.generated') }
+    let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
+    let(:default_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.default') }
+    let(:generated_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.generated') }
 
     after(:each) do
       File.delete generated_gemfile_path if File.exist? generated_gemfile_path

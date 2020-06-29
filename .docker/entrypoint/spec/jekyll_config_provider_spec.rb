@@ -5,10 +5,11 @@ require 'jekyll_config_provider'
 
 describe Jekyll::PlantUml::JekyllConfigProvider do
   describe '#get_config' do
+    let(:data_dir) { File.join(__dir__, 'data') }
     subject(:jcp) { Jekyll::PlantUml::JekyllConfigProvider }
 
     context 'existing _config.yml' do
-      subject(:config_provider) { jcp.new(__dir__) }
+      subject(:config_provider) { jcp.new(data_dir) }
 
       it 'nil should raise' do
         expect { config_provider.get_config(nil) }.to raise_error(ArgumentError, 'jekyll_command is nil')
@@ -16,15 +17,15 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
 
       context 'build returns config' do
         subject { config_provider.get_config('build') }
-        let(:spec_config) { File.join(__dir__, '_config.yml') }
-        let(:destination) { File.join(__dir__, '_site') }
+        let(:spec_config) { File.join(data_dir, '_config.yml') }
+        let(:destination) { File.join(data_dir, '_site') }
 
         it {
           is_expected.to include('config' => spec_config)
         }
 
         it {
-          is_expected.to include('source' => __dir__)
+          is_expected.to include('source' => data_dir)
         }
 
         it {

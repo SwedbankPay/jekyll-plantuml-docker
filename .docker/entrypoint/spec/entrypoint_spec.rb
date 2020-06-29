@@ -6,8 +6,9 @@ require 'jekyll_environment'
 
 describe Jekyll::PlantUml::Entrypoint do
   subject(:entrypoint) do
+    data_dir = File.join(__dir__, 'data')
     Jekyll::PlantUml::Entrypoint.new(
-      Jekyll::PlantUml::JekyllEnvironment.new('dev', __dir__, __dir__),
+      Jekyll::PlantUml::JekyllEnvironment.new('dev', data_dir, data_dir),
       Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
     )
   end

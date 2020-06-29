@@ -9,8 +9,9 @@ require 'jekyll_environment'
 describe Jekyll::PlantUml::Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
+    data_dir = File.join(__dir__, 'data')
     Jekyll::PlantUml::Commander.new(
-      Jekyll::PlantUml::JekyllEnvironment.new('development', __dir__, __dir__),
+      Jekyll::PlantUml::JekyllEnvironment.new('development', data_dir, data_dir),
       Jekyll::PlantUml::DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end

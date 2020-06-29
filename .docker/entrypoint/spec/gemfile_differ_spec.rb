@@ -8,8 +8,8 @@ describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }
 
   describe '#diff' do
-    let(:user_gemfile_path) { File.join(__dir__, 'Gemfile.user') }
-    let(:default_gemfile_path) { File.join(__dir__, 'Gemfile.default') }
+    let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
+    let(:default_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.default') }
 
     context 'non-existent default gemfile' do
       it 'should raise' do
