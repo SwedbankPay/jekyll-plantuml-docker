@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'commander'
-require 'spec_logger'
+require 'helpers/spec_logger'
 require 'jekyll'
 require 'docker_image'
 require 'jekyll_environment'

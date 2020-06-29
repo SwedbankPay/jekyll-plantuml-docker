@@ -2,7 +2,7 @@
 
 require 'jekyll'
 require 'commands/deployer'
-require 'spec_jekyll_build'
+require 'helpers/spec_jekyll_build'
 require 'matchers/invoke_matcher'
 
 describe Jekyll::PlantUml::Deployer do
