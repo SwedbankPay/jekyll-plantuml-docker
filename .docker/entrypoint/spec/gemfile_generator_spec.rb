@@ -4,7 +4,7 @@ require 'diffy'
 require 'bundler'
 require 'gemfile_generator'
 require 'file_not_found_error'
-require 'be_valid_gemfile_matcher'
+require 'matchers/be_valid_gemfile_matcher'
 
 describe Jekyll::PlantUml::GemfileGenerator do
   subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }

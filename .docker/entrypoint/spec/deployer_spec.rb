@@ -3,7 +3,7 @@
 require 'jekyll'
 require 'commands/deployer'
 require 'spec_jekyll_build'
-require 'invoke_matcher'
+require 'matchers/invoke_matcher'
 
 describe Jekyll::PlantUml::Deployer do
   subject(:deployer) { Jekyll::PlantUml::Deployer.new(__dir__, __dir__) }

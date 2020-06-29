@@ -4,7 +4,7 @@ require 'diffy'
 require 'bundler'
 require 'gemfile_generator_exec'
 require 'file_not_found_error'
-require 'be_valid_gemfile_matcher'
+require 'matchers/be_valid_gemfile_matcher'
 
 describe Jekyll::PlantUml::GemfileGeneratorExec do
   let(:user_gemfile_path) { File.join(__dir__, 'Gemfile.user') }
