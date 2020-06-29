@@ -14,7 +14,7 @@ module Jekyll
         @jekyll_data_dir = jekyll_data_dir
       end
 
-      def get_config(jekyll_command)
+      def provide(jekyll_command)
         config_file_path = config_file_path()
         jekyll_config = config(jekyll_command, config_file_path)
 

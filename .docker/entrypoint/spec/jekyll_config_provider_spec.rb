@@ -4,7 +4,7 @@ require 'file_not_found_error'
 require 'jekyll_config_provider'
 
 describe Jekyll::PlantUml::JekyllConfigProvider do
-  describe '#get_config' do
+  describe '#provide' do
     let(:data_dir) { File.join(__dir__, 'data') }
     subject(:jcp) { Jekyll::PlantUml::JekyllConfigProvider }
 
@@ -12,11 +12,11 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
       subject(:config_provider) { jcp.new(data_dir) }
 
       it 'nil should raise' do
-        expect { config_provider.get_config(nil) }.to raise_error(ArgumentError, 'jekyll_command is nil')
+        expect { config_provider.provide(nil) }.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
 
       context 'build returns config' do
-        subject { config_provider.get_config('build') }
+        subject { config_provider.provide('build') }
         let(:spec_config) { File.join(data_dir, '_config.yml') }
         let(:destination) { File.join(data_dir, '_site') }
 
@@ -42,7 +42,7 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
       subject(:config_provider) { jcp.new('non_existing_directory') }
 
       context 'serve returns config' do
-        subject { config_provider.get_config('serve') }
+        subject { config_provider.provide('serve') }
 
         it 'should return config' do
           is_expected.to have_key('config')
