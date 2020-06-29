@@ -12,6 +12,6 @@ Layout:
   Exclude:
     - "Rakefile"
     - "spec/**/*.rb"
-  LineLength: 80
+  LineLength: 100
   IndentationStyle:
     IndentationWidth: 2
