@@ -5,20 +5,24 @@ require 'jekyll_config_provider'
 
 describe Jekyll::PlantUml::JekyllConfigProvider do
   describe '#provide' do
-    let(:data_dir) { File.join(__dir__, 'data') }
-    subject(:jcp) { Jekyll::PlantUml::JekyllConfigProvider }
+    data_dir = File.join(__dir__, 'data')
+    spec_config = File.join(data_dir, '_config.yml')
+    destination = File.join(data_dir, '_site')
 
     context 'existing _config.yml' do
-      subject(:config_provider) { jcp.new(data_dir) }
-
       it 'nil should raise' do
-        expect { config_provider.provide(nil) }.to raise_error(ArgumentError, 'jekyll_command is nil')
+        expect do
+          Jekyll::PlantUml::JekyllConfigProvider.new(data_dir).provide(nil)
+        end.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
 
       context 'build returns config' do
-        subject { config_provider.provide('build') }
-        let(:spec_config) { File.join(data_dir, '_config.yml') }
-        let(:destination) { File.join(data_dir, '_site') }
+        before(:all) do
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          @jekyll_config = jekyll_config_provider.provide('build')
+        end
+
+        subject { @jekyll_config }
 
         it {
           is_expected.to include('config' => spec_config)
@@ -39,10 +43,13 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     end
 
     context 'non-existing _config.yml' do
-      subject(:config_provider) { jcp.new('non_existing_directory') }
-
       context 'serve returns config' do
-        subject { config_provider.provide('serve') }
+        before(:all) do
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new('non_existing_directory')
+          @jekyll_config = jekyll_config_provider.provide('serve')
+        end
+
+        subject { @jekyll_config }
 
         it 'should return config' do
           is_expected.to have_key('config')
