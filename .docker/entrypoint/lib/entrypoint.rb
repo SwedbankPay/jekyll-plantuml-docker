@@ -47,6 +47,8 @@ module Jekyll
 end
 
 if __FILE__ == $PROGRAM_NAME
+  # We set STDOUT.sync to avoid buffering when running in docker-compose
+  STDOUT.sync = true
   # This will only run if the script was the main, not loaded or required
   Jekyll::PlantUml::Entrypoint.new.execute
 end
