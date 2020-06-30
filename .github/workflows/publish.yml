@@ -8,7 +8,7 @@ on:
     branches: [master]
 
 jobs:
-  docker-publish:
+  variables:
     runs-on: ubuntu-latest
     outputs:
       ref: ${{ steps.variables.outputs.ref }}
@@ -16,6 +16,9 @@ jobs:
       sha8: ${{ steps.variables.outputs.sha8 }}
       date: ${{ steps.variables.outputs.date }}
       version: ${{ steps.variables.outputs.version }}
+      docker_image_name: ${{ steps.variables.outputs.docker_image_name }}
+      docker_image_tag: ${{ steps.variables.outputs.docker_image_tag }}
+      docker_image_fqn: ${{ steps.variables.outputs.docker_image_fqn }}
 
     steps:
       - uses: actions/checkout@v2
@@ -35,6 +38,13 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: ./.github/workflows/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
 
+  docker-publish:
+    runs-on: ubuntu-latest
+    needs: variables
+
+    steps:
+      - uses: actions/checkout@v2
+
       - name: Publish unstable Docker image to GitHub Package Registry
         if: startsWith(github.ref, 'refs/tags/') != true
         uses: whoan/docker-build-with-cache-action@v5.3.3
@@ -43,16 +53,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           image_name: jekyll-plantuml
-          image_tag: ${{ steps.variables.outputs.sha8 }}
+          image_tag: ${{ needs.variables.outputs.docker_image_tag }}
           dockerfile: .docker/Dockerfile
           push_image_and_stages: ./.github/workflows/docker_run_test.sh build
           pull_image_and_stages: false
-          build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
+          build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ steps.variables.outputs.sha8 }}
-          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
+          IMAGE_NAME: ${{ needs.variables.outputs.docker_image_name }}
+          IMAGE_TAG: ${{ needs.variables.outputs.docker_image_tag }}
           JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
           DEBUG: true
 
@@ -63,20 +73,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: "${{ secrets.DOCKERHUB_PASSWORD }}"
           image_name: swedbankpay/jekyll-plantuml
-          image_tag: ${{ steps.variables.outputs.version }}
+          image_tag: ${{ needs.variables.outputs.docker_image_tag }}
           dockerfile: .docker/Dockerfile
           push_image_and_stages: ./.github/workflows/docker_run_test.sh build
           pull_image_and_stages: false
-          build_extra_args: --build-arg SHA="${{ steps.variables.outputs.sha }}" --build-arg DATE="${{ steps.variables.outputs.date }}" --build-arg VERSION="${{ steps.variables.outputs.version }}"
+          build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ steps.variables.outputs.version }}
+          IMAGE_TAG: ${{ needs.variables.outputs.docker_image_tag }}
           JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
 
   docker-verify:
     runs-on: ubuntu-latest
-    needs: docker-publish
+    needs: [docker-publish, variables]
 
     steps:
       - uses: actions/checkout@v2
@@ -86,13 +96,11 @@ jobs:
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ needs.publish.outputs.sha8 }}
           JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
-          IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
           DEBUG: true
         run: |
           docker login https://docker.pkg.github.com -u ${{ github.repository_owner }} -p "${{ secrets.GITHUB_TOKEN }}"
-          docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+          docker pull ${{ needs.variables.outputs.docker_image_fqn }}
           ./.github/workflows/docker_run_test.sh build
 
       - name: Download and run image from Docker Hub
@@ -100,23 +108,17 @@ jobs:
         env:
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ needs.publish.outputs.version }}
           JEKYLL_DIR: ${{ github.workspace }}/tests/minimal
+          IMAGE_NAME: ${{ needs.variables.outputs.docker_image_name }}
+          IMAGE_TAG: ${{ needs.variables.outputs.docker_image_tag }}
         run: |
-          docker pull swedbankpay/jekyll-plantuml:${IMAGE_TAG}
+          docker pull ${{ needs.variables.outputs.docker_image_fqn }}
           ./.github/workflows/docker_run_test.sh build
 
-  gh-pages-deploy:
-    runs-on: ubuntu-latest
-    needs: docker-publish
-    steps:
-      - uses: actions/checkout@v2
       - name: Deploy to GitHub Pages
         run: |
-          docker pull swedbankpay/jekyll-plantuml:${IMAGE_TAG}
-          docker run \
-            --volume $(pwd)/tests/full:/srv/jekyll \
-            --env JEKYLL_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            --env PAGES_REPO_NWO=${{ github.repository }} \
-            swedbankpay/jekyll-plantuml:${IMAGE_TAG} \
-            deploy
+          ./.github/workflows/deploy.sh \
+            --repository ${{ github.repository }} \
+            --ref ${{ github.ref }} \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --image ${{ needs.variables.outputs.docker_image_fqn }}
