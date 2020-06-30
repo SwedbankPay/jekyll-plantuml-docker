@@ -151,24 +151,3 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 ```
 The final element.
 ```
-
-## Emoji support
-
-:+1: :heavy_check_mark: :fire: 💡 :unicorn:
-
-## Material design icons
-
-{% icon check %} {% icon line_weight %} {% icon gavel %} {% icon visibility %}
-{% icon work %}
-
-## PlantUML
-
-```plantuml
-@startuml
-actor client
-node app
-database db
-db -> app
-app -> client
-@enduml
-```

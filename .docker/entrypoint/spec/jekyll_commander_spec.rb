@@ -29,7 +29,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
 
   describe '#execute :build' do
     describe '_site' do
-      data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
+      data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'minimal')
       site_dir = File.join(data_dir, '_site')
 
       before(:all) do
