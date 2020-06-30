@@ -63,18 +63,22 @@ generate_variables() {
     version="${version/+/.}"
     sha8=$(echo "${sha}" | cut -c1-8)
     date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+    ghpr_docker_image_name="docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml"
+    docker_hub_image_name="swedbankpay/jekyll-plantuml"
 
     if [[ "$ref" == refs/tags/* ]]; then
         # Override GitVersion's version on tags, just to be sure.
         version="${ref#refs/tags/}"
-        docker_image_name="swedbankpay/jekyll-plantuml"
+        docker_image_name="$docker_hub_image_name"
         docker_image_tag="$version"
     else
-        docker_image_name="docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml"
+        docker_image_name="$ghpr_docker_image_name"
         docker_image_tag="$sha8"
     fi
 
     docker_image_fqn="$docker_image_name:$docker_image_tag"
+    ghpr_docker_image_fqn="$ghpr_docker_image_name:$sha8"
+    docker_hub_image_name="$docker_hub_image_name:$version"
     branch_name="r${run_id}-${run_number}"
 
     echo "Ref:                $ref"
@@ -95,6 +99,7 @@ generate_variables() {
     echo "::set-output name=docker_image_name::$docker_image_name"
     echo "::set-output name=docker_image_tag::$docker_image_tag"
     echo "::set-output name=docker_image_fqn::$docker_image_fqn"
+    echo "::set-output name=docker_image_fqn::$ghpr_docker_image_fqn"
 }
 
 main() {
