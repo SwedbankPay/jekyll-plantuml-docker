@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative '../lib/commands/jekyll_commander'
 
 describe Jekyll::PlantUml::Commands::JekyllCommander do
   describe '#initialize' do
