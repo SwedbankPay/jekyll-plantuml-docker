@@ -4,22 +4,25 @@ require 'jekyll_environment'
 
 describe Jekyll::PlantUml::JekyllEnvironment do
   describe '#initialize' do
-    subject { Jekyll::PlantUml::JekyllEnvironment.new('dev', __dir__, __dir__) }
+    let(:data_dir) { File.join(__dir__, 'data') }
+    subject do
+      Jekyll::PlantUml::JekyllEnvironment.new('dev', data_dir, data_dir)
+    end
     it {
       is_expected.not_to be_nil
     }
     it {
       is_expected.to have_attributes(
         env: 'dev',
-        var_dir: __dir__,
-        data_dir: __dir__
+        var_dir: data_dir,
+        data_dir: data_dir
       )
     }
 
     context 'env is nil' do
       it do
         expect do
-          Jekyll::PlantUml::JekyllEnvironment.new(nil, __dir__, __dir__)
+          Jekyll::PlantUml::JekyllEnvironment.new(nil, data_dir, data_dir)
         end.to raise_error(ArgumentError, 'env is nil')
       end
     end
@@ -27,7 +30,7 @@ describe Jekyll::PlantUml::JekyllEnvironment do
     context 'var_dir is nil' do
       it do
         expect do
-          Jekyll::PlantUml::JekyllEnvironment.new('dev', nil, __dir__)
+          Jekyll::PlantUml::JekyllEnvironment.new('dev', nil, data_dir)
         end.to raise_error(ArgumentError, 'var_dir is nil')
       end
     end

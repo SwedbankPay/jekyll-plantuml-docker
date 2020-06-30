@@ -64,25 +64,37 @@ generate_variables() {
     sha8=$(echo "${sha}" | cut -c1-8)
     date=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
 
-    # Override GitVersion's version on tags, just to be sure.
     if [[ "$ref" == refs/tags/* ]]; then
+        # Override GitVersion's version on tags, just to be sure.
         version="${ref#refs/tags/}"
+        docker_image_name="swedbankpay/jekyll-plantuml"
+        docker_image_tag="$version"
+    else
+        docker_image_name="docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml"
+        docker_image_tag="$sha8"
     fi
 
+    docker_image_fqn="$docker_image_name:$docker_image_tag"
     branch_name="r${run_id}-${run_number}"
 
-    echo "Ref:     ${ref}"
-    echo "Sha:     ${sha}"
-    echo "Sha8:    ${sha8}"
-    echo "Date:    ${date}"
-    echo "Branch:  ${branch_name}"
-    echo "Version: ${version}"
-    echo "::set-output name=ref::${ref}"
-    echo "::set-output name=sha::${sha}"
-    echo "::set-output name=sha8::${sha8}"
-    echo "::set-output name=date::${date}"
-    echo "::set-output name=version::${version}"
-    echo "::set-output name=branch_name::${branch_name}"
+    echo "Ref:                $ref"
+    echo "Sha:                $sha"
+    echo "Sha8:               $sha8"
+    echo "Date:               $date"
+    echo "Branch:             $branch_name"
+    echo "Version:            $version"
+    echo "Docker Image Name:  $docker_image_name"
+    echo "Docker Image Tag:   $docker_image_tag"
+    echo "Docker Image FQN:   $docker_image_fqn"
+    echo "::set-output name=ref::$ref"
+    echo "::set-output name=sha::$sha"
+    echo "::set-output name=sha8::$sha8"
+    echo "::set-output name=date::$date"
+    echo "::set-output name=version::$version"
+    echo "::set-output name=branch_name::$branch_name"
+    echo "::set-output name=docker_image_name::$docker_image_name"
+    echo "::set-output name=docker_image_tag::$docker_image_tag"
+    echo "::set-output name=docker_image_fqn::$docker_image_fqn"
 }
 
 main() {
