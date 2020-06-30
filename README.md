@@ -1,6 +1,6 @@
 # Jekyll PlantUML
 
-![Test Deploy][test-badge]
+![Test][test-badge]
 [![codecov][codecov-badge]][codecov]
 [![Codacy Grade][codacy-badge]][codacy]
 [![Docker Pulls][docker-pull-badge]][docker]
@@ -142,4 +142,4 @@ agreement][cla].
 [license]:              https://opensource.org/licenses/Apache-2.0
 [pat]:                  https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
 [plantuml]:             https://plantuml.com/
-[test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test%20Deploy/badge.svg
+[test-badge]:           https://github.com/SwedbankPay/jekyll-plantuml-docker/workflows/Test/badge.svg
