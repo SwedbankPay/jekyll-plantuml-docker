@@ -96,6 +96,8 @@ module Jekyll
         }
       end
 
+      # Given the provided jekyll_config, finds the URL that the GitHub Pages
+      # HTML is published on.
       def provide_pages_html_url(jekyll_config)
         ghm = Jekyll::GitHubMetadata
         ghm.site = Jekyll::Site.new(jekyll_config)
