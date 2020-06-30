@@ -99,7 +99,7 @@ generate_variables() {
     echo "::set-output name=docker_image_name::$docker_image_name"
     echo "::set-output name=docker_image_tag::$docker_image_tag"
     echo "::set-output name=docker_image_fqn::$docker_image_fqn"
-    echo "::set-output name=docker_image_fqn::$ghpr_docker_image_fqn"
+    echo "::set-output name=ghpr_docker_image_fqn::$ghpr_docker_image_fqn"
 }
 
 main() {
