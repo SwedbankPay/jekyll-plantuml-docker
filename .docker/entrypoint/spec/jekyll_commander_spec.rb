@@ -90,7 +90,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
         end
       end
 
-      after(:all) do
+      after(:each) do
         capture_io do
           Jekyll::Commands::Serve.shutdown
         end
@@ -101,6 +101,14 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
           end
         end
       end
+
+      subject {
+        File.join(site_dir, '0.0.0.0')
+      }
+
+      it {
+        is_expected.not_to exist
+      }
     end
   end
 end
