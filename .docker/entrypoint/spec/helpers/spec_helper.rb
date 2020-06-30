@@ -99,9 +99,7 @@ RSpec.configure do |config|
   #   Kernel.srand config.seed
 end
 
-if ENV.fetch('GITHUB_ACTIONS', false)
+if ENV.fetch('GITHUB_ACTIONS', false) || ENV.fetch('COVER', false)
   require 'simplecov'
   SimpleCov.start
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end

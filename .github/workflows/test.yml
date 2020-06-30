@@ -162,6 +162,11 @@ jobs:
 
   rspec:
     runs-on: ubuntu-latest
+    env:
+      working-directory: .docker/entrypoint
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
 
     steps:
       - uses: actions/checkout@v2
@@ -172,22 +177,26 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: .docker/entrypoint/vendor/bundle
+          path: ${{ env.working-directory }}/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: ${{ runner.os }}-gems-
 
       - name: Bundle Install
-        run: cd .docker/entrypoint && bundle install
+        run: bundle install
 
       - name: RSpec
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           PAGES_REPO_NWO: ${{ github.repository }}
           JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: cd .docker/entrypoint && bundle exec rake
+        run: bundle exec rake
+
+      - name: Codecov Upload
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bundle exec rake codecov:upload
 
       - name: RuboCop
-        run: cd .docker/entrypoint && bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
+        run: bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
 
   verify-output:
     runs-on: ubuntu-latest
