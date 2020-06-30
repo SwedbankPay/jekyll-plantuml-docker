@@ -90,6 +90,7 @@ module Jekyll
         {
           'host' => '0.0.0.0',
           'port' => '4000',
+          'livereload_port' => 35_729,
           'livereload' => true,
           'force_polling' => true,
           'watch' => true
