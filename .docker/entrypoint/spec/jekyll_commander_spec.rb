@@ -73,4 +73,34 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       end
     end
   end
+
+  describe '#execute :serve' do
+    describe '_site' do
+      data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
+      site_dir = File.join(data_dir, '_site')
+
+      before(:all) do
+        Jekyll::Commands::Serve.mutex.synchronize do
+          unless Jekyll::Commands::Serve.running?
+            jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+            jekyll_config = jekyll_config_provider.provide('serve')
+            jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
+            jekyll_commander.execute('serve').wait(Jekyll::Commands::Serve.mutex)
+          end
+        end
+      end
+
+      after(:all) do
+        capture_io do
+          Jekyll::Commands::Serve.shutdown
+        end
+  
+        Jekyll::Commands::Serve.mutex.synchronize do
+          if Jekyll::Commands::Serve.running?
+            Jekyll::Commands::Serve.run_cond.wait(Jekyll::Commands::Serve.mutex)
+          end
+        end
+      end
+    end
+  end
 end
