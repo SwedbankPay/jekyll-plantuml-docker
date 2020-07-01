@@ -14,7 +14,7 @@ describe Jekyll::PlantUml::ArgumentParser do
       it do
         expect do
           Jekyll::PlantUml::ArgumentParser.new(nil)
-        end.to raise_error(ArgumentError, 'docker_image cannot be nil')
+        end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
 
@@ -22,7 +22,7 @@ describe Jekyll::PlantUml::ArgumentParser do
       it do
         expect do
           Jekyll::PlantUml::ArgumentParser.new({})
-        end.to raise_error(ArgumentError, 'docker_image must be a DockerImage')
+        end.to raise_error(ArgumentError, 'Hash is not a Jekyll::PlantUml::DockerImage')
       end
     end
 

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 require_relative '../lib/commands/jekyll_commander'
 
+require 'commands/jekyll_commander'
+
 describe Jekyll::PlantUml::Commands::JekyllCommander do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
           Jekyll::PlantUml::Commands::JekyllCommander.new(nil)
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be nil')
+        end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
 
@@ -23,7 +25,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       it do
         expect do
           Jekyll::PlantUml::Commands::JekyllCommander.new([])
-        end.to raise_error(ArgumentError, 'jekyll_config must be a hash')
+        end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
   end

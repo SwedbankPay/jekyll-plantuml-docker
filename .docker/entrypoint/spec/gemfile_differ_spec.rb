@@ -2,7 +2,7 @@
 
 require 'bundler'
 require 'gemfile_differ'
-require 'file_not_found_error'
+require 'errors/file_not_found_error'
 
 describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }

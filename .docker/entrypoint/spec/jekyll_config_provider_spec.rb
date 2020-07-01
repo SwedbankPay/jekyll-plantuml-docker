@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'file_not_found_error'
 require 'jekyll_config_provider'
+require 'errors/file_not_found_error'
 
 describe Jekyll::PlantUml::JekyllConfigProvider do
   describe '#provide' do

@@ -3,7 +3,7 @@
 require 'diffy'
 require 'bundler'
 require 'gemfile_generator'
-require 'file_not_found_error'
+require 'errors/file_not_found_error'
 require 'matchers/be_valid_gemfile_matcher'
 
 describe Jekyll::PlantUml::GemfileGenerator do

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll_environment'
+require 'errors/directory_not_found_error'
 
 describe Jekyll::PlantUml::JekyllEnvironment do
   describe '#initialize' do
@@ -39,7 +40,7 @@ describe Jekyll::PlantUml::JekyllEnvironment do
       it do
         expect do
           Jekyll::PlantUml::JekyllEnvironment.new('dev', __dir__, nil)
-        end.to raise_error(ArgumentError, 'data_dir is nil')
+        end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
 
@@ -47,7 +48,7 @@ describe Jekyll::PlantUml::JekyllEnvironment do
       it do
         expect do
           Jekyll::PlantUml::JekyllEnvironment.new('dev', __dir__, 'abc')
-        end.to raise_error(ArgumentError, 'abc does not exist')
+        end.to raise_error(Jekyll::PlantUml::DirectoryNotFoundError, 'abc does not exist')
       end
     end
   end

@@ -4,6 +4,7 @@ require 'jekyll'
 require 'jekyll-github-metadata'
 require_relative '../command_line_argument_error'
 require_relative '../jekyll_config_provider'
+require_relative '../extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -16,8 +17,7 @@ module Jekyll
       # as `build` and `serve` against the correct `Jekyll::Commands::*` class.
       class JekyllCommander
         def initialize(jekyll_config)
-          raise ArgumentError, 'jekyll_config cannot be nil' if jekyll_config.nil?
-          raise ArgumentError, 'jekyll_config must be a hash' unless jekyll_config.is_a? Hash
+          jekyll_config.must_be_a! Hash
           raise ArgumentError, 'jekyll_config cannot be empty' if jekyll_config.empty?
 
           @jekyll_config = jekyll_config

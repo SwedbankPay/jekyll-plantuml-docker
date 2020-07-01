@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'docopt'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -10,8 +11,7 @@ module Jekyll
     # and exposes its help and usage command line screens.
     class ArgumentParser
       def initialize(docker_image)
-        raise ArgumentError, 'docker_image cannot be nil' if docker_image.nil?
-        raise ArgumentError, 'docker_image must be a DockerImage' unless docker_image.is_a? DockerImage
+        docker_image.must_be_a! DockerImage
 
         @docker_image_version = docker_image.version
         # rubocop:disable Layout/HeredocIndentation,Layout/ClosingHeredocIndentation

@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
+require 'commands/verifier'
+require 'errors/directory_not_found_error'
+
 describe Jekyll::PlantUml::Commands::Verifier do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
           Jekyll::PlantUml::Commands::Verifier.new(nil)
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be nil')
+        end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
 
@@ -14,7 +17,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
       it do
         expect do
           Jekyll::PlantUml::Commands::Verifier.new({})
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be empty')
+        end.to raise_error(ArgumentError, 'Hash cannot be empty')
       end
     end
 
@@ -22,7 +25,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
       it do
         expect do
           Jekyll::PlantUml::Commands::Verifier.new([])
-        end.to raise_error(ArgumentError, 'jekyll_config must be a hash')
+        end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
 
@@ -30,7 +33,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
       it do
         expect do
           Jekyll::PlantUml::Commands::Verifier.new({ a: 'b' })
-        end.to raise_error(ArgumentError, "No 'destination' key found in the Jekyll config")
+        end.to raise_error(ArgumentError, "No 'destination' key found in the hash")
       end
     end
 
@@ -38,7 +41,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
       it do
         expect do
           Jekyll::PlantUml::Commands::Verifier.new({ 'destination' => 'abc' })
-        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc does not exist')
+        end.to raise_error(Jekyll::PlantUml::DirectoryNotFoundError, 'abc does not exist')
       end
     end
   end
