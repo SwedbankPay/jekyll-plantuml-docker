@@ -5,6 +5,10 @@ require_relative '../errors/directory_not_found_error'
 
 # Object extensions
 class Object
+  def valid_array?
+    !nil? && is_a?(Array) && !empty?
+  end
+
   def must_be_a_directory!
     raise ArgumentError, 'Value cannot be nil' if nil?
 

@@ -215,7 +215,9 @@ jobs:
             "${IMAGE_FQN}" \
             build \
             --verify \
-            --ignore https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master/index.md
+            --ignore-url '%r{[/.]?page1}' \
+            --ignore-url http://www.wikipedia.org \
+            --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}'
 
       - name: Upload build output artifacts
         uses: actions/upload-artifact@v2

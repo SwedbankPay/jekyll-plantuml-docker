@@ -64,12 +64,12 @@ describe Jekyll::PlantUml::ArgumentParser do
 
     context '--ignore-url' do
       subject do
-        args = ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net']
+        args = ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net', '--ignore-url="%r{[/.]?page1}"']
         argument_parser.parse(args)
       end
 
       it {
-        is_expected.to include('--ignore-url' => ['https://example.com', 'https://example.net'])
+        is_expected.to include('--ignore-url' => ['https://example.com', 'https://example.net', %r{[/.]?page1}])
       }
     end
   end

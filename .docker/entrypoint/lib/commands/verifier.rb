@@ -3,8 +3,6 @@
 require 'jekyll'
 require 'html-proofer'
 require 'html-proofer-unrendered-markdown'
-require_relative '../extensions/array_extensions'
-require_relative '../extensions/object_extensions'
 require_relative '../extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -36,18 +34,42 @@ module Jekyll
         private
 
         def options(ignore_urls = nil)
-          opts = {
+          ignore_urls = massage(ignore_urls)
+
+          opts = default_options
+          opts[:log_level] = @log_level.to_sym unless @log_level.nil?
+          opts[:url_ignore] = ignore_urls if ignore_urls.valid_array?
+
+          opts
+        end
+
+        def default_options
+          {
             assume_extension: true,
             check_html: true,
             enforce_https: true,
             only_4xx: true,
             check_unrendered_link: true
           }
+        end
 
-          opts[:log_level] = @log_level.to_sym unless @log_level.nil?
-          opts[:url_ignore] = ignore_urls if ignore_urls.valid?
+        def massage(ignore_urls)
+          return [ignore_urls] if ignore_urls.is_a?(Regexp) || ignore_urls.is_a?(String)
+          return nil unless ignore_urls.valid_array?
 
-          opts
+          ignore_urls.map { |url| convert_to_regex(url) }
+        end
+
+        def convert_to_regex(value)
+          return value if value.is_a? Regexp
+          return value unless value.is_a? String
+
+          if value.start_with?('%r{') && value.end_with?('}')
+            regexp = value[3...-1]
+            return Regexp.new(regexp)
+          end
+
+          value
         end
       end
     end
