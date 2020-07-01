@@ -5,6 +5,10 @@ description: The index page
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 
+* [Internal, relative reference link that should work][link].
+* [Link to the site root]({{ site.url }}).
+* [Absolute URL to page]({{ page.url | absolute_url }}).
+* [Relative URL to page]({{ "/" | relative_url }}).
 * [External absolute full link](https://www.wikipedia.org)
 * [External protocol relative link](//www.wikipedia.org)
 * [Internal absolute full link]({{ site.url }})
@@ -151,3 +155,5 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 ```
 The final element.
 ```
+
+[link]: index
