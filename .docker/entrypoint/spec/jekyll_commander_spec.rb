@@ -78,7 +78,6 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
   describe '#execute :serve' do
     describe '_site' do
       data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-      @thread;
 
       before(:all) do
         @thread = Thread.new do
