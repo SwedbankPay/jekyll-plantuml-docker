@@ -78,28 +78,17 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
   describe '#execute :serve' do
     describe '_site' do
       data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-      site_dir = File.join(data_dir, '_site')
       @thread;
 
       before(:all) do
         @thread = Thread.new do
-          merc = nil
-          cmd = Jekyll::Commands::Serve
-          Mercenary.program(:jekyll) do |p|
-            merc = cmd.init_with_program(p)
-          end
-          merc.execute(:serve, opts)
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          jekyll_config = jekyll_config_provider.provide('serve')
+          jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
+          jekyll_commander.execute('serve').wait(Jekyll::Commands::Serve.mutex)
         end
         @thread.abort_on_exception = true
     
-        Jekyll::Commands::Serve.mutex.synchronize do
-          unless Jekyll::Commands::Serve.running?
-            jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
-            jekyll_config = jekyll_config_provider.provide('serve')
-            jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
-            jekyll_commander.execute('serve').wait(Jekyll::Commands::Serve.mutex)
-          end
-        end
       end
       
       after(:each) do
@@ -115,7 +104,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       end
 
       subject {
-        File.join(site_dir, '0.0.0.0')
+        File.join(data_dir, '0.0.0.0')
       }
 
       it {
