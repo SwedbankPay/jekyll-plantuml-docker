@@ -79,8 +79,19 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
     describe '_site' do
       data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
       site_dir = File.join(data_dir, '_site')
+      @thread;
 
       before(:all) do
+        @thread = Thread.new do
+          merc = nil
+          cmd = Jekyll::Commands::Serve
+          Mercenary.program(:jekyll) do |p|
+            merc = cmd.init_with_program(p)
+          end
+          merc.execute(:serve, opts)
+        end
+        @thread.abort_on_exception = true
+    
         Jekyll::Commands::Serve.mutex.synchronize do
           unless Jekyll::Commands::Serve.running?
             jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
