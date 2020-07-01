@@ -107,12 +107,8 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
         end
       end
 
-      subject {
-        File.join(data_dir, '0.0.0.0')
-      }
-
       it {
-        is_expected.not_to exist
+        expect(File).not_to exist(File.join(__dir__, '0.0.0.0'))
       }
     end
   end

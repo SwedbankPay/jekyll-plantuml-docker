@@ -50,7 +50,7 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
         subject { @jekyll_config }
         
         it {
-          is_expected.to include('livereload_port' => 35729)
+          is_expected.to include('livereload_port' => 35_729)
         }
       end
     end
