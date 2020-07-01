@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../errors/file_not_found_error'
+require_relative '../errors/directory_not_found_error'
+
 # Object extensions
 class Object
   def must_be_a_directory!
@@ -8,7 +11,9 @@ class Object
     must_be_a! String
 
     raise ArgumentError, 'String cannot be empty' if empty?
-    raise Jekyll::PlantUml::DirectoryNotFoundError, "#{self} does not exist" unless Dir.exist?(self)
+
+    dnfe = Jekyll::PlantUml::DirectoryNotFoundError
+    raise dnfe, "#{self} does not exist" unless Dir.exist?(self)
   end
 
   def must_be_a_file!
@@ -17,7 +22,9 @@ class Object
     must_be_a! String
 
     raise ArgumentError, 'String cannot be empty' if empty?
-    raise Jekyll::PlantUml::FileNotFoundError, "#{self} cannot be found." unless writable_file?
+
+    fnfe = Jekyll::PlantUml::FileNotFoundError
+    raise fnfe, "#{self} cannot be found." unless writable_file?
   end
 
   def writable_file?
