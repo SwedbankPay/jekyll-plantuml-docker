@@ -39,6 +39,10 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
         it {
           is_expected.to include('incremental' => true)
         }
+
+        it {
+          is_expected.to include('livereload_port' => 35729)
+        }
       end
     end
 
