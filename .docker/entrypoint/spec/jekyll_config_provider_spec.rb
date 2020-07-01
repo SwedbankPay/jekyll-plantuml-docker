@@ -39,7 +39,16 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
         it {
           is_expected.to include('incremental' => true)
         }
+      end
 
+      context 'serve returns config' do
+        before(:all) do
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          @jekyll_config = jekyll_config_provider.provide('serve')
+        end
+
+        subject { @jekyll_config }
+        
         it {
           is_expected.to include('livereload_port' => 35729)
         }
