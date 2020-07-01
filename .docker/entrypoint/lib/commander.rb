@@ -53,9 +53,10 @@ module Jekyll
         command = args['<command>']
         verify = args['--verify']
         dry_run = args['--dry-run']
+        ignore_urls = args['--ignore-url']
         jekyll_config = @jekyll_config_provider.provide(command)
         execute_command(jekyll_config, command, dry_run, verify)
-        verify(jekyll_config) if verify
+        verify(jekyll_config, ignore_urls) if verify
       end
 
       def execute_command(jekyll_config, command, dry_run, verify)
@@ -69,9 +70,9 @@ module Jekyll
         end
       end
 
-      def verify(jekyll_config)
+      def verify(jekyll_config, ignore_urls)
         verifier = provide_instance(:verify, jekyll_config)
-        verifier.verify
+        verifier.verify(ignore_urls)
       end
 
       def deploy(jekyll_config, dry_run, verify)

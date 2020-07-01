@@ -19,15 +19,16 @@ module Jekyll
 Runs the #{docker_image.name} container's entrypoint.
 
 Usage:
-  #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
+  #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify] [--ignore-url=url ...]
 
 Options:
-  -h --help     Print this screen.
-  --version     Print the version of #{docker_image.name}.
-  --dry-run     On a dry-run, the the deploy command will not push the changes
-                to the remote `origin`.
-  --verify      Verifies the built output before deploying. Can be used in
-                combination with --dry-run in tests and for local debugging.
+  -h --help         Print this screen.
+  --version         Print the version of #{docker_image.name}.
+  --dry-run         On a dry-run, the the deploy command will not push the
+                    changes to the remote `origin`.
+  --verify          Verifies the built output before deploying. Can be used in
+                    combination with --dry-run in tests and for local debugging.
+  --ignore-url=url  Ignores the specified URL when doing --verify.
 
 Commands:
   deploy        Builds the website with `jekyll build` and then deploys

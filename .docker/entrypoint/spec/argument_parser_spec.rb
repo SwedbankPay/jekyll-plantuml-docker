@@ -56,6 +56,21 @@ describe Jekyll::PlantUml::ArgumentParser do
       it {
         is_expected.to include('--verify' => false)
       }
+
+      it {
+        is_expected.to include('--ignore-url' => [])
+      }
+    end
+
+    context '--ignore-url' do
+      subject do
+        args = ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net']
+        argument_parser.parse(args)
+      end
+
+      it {
+        is_expected.to include('--ignore-url' => ['https://example.com', 'https://example.net'])
+      }
     end
   end
 
