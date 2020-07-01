@@ -19,7 +19,11 @@ module Jekyll
 Runs the #{docker_image.name} container's entrypoint.
 
 Usage:
-  #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} [-h | --help]
+  #{docker_image.fqn} [--version]
+  #{docker_image.fqn} build [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} serve [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} deploy [--dry-run] [--verify] [--ignore-url=url ...]
 
 Options:
   -h --help         Print this screen.

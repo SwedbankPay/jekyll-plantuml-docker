@@ -32,21 +32,25 @@ describe Jekyll::PlantUml::ArgumentParser do
   end
 
   describe '#parse' do
-    ['--help', '-h'].each do |arg|
-      it arg do
-        expect { argument_parser.parse([arg]) }.to raise_error(Docopt::Exit, /Usage:/)
+    [['--help'], ['build', '--dry-run'], ['serve', '--dry-run']].each do |args|
+      context args.join(' ') do
+        it do
+          expect { argument_parser.parse(args) }.to raise_error(Docopt::Exit, /Usage:/)
+        end
       end
     end
 
-    it '--version' do
-      expect { argument_parser.parse(['--version']) }.to raise_error(Docopt::Exit, /#{docker_image.version}/)
+    context '--version' do
+      it do
+        expect { argument_parser.parse(['--version']) }.to raise_error(Docopt::Exit, /#{docker_image.version}/)
+      end
     end
 
     context 'build' do
       subject { argument_parser.parse(['build']) }
 
       it {
-        is_expected.to include('<command>' => 'build')
+        is_expected.to include('build' => true)
       }
 
       it {

@@ -50,13 +50,21 @@ module Jekyll
       end
 
       def execute_args(args)
-        command = args['<command>']
+        command = find_command(args)
         verify = args['--verify']
         dry_run = args['--dry-run']
         ignore_urls = args['--ignore-url']
         jekyll_config = @jekyll_config_provider.provide(command)
         execute_command(jekyll_config, command, dry_run, verify)
         verify(jekyll_config, ignore_urls) if verify
+      end
+
+      def find_command(args)
+        return 'build' if args['build'] == true
+        return 'serve' if args['serve'] == true
+        return 'deploy' if args['deploy'] == true
+
+        raise CommandLineArgumentError, 'Unkonw command'
       end
 
       def execute_command(jekyll_config, command, dry_run, verify)
