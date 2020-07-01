@@ -76,7 +76,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
   end
 
   describe '#execute :serve' do
-    describe '_site' do
+    describe 'weird file' do
       data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
 
       before(:all) do
@@ -84,7 +84,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
           jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
           jekyll_config = jekyll_config_provider.provide('serve')
           jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
-          jekyll_commander.execute('serve').wait(Jekyll::Commands::Serve.mutex)
+          jekyll_commander.execute('serve')
         end
         @thread.abort_on_exception = true
 
@@ -96,9 +96,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       end
       
       after(:each) do
-        capture_io do
-          Jekyll::Commands::Serve.shutdown
-        end
+        Jekyll::Commands::Serve.shutdown
   
         Jekyll::Commands::Serve.mutex.synchronize do
           if Jekyll::Commands::Serve.running?
@@ -108,7 +106,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       end
 
       it {
-        expect(File).not_to exist(File.join(__dir__, '0.0.0.0'))
+        expect(File).not_to exist(File.join(__dir__, '..', '0.0.0.0'))
       }
     end
   end
