@@ -82,7 +82,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
 
       before(:all) do
         Jekyll::Commands::Serve.mutex.synchronize do
-          unless Jekyll::Commands::Serve.running? do
+          unless Jekyll::Commands::Serve.running?
             jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
             jekyll_config = jekyll_config_provider.provide('serve')
             jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
