@@ -10,6 +10,9 @@ module Jekyll
     # and exposes its help and usage command line screens.
     class ArgumentParser
       def initialize(docker_image)
+        raise ArgumentError, 'docker_image cannot be nil' if docker_image.nil?
+        raise ArgumentError, 'docker_image must be a DockerImage' unless docker_image.is_a? DockerImage
+
         @docker_image_version = docker_image.version
         # rubocop:disable Layout/HeredocIndentation,Layout/ClosingHeredocIndentation
         @doc = <<~DOCOPT
