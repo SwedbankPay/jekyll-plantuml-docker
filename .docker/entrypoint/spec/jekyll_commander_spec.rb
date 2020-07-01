@@ -87,7 +87,12 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
           jekyll_commander.execute('serve').wait(Jekyll::Commands::Serve.mutex)
         end
         @thread.abort_on_exception = true
-    
+
+        Jekyll::Commands::Serve.mutex.synchronize do
+          unless Jekyll::Commands::Serve.running?
+            Jekyll::Commands::Serve.run_cond.wait(Jekyll::Commands::Serve.mutex)
+          end
+        end
       end
       
       after(:each) do
