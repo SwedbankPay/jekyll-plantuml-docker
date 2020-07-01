@@ -55,7 +55,7 @@ jobs:
           image_name: jekyll-plantuml
           image_tag: ${{ needs.variables.outputs.docker_image_tag }}
           dockerfile: .docker/Dockerfile
-          push_image_and_stages: ./.github/workflows/docker_run_test.sh build --image ${{ needs.variables.outputs.docker_image_fqn }} --repository ${{ github.repository }} --dir ${{ github.workspace }}/tests/minimal --token ${{ secrets.GITHUB_TOKEN }} --verbose
+          push_image_and_stages: ./.github/workflows/docker_run_test.sh build --image ${{ needs.variables.outputs.docker_image_fqn }} --repository ${{ github.repository }} --dir ${{ github.workspace }}/tests/minimal --token ${{ secrets.GITHUB_TOKEN }} --verbose --no-pull
           pull_image_and_stages: false
           build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
 
@@ -68,7 +68,7 @@ jobs:
           image_name: swedbankpay/jekyll-plantuml
           image_tag: ${{ needs.variables.outputs.docker_image_tag }}
           dockerfile: .docker/Dockerfile
-          push_image_and_stages: ./.github/workflows/docker_run_test.sh build --image ${{ needs.variables.outputs.docker_image_fqn }} --repository ${{ github.repository }} --dir ${{ github.workspace }}/tests/minimal --token ${{ secrets.GITHUB_TOKEN }} --verbose
+          push_image_and_stages: ./.github/workflows/docker_run_test.sh build --image ${{ needs.variables.outputs.docker_image_fqn }} --repository ${{ github.repository }} --dir ${{ github.workspace }}/tests/minimal --token ${{ secrets.GITHUB_TOKEN }} --verbose --no-pull
           pull_image_and_stages: false
           build_extra_args: --build-arg SHA="${{ needs.variables.outputs.sha }}" --build-arg DATE="${{ needs.variables.outputs.date }}" --build-arg VERSION="${{ needs.variables.outputs.version }}"
 

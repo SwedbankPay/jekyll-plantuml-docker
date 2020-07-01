@@ -6,7 +6,7 @@ help_message="\
 Execute a Jekyll command in the Docker container and optionally test the output.
 
 Usage:
-  $me (build | serve) --image <image> --dir <dir> --repository <name> --token <token> [--verbose]
+  $me (build | serve) --image <image> --dir <dir> --repository <name> --token <token> [--verbose] [--no-pull]
   $me --help
 
 Arguments:
@@ -19,6 +19,7 @@ Arguments:
   -d, --dir                 The content directory to use for Jekyll.
   -r, --repository <name>   The name of the GitHub repository to deploy to.
   -t, --token <token>       A GitHub token with access to the repository.
+  -n, --no-pull             Does not perform 'docker pull' of the image.
   -v, --verbose             Increase verbosity. Useful for debugging."
 
 parse_args() {
@@ -41,6 +42,9 @@ parse_args() {
         elif [[ ( $1 = "-t" || $1 = "--token" ) && -n $2 ]]; then
             github_access_token=$2
             shift 2
+        elif [[ $1 = "-n" || $1 = "--no-pull" ]]; then
+            no_pull=true
+            shift
         elif [[ $1 = "-v" || $1 = "--verbose" ]]; then
             verbose=true
             shift
@@ -128,8 +132,12 @@ main() {
       docker login https://docker.pkg.github.com -u SwedbankPay -p "$github_access_token"
     fi
 
-    [ $verbose ] && echo "Pulling $docker_image_fqn..."
-    docker pull "$docker_image_fqn"
+    if [[ $no_pull ]]; then
+      [ $verbose ] && echo "Not pulling $docker_image_fqn."
+    else
+      [ $verbose ] && echo "Pulling $docker_image_fqn..."
+      docker pull "$docker_image_fqn"
+    fi
 
     [ $verbose ] && echo "Running ${docker_image_fqn} $jekyll_command..."
 
