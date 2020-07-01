@@ -22,6 +22,8 @@ module Jekyll
           raise ArgumentError, "No 'destination' key found in the Jekyll config" unless jekyll_config.key? 'destination'
 
           @jekyll_destination_dir = jekyll_config['destination']
+          @log_level = jekyll_config[:level] || jekyll_config['level']
+
           unless Dir.exist?(@jekyll_destination_dir)
             raise Jekyll::PlantUml::FileNotFoundError, "#{@jekyll_destination_dir} does not exist"
           end
@@ -48,9 +50,14 @@ module Jekyll
             check_unrendered_link: true
           }
 
-          return opts if ignore_urls.nil? || !ignore_urls.is_a?(Array) || ignore_urls.empty?
+          opts[:log_level] = @log_level.to_sym unless @log_level.nil?
+          opts[:url_ignore] = ignore_urls if valid_array? ignore_urls
 
-          opts.merge({ url_ignore: ignore_urls })
+          opts
+        end
+
+        def valid_array?(obj)
+          !obj.nil? && obj.is_a?(Array) && !obj.empty?
         end
       end
     end

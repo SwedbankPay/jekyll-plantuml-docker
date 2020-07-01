@@ -54,7 +54,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
       jekyll_commander.execute('build')
     end
 
-    subject { Jekyll::PlantUml::Commands::Verifier.new({ 'destination' => site_dir }) }
+    subject { Jekyll::PlantUml::Commands::Verifier.new({ level: :warn, 'destination' => site_dir }) }
 
     it 'ignores urls' do
       ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
