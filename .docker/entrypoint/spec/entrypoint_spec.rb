@@ -2,7 +2,7 @@
 
 require 'entrypoint'
 require 'docker_image'
-require 'jekyll_environment'
+require 'exec_env'
 
 Entrypoint = Jekyll::PlantUml::Entrypoint
 JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment

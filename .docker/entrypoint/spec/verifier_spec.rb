@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'jekyll_environment'
+require 'exec_env'
 require 'jekyll_config_provider'
 require 'commands/verifier'
 require 'commands/jekyll_commander'

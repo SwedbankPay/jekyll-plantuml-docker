@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'jekyll_environment'
+require 'exec_env'
 require 'errors/directory_not_found_error'
 
 JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment

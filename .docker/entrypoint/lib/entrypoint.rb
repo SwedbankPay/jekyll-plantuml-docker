@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'commander'
-require_relative 'jekyll_environment'
+require_relative 'exec_env'
 require_relative 'docker_image'
 
 # The Jekyll module contains everything related to Jekyll.

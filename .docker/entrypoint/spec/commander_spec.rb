@@ -3,7 +3,7 @@
 require 'commander'
 require 'jekyll'
 require 'docker_image'
-require 'jekyll_environment'
+require 'exec_env'
 require 'helpers/spec_jekyll_commander'
 require 'helpers/spec_logger'
 
