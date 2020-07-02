@@ -70,9 +70,9 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
           is_expected.not_to be_empty
         }
 
-        it {
-          is_expected.to include('https://swedbankpay.github.io/jekyll-plantuml-docker/')
-        }
+        # it {
+        #   is_expected.to include('https://swedbankpay.github.io/jekyll-plantuml-docker/')
+        # }
       end
     end
   end
