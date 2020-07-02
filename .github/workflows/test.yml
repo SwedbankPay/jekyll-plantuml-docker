@@ -179,7 +179,7 @@ jobs:
       - name: Codecov Upload
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: bundle exec rake codecov:upload
+        run: bundle exec rake codecov:upload || echo 'Codecov upload failed'
 
       - name: RuboCop
         run: bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
