@@ -6,11 +6,10 @@ require 'commands/verifier'
 require 'commands/jekyll_commander'
 require 'errors/directory_not_found_error'
 
-ExecEnv = Jekyll::PlantUml::ExecEnv
-JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
-DirectoryNotFoundError = Jekyll::PlantUml::DirectoryNotFoundError
-JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
-Verifier = Jekyll::PlantUml::Commands::Verifier
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+include Jekyll::PlantUml::Commands
+# rubocop:enable Style/MixinUsage
 
 describe Jekyll::PlantUml::Commands::Verifier do
   describe '#initialize' do

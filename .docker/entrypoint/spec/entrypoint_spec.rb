@@ -4,9 +4,9 @@ require 'entrypoint'
 require 'docker_image'
 require 'exec_env'
 
-Entrypoint = Jekyll::PlantUml::Entrypoint
-ExecEnv = Jekyll::PlantUml::ExecEnv
-DockerImage = Jekyll::PlantUml::DockerImage
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+# rubocop:enable Style/MixinUsage
 
 describe Entrypoint do
   subject(:entrypoint) do

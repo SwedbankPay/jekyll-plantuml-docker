@@ -3,7 +3,9 @@
 require 'exec_env'
 require 'errors/directory_not_found_error'
 
-ExecEnv = Jekyll::PlantUml::ExecEnv
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+# rubocop:enable Style/MixinUsage
 
 describe ExecEnv do
   describe '#initialize' do

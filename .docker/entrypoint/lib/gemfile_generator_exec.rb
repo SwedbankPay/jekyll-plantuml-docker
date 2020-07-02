@@ -2,7 +2,7 @@
 
 require_relative 'gemfile_generator'
 
-GemfileGenerator = Jekyll::PlantUml::GemfileGenerator
+GemfileGenerator ||= Jekyll::PlantUml::GemfileGenerator
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll

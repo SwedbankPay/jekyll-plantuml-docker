@@ -3,10 +3,12 @@
 require 'argument_parser'
 require 'docker_image'
 
-ArgumentParser = Jekyll::PlantUml::ArgumentParser
-DockerImage = Jekyll::PlantUml::DockerImage
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+# rubocop:enable Style/MixinUsage
 
 describe ArgumentParser do
+
   docker_image = DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
   argument_parser = ArgumentParser.new(docker_image)
 

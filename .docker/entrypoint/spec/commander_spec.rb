@@ -7,11 +7,10 @@ require 'exec_env'
 require 'helpers/spec_jekyll_commander'
 require 'helpers/spec_logger'
 
-Commander = Jekyll::PlantUml::Commander
-DockerImage = Jekyll::PlantUml::DockerImage
-ExecEnv = Jekyll::PlantUml::ExecEnv
-SpecLogger = Jekyll::PlantUml::Specs::Helpers::SpecLogger
-SpecJekyllCommander = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+include Jekyll::PlantUml::Specs::Helpers
+# rubocop:enable Style/MixinUsage
 
 describe Commander do
   let(:version) { '0.0.1-test.0' }

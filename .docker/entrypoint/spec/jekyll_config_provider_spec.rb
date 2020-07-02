@@ -5,8 +5,9 @@ require 'securerandom'
 require 'jekyll_config_provider'
 require 'errors/file_not_found_error'
 
-ExecEnv = Jekyll::PlantUml::ExecEnv
-JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+# rubocop:enable Style/MixinUsage
 
 describe JekyllConfigProvider do
   describe '#provide' do

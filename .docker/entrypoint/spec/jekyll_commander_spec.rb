@@ -3,10 +3,10 @@ require_relative '../lib/commands/jekyll_commander'
 
 require 'commands/jekyll_commander'
 
-ExecEnv = Jekyll::PlantUml::ExecEnv
-JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
-DirectoryNotFoundError = Jekyll::PlantUml::DirectoryNotFoundError
-JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+include Jekyll::PlantUml::Commands
+# rubocop:enable Style/MixinUsage
 
 describe JekyllCommander do
   describe '#initialize' do
@@ -76,9 +76,9 @@ describe JekyllCommander do
           is_expected.not_to be_empty
         }
 
-        # it {
-        #   is_expected.to include('https://swedbankpay.github.io/jekyll-plantuml-docker/')
-        # }
+        it {
+          is_expected.to include('https://swedbankpay.github.io/jekyll-plantuml-docker/')
+        }
       end
     end
   end

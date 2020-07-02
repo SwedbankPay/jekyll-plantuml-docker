@@ -2,7 +2,10 @@
 
 require 'docker_image'
 
-DockerImage = Jekyll::PlantUml::DockerImage
+
+# rubocop:disable Style/MixinUsage
+include Jekyll::PlantUml
+# rubocop:enable Style/MixinUsage
 
 describe DockerImage do
   subject(:docker_image) { DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
