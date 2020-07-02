@@ -3,7 +3,7 @@ require_relative '../lib/commands/jekyll_commander'
 
 require 'commands/jekyll_commander'
 
-JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+ExecEnv = Jekyll::PlantUml::ExecEnv
 JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
 DirectoryNotFoundError = Jekyll::PlantUml::DirectoryNotFoundError
 JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
@@ -41,8 +41,8 @@ describe JekyllCommander do
       site_dir = File.join(data_dir, '_site')
 
       before(:all) do
-        jekyll_env = JekyllEnvironment.new('development', __dir__, data_dir)
-        jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :info)
+        exec_env = ExecEnv.new('development', __dir__, data_dir)
+        jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
         jekyll_config = jekyll_config_provider.provide('build')
         jekyll_commander = JekyllCommander.new(jekyll_config, :info)
         jekyll_commander.execute('build')

@@ -6,9 +6,9 @@ require_relative 'extensions/object_extensions'
 module Jekyll
   # The Jekyll::PlantUml module contains everything related to Jekyll::PlantUml.
   module PlantUml
-    # The Jekyll::PlantUml::JekyllEnvironment class provides
-    # environment-specific data for Jekyll.
-    class JekyllEnvironment
+    # The Jekyll::PlantUml::ExecEnv class provides data from and about the
+    # execution environment
+    class ExecEnv
       attr_reader :env
       attr_reader :var_dir
       attr_reader :data_dir

@@ -3,12 +3,12 @@
 require 'exec_env'
 require 'errors/directory_not_found_error'
 
-JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+ExecEnv = Jekyll::PlantUml::ExecEnv
 
-describe JekyllEnvironment do
+describe ExecEnv do
   describe '#initialize' do
     let(:data_dir) { File.join(__dir__, 'data') }
-    subject { JekyllEnvironment.new('dev', data_dir, data_dir) }
+    subject { ExecEnv.new('dev', data_dir, data_dir) }
 
     it {
       is_expected.not_to be_nil
@@ -25,7 +25,7 @@ describe JekyllEnvironment do
     context 'env is nil' do
       it do
         expect do
-          JekyllEnvironment.new(nil, data_dir, data_dir)
+          ExecEnv.new(nil, data_dir, data_dir)
         end.to raise_error(ArgumentError, 'env is nil')
       end
     end
@@ -33,7 +33,7 @@ describe JekyllEnvironment do
     context 'var_dir is nil' do
       it do
         expect do
-          JekyllEnvironment.new('dev', nil, data_dir)
+          ExecEnv.new('dev', nil, data_dir)
         end.to raise_error(ArgumentError, 'var_dir is nil')
       end
     end
@@ -41,7 +41,7 @@ describe JekyllEnvironment do
     context 'data_dir is nil' do
       it do
         expect do
-          JekyllEnvironment.new('dev', __dir__, nil)
+          ExecEnv.new('dev', __dir__, nil)
         end.to raise_error(ArgumentError, 'data_dir is nil')
       end
     end

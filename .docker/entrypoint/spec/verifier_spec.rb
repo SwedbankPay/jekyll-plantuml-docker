@@ -6,7 +6,7 @@ require 'commands/verifier'
 require 'commands/jekyll_commander'
 require 'errors/directory_not_found_error'
 
-JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+ExecEnv = Jekyll::PlantUml::ExecEnv
 JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
 DirectoryNotFoundError = Jekyll::PlantUml::DirectoryNotFoundError
 JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
@@ -60,8 +60,8 @@ describe Jekyll::PlantUml::Commands::Verifier do
     site_dir = File.join(data_dir, '_site')
 
     before(:all) do
-      jekyll_env = JekyllEnvironment.new('development', __dir__, data_dir)
-      jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :error)
+      exec_env = ExecEnv.new('development', __dir__, data_dir)
+      jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
       jekyll_config = jekyll_config_provider.provide('build')
       jekyll_commander = JekyllCommander.new(jekyll_config, :error)
       jekyll_commander.execute('build')

@@ -18,11 +18,11 @@ module Jekyll
     class Commander
       attr_reader :commands
 
-      def initialize(jekyll_env, docker_image)
-        jekyll_env.must_be_a! JekyllEnvironment
+      def initialize(exec_env, docker_image)
+        exec_env.must_be_a! ExecEnv
         docker_image.must_be_a! DockerImage
 
-        @jekyll_env = jekyll_env
+        @exec_env = exec_env
         @argument_parser = ArgumentParser.new(docker_image)
         @commands = default_commands
       end
@@ -52,7 +52,7 @@ module Jekyll
         dry_run = args['--dry-run']
         ignore_urls = args['--ignore-url']
         log_level = args['--log-level']
-        jekyll_config_provider = JekyllConfigProvider.new(@jekyll_env, log_level)
+        jekyll_config_provider = JekyllConfigProvider.new(@exec_env, log_level)
         jekyll_config = jekyll_config_provider.provide(command)
         execute_command(jekyll_config, command, dry_run, verify, log_level)
         verify(jekyll_config, ignore_urls, log_level) if verify
@@ -83,7 +83,7 @@ module Jekyll
       end
 
       def deploy(jekyll_config, dry_run, verify)
-        deployer = provide_instance(:deploy, jekyll_config, @jekyll_env.var_dir)
+        deployer = provide_instance(:deploy, jekyll_config, @exec_env.var_dir)
         deployer.deploy(dry_run, verify)
       end
 

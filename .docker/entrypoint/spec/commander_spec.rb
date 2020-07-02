@@ -9,7 +9,7 @@ require 'helpers/spec_logger'
 
 Commander = Jekyll::PlantUml::Commander
 DockerImage = Jekyll::PlantUml::DockerImage
-JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+ExecEnv = Jekyll::PlantUml::ExecEnv
 SpecLogger = Jekyll::PlantUml::Specs::Helpers::SpecLogger
 SpecJekyllCommander = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
 
@@ -18,7 +18,7 @@ describe Commander do
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')
     Commander.new(
-      JekyllEnvironment.new('development', data_dir, data_dir, :level),
+      ExecEnv.new('development', data_dir, data_dir, :level),
       DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end

@@ -5,14 +5,14 @@ require 'docker_image'
 require 'exec_env'
 
 Entrypoint = Jekyll::PlantUml::Entrypoint
-JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+ExecEnv = Jekyll::PlantUml::ExecEnv
 DockerImage = Jekyll::PlantUml::DockerImage
 
 describe Entrypoint do
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
     Entrypoint.new(
-      JekyllEnvironment.new('dev', data_dir, data_dir),
+      ExecEnv.new('dev', data_dir, data_dir),
       DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
     )
   end
