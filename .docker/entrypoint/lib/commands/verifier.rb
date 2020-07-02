@@ -22,9 +22,7 @@ module Jekyll
         end
 
         def verify(ignore_urls = nil)
-          html_glob = File.join(@jekyll_destination_dir, '**/*.html')
-
-          raise "#{@jekyll_destination_dir} contains no .html files" if Dir.glob(html_glob).empty?
+          ensure_directory_not_empty!(@jekyll_destination_dir)
 
           opts = options(ignore_urls)
 
@@ -32,6 +30,11 @@ module Jekyll
         end
 
         private
+
+        def ensure_directory_not_empty!(dir)
+          html_glob = File.join(dir, '**/*.html')
+          raise "#{dir} contains no .html files" if Dir.glob(html_glob).empty?
+        end
 
         def options(ignore_urls = nil)
           ignore_urls = massage(ignore_urls)
@@ -53,11 +56,11 @@ module Jekyll
           }
         end
 
-        def massage(ignore_urls)
-          return [ignore_urls] if ignore_urls.is_a?(Regexp) || ignore_urls.is_a?(String)
-          return nil unless ignore_urls.valid_array?
+        def massage(urls)
+          return [urls] if urls.is_a?(Regexp) || urls.is_a?(String)
+          return nil unless urls.valid_array?
 
-          ignore_urls.map { |url| convert_to_regex(url) }
+          urls.map { |url| convert_to_regex(url) }
         end
 
         def convert_to_regex(value)

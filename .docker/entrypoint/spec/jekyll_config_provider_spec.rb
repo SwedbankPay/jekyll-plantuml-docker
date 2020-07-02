@@ -58,17 +58,17 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     end
 
     context 'non-existing _config.yml' do
-      uuid = SecureRandom.urlsafe_base64
-      non_existing_directory = File.join(__dir__, 'data', ".#{uuid}")
+      rnd = SecureRandom.urlsafe_base64
+      dir = File.join(__dir__, 'data', ".#{rnd}")
 
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(non_existing_directory)
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(dir)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 
         after(:all) do
-          FileUtils.rm_rf(non_existing_directory) if Dir.exist? non_existing_directory
+          FileUtils.rm_rf(dir) if Dir.exist? dir
         end
 
         subject { @jekyll_config }
