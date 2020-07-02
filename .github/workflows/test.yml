@@ -254,7 +254,8 @@ jobs:
             --env JEKYLL_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             --env DEBUG="true" \
             ${IMAGE_NAME}:${IMAGE_TAG} \
-            deploy
+            deploy \
+            --env=production
 
   cleanup:
     runs-on: ubuntu-latest
