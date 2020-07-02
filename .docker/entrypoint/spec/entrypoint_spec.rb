@@ -4,12 +4,16 @@ require 'entrypoint'
 require 'docker_image'
 require 'jekyll_environment'
 
-describe Jekyll::PlantUml::Entrypoint do
+Entrypoint = Jekyll::PlantUml::Entrypoint
+JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+DockerImage = Jekyll::PlantUml::DockerImage
+
+describe Entrypoint do
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
-    Jekyll::PlantUml::Entrypoint.new(
-      Jekyll::PlantUml::JekyllEnvironment.new('dev', data_dir, data_dir),
-      Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
+    Entrypoint.new(
+      JekyllEnvironment.new('dev', data_dir, data_dir),
+      DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
     )
   end
 

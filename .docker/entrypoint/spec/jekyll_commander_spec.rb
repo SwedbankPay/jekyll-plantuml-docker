@@ -3,12 +3,17 @@ require_relative '../lib/commands/jekyll_commander'
 
 require 'commands/jekyll_commander'
 
-describe Jekyll::PlantUml::Commands::JekyllCommander do
+JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
+DirectoryNotFoundError = Jekyll::PlantUml::DirectoryNotFoundError
+JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
+
+describe JekyllCommander do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::JekyllCommander.new(nil)
+          JekyllCommander.new(nil, :info)
         end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
@@ -16,7 +21,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
     context 'empty config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::JekyllCommander.new({})
+          JekyllCommander.new({}, :info)
         end.to raise_error(ArgumentError, 'jekyll_config cannot be empty')
       end
     end
@@ -24,7 +29,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
     context 'non-hash config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::JekyllCommander.new([])
+          JekyllCommander.new([], :info)
         end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
@@ -36,9 +41,10 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       site_dir = File.join(data_dir, '_site')
 
       before(:all) do
-        jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+        jekyll_env = JekyllEnvironment.new('development', __dir__, data_dir)
+        jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :info)
         jekyll_config = jekyll_config_provider.provide('build')
-        jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
+        jekyll_commander = JekyllCommander.new(jekyll_config, :info)
         jekyll_commander.execute('build')
       end
 

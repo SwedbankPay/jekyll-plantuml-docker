@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -10,13 +11,17 @@ module Jekyll
     # configuration by probing for `_config.yml` files and setting configuration
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
-      def initialize(jekyll_data_dir)
-        @jekyll_data_dir = jekyll_data_dir
+      def initialize(jekyll_env, log_level)
+        jekyll_env.must_be_a! JekyllEnvironment
+
+        @verbose = jekyll_env.debug || log_level == :debug
+        @jekyll_data_dir = jekyll_env.data_dir
       end
 
       def provide(jekyll_command)
         config_file_path = config_file_path()
-        config(jekyll_command, config_file_path)
+        config = config(jekyll_command, config_file_path)
+        config
       end
 
       private
@@ -46,6 +51,8 @@ module Jekyll
 
         jekyll_config = Jekyll.configuration(default_config(config_file_path))
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
+        jekyll_config['verbose'] = true if @verbose
+
         jekyll_config
       end
 

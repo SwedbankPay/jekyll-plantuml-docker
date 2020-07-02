@@ -3,9 +3,12 @@
 require 'argument_parser'
 require 'docker_image'
 
-describe Jekyll::PlantUml::ArgumentParser do
-  docker_image = Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
-  argument_parser = Jekyll::PlantUml::ArgumentParser.new(docker_image)
+ArgumentParser = Jekyll::PlantUml::ArgumentParser
+DockerImage = Jekyll::PlantUml::DockerImage
+
+describe ArgumentParser do
+  docker_image = DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
+  argument_parser = ArgumentParser.new(docker_image)
 
   describe '#initialize' do
     subject { argument_parser }
@@ -13,7 +16,7 @@ describe Jekyll::PlantUml::ArgumentParser do
     context 'docker_image: nil' do
       it do
         expect do
-          Jekyll::PlantUml::ArgumentParser.new(nil)
+          ArgumentParser.new(nil)
         end.to raise_error(ArgumentError, 'Value cannot be nil')
       end
     end
@@ -21,7 +24,7 @@ describe Jekyll::PlantUml::ArgumentParser do
     context 'docker_image: not a DockerImage' do
       it do
         expect do
-          Jekyll::PlantUml::ArgumentParser.new({})
+          ArgumentParser.new({})
         end.to raise_error(ArgumentError, 'Hash is not a Jekyll::PlantUml::DockerImage')
       end
     end
@@ -64,6 +67,10 @@ describe Jekyll::PlantUml::ArgumentParser do
       it {
         is_expected.to include('--ignore-url' => [])
       }
+
+      it {
+        is_expected.to include('--log-level' => nil)
+      }
     end
 
     context '--ignore-url' do
@@ -74,6 +81,17 @@ describe Jekyll::PlantUml::ArgumentParser do
 
       it {
         is_expected.to include('--ignore-url' => ['https://example.com', 'https://example.net', %r{[/.]?page1}])
+      }
+    end
+
+    context '--log-level' do
+      subject do
+        args = ['build', '--log-level=error']
+        argument_parser.parse(args)
+      end
+
+      it {
+        is_expected.to include('--log-level' => 'error')
       }
     end
   end

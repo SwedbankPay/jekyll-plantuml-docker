@@ -2,6 +2,8 @@
 
 require_relative 'gemfile_generator'
 
+GemfileGenerator = Jekyll::PlantUml::GemfileGenerator
+
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
   # The Jekyll::PlantUml module contains everything related to Jekyll::PlantUml.
@@ -24,7 +26,7 @@ module Jekyll
       def generate
         gemfiles_info
 
-        gemfile_generator = Jekyll::PlantUml::GemfileGenerator.new(@debug)
+        gemfile_generator = GemfileGenerator.new(@debug)
 
         gemfile_generator.generate(
           @gemfiles[:default],

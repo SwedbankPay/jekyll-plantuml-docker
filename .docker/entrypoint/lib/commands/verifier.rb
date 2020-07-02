@@ -15,9 +15,9 @@ module Jekyll
       # The Jekyll::PlantUml::Verifier class executes HTMLProofer on a built
       # Jekyll site in order to verify that the HTML is correct.
       class Verifier
-        def initialize(jekyll_config)
+        def initialize(jekyll_config, log_level)
           @jekyll_destination_dir = jekyll_config.value_for('destination')
-          @log_level = jekyll_config[:level] || jekyll_config['level']
+          @log_level = log_level
           @jekyll_destination_dir.must_be_a_directory!
         end
 

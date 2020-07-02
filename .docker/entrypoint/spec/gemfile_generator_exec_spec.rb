@@ -6,13 +6,15 @@ require 'gemfile_generator_exec'
 require 'errors/file_not_found_error'
 require 'matchers/be_valid_gemfile_matcher'
 
-describe Jekyll::PlantUml::GemfileGeneratorExec do
+GemfileGeneratorExec = Jekyll::PlantUml::GemfileGeneratorExec
+
+describe GemfileGeneratorExec do
   let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
   let(:default_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.default') }
   let(:generated_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.generated') }
 
   subject(:generator) do
-    Jekyll::PlantUml::GemfileGeneratorExec.new(
+    GemfileGeneratorExec.new(
       {
         default: default_gemfile_path,
         user: user_gemfile_path,

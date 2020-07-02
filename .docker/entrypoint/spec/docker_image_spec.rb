@@ -2,8 +2,10 @@
 
 require 'docker_image'
 
-describe Jekyll::PlantUml::DockerImage do
-  subject(:docker_image) { Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
+DockerImage = Jekyll::PlantUml::DockerImage
+
+describe DockerImage do
+  subject(:docker_image) { DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
   subject { docker_image }
 
   describe '#initialize' do
@@ -22,7 +24,7 @@ describe Jekyll::PlantUml::DockerImage do
     context 'name is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new(nil, 'latest', '1.2.3')
+          DockerImage.new(nil, 'latest', '1.2.3')
         end.to raise_error(ArgumentError, 'name is nil')
       end
     end
@@ -30,7 +32,7 @@ describe Jekyll::PlantUml::DockerImage do
     context 'tag is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', nil, '1.2.3')
+          DockerImage.new('jekyll-plantuml', nil, '1.2.3')
         end.to raise_error(ArgumentError, 'tag is nil')
       end
     end
@@ -38,7 +40,7 @@ describe Jekyll::PlantUml::DockerImage do
     context 'version is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', nil)
+          DockerImage.new('jekyll-plantuml', 'latest', nil)
         end.to raise_error(ArgumentError, 'version is nil')
       end
     end

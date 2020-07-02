@@ -7,13 +7,19 @@ require 'jekyll_environment'
 require 'helpers/spec_jekyll_commander'
 require 'helpers/spec_logger'
 
-describe Jekyll::PlantUml::Commander do
+Commander = Jekyll::PlantUml::Commander
+DockerImage = Jekyll::PlantUml::DockerImage
+JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+SpecLogger = Jekyll::PlantUml::Specs::Helpers::SpecLogger
+SpecJekyllCommander = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
+
+describe Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')
-    Jekyll::PlantUml::Commander.new(
-      Jekyll::PlantUml::JekyllEnvironment.new('development', data_dir, data_dir),
-      Jekyll::PlantUml::DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
+    Commander.new(
+      JekyllEnvironment.new('development', data_dir, data_dir, :level),
+      DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end
 
@@ -34,7 +40,7 @@ describe Jekyll::PlantUml::Commander do
 
     context 'build' do
       # TODO: This should probably be reset before(:each) somehow.
-      let!(:logger) { Jekyll.logger = Jekyll::PlantUml::Specs::Helpers::SpecLogger.new(:info) }
+      let!(:logger) { Jekyll.logger = SpecLogger.new(:info) }
 
       it {
         commander.execute(['build'])
@@ -42,8 +48,8 @@ describe Jekyll::PlantUml::Commander do
       }
 
       it do
-        jekyll_commander_class = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
-        jekyll_commander = jekyll_commander_class.new('xyz')
+        jekyll_commander_class = SpecJekyllCommander
+        jekyll_commander = jekyll_commander_class.new('xyz', :info)
         allow(jekyll_commander_class).to receive(:new).and_return(jekyll_commander)
         expect(jekyll_commander).to receive(:execute).with('build')
         commander.commands[:build] = jekyll_commander_class

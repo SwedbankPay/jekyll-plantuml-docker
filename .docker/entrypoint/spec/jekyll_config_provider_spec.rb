@@ -5,7 +5,10 @@ require 'securerandom'
 require 'jekyll_config_provider'
 require 'errors/file_not_found_error'
 
-describe Jekyll::PlantUml::JekyllConfigProvider do
+JekyllEnvironment = Jekyll::PlantUml::JekyllEnvironment
+JekyllConfigProvider = Jekyll::PlantUml::JekyllConfigProvider
+
+describe JekyllConfigProvider do
   describe '#provide' do
     data_dir = File.join(__dir__, 'data')
     spec_config = File.join(data_dir, '_config.yml')
@@ -14,13 +17,16 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     context 'existing _config.yml' do
       it 'nil should raise' do
         expect do
-          Jekyll::PlantUml::JekyllConfigProvider.new(data_dir).provide(nil)
+          jekyll_env = JekyllEnvironment.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :info)
+          jekyll_config_provider.provide(nil)
         end.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
 
       context 'build returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          jekyll_env = JekyllEnvironment.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :error)
           @jekyll_config = jekyll_config_provider.provide('build')
         end
 
@@ -63,7 +69,8 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
 
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(dir)
+          jekyll_env = JekyllEnvironment.new('development', __dir__, dir)
+          jekyll_config_provider = JekyllConfigProvider.new(jekyll_env, :error)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 

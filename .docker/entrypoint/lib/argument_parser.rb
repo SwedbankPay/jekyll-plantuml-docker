@@ -21,18 +21,19 @@ Runs the #{docker_image.name} container's entrypoint.
 Usage:
   #{docker_image.fqn} [-h | --help]
   #{docker_image.fqn} [--version]
-  #{docker_image.fqn} build [--verify] [--ignore-url=url ...]
-  #{docker_image.fqn} serve [--verify] [--ignore-url=url ...]
-  #{docker_image.fqn} deploy [--dry-run] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} build [--log-level=level] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} serve [--log-level=level] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} deploy [--log-level=level] [--dry-run] [--verify] [--ignore-url=url ...]
 
 Options:
-  -h --help         Print this screen.
-  --version         Print the version of #{docker_image.name}.
-  --dry-run         On a dry-run, the the deploy command will not push the
-                    changes to the remote `origin`.
-  --verify          Verifies the built output before deploying. Can be used in
-                    combination with --dry-run in tests and for local debugging.
-  --ignore-url=url  Ignores the specified URL when doing --verify.
+  -h --help           Print this screen.
+  --version           Print the version of #{docker_image.name}.
+  --dry-run           On a dry-run, the the deploy command will not push the
+                      changes to the remote `origin`.
+  --log-level=level   The level that should be visible in log output. Default 'info'.
+  --verify            Verifies the built output before deploying. Can be used in
+                      combination with --dry-run in tests and for local debugging.
+  --ignore-url=url    Ignores the specified URL when doing --verify.
 
 Commands:
   deploy        Builds the website with `jekyll build` and then deploys

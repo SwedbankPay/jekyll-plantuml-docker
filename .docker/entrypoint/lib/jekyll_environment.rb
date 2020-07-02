@@ -12,16 +12,17 @@ module Jekyll
       attr_reader :env
       attr_reader :var_dir
       attr_reader :data_dir
+      attr_reader :debug
 
-      def initialize(env, var_dir, data_dir)
+      def initialize(env, var_dir, data_dir, debug = false)
         raise ArgumentError, 'env is nil' if env.nil?
+        raise ArgumentError, 'data_dir is nil' if data_dir.nil?
         raise ArgumentError, 'var_dir is nil' if var_dir.nil?
-
-        data_dir.must_be_a_directory!
 
         @env = env
         @var_dir = var_dir
         @data_dir = data_dir
+        @debug = debug
       end
     end
   end

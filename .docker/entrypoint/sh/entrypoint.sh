@@ -1,7 +1,10 @@
 #!/bin/bash
 set -o errexit # Immediately abort if any command fails
 
-[ "${DEBUG:-false}" = "true" ] && set -x
+if [ "${DEBUG:-false}" = "true" ]; then
+  set -x
+  # export JEKYLL_LOG_LEVEL="debug"
+fi
 
 ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/gemfile_generator_exec.rb"
 

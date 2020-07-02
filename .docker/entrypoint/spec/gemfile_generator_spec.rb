@@ -6,8 +6,12 @@ require 'gemfile_generator'
 require 'errors/file_not_found_error'
 require 'matchers/be_valid_gemfile_matcher'
 
-describe Jekyll::PlantUml::GemfileGenerator do
-  subject(:generator) { Jekyll::PlantUml::GemfileGenerator.new }
+Diff = Diffy::Diff
+GemfileGenerator = Jekyll::PlantUml::GemfileGenerator
+FileNotFoundError = Jekyll::PlantUml::FileNotFoundError
+
+describe GemfileGenerator do
+  subject(:generator) { GemfileGenerator.new }
 
   describe '#generate' do
     let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
@@ -22,7 +26,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
       it 'should raise' do
         expect do
           generator.generate('abc', user_gemfile_path, generated_gemfile_path)
-        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc cannot be found.')
+        end.to raise_error(FileNotFoundError, 'abc cannot be found.')
       end
     end
 
@@ -94,7 +98,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
         generator.generate(user_gemfile_path, user_gemfile_path, generated_gemfile_path)
       end
       subject do
-        Diffy::Diff.new(user_gemfile_path, generated_gemfile_path, source: 'files').to_s
+        Diff.new(user_gemfile_path, generated_gemfile_path, source: 'files').to_s
       end
       it {
         is_expected.to be_empty
@@ -106,7 +110,7 @@ describe Jekyll::PlantUml::GemfileGenerator do
         generator.generate(default_gemfile_path, default_gemfile_path, generated_gemfile_path)
       end
       subject do
-        Diffy::Diff.new(default_gemfile_path, generated_gemfile_path, source: 'files').to_s
+        Diff.new(default_gemfile_path, generated_gemfile_path, source: 'files').to_s
       end
       it {
         is_expected.to be_empty
