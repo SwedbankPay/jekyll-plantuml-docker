@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+require 'securerandom'
 require 'jekyll_config_provider'
 require 'errors/file_not_found_error'
 
@@ -56,10 +58,17 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     end
 
     context 'non-existing _config.yml' do
+      uuid = SecureRandom.urlsafe_base64
+      non_existing_directory = File.join(__dir__, 'data', ".#{uuid}")
+
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new('non_existing_directory')
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(non_existing_directory)
           @jekyll_config = jekyll_config_provider.provide('serve')
+        end
+
+        after(:all) do
+          FileUtils.rm_rf(non_existing_directory) if Dir.exist? non_existing_directory
         end
 
         subject { @jekyll_config }
