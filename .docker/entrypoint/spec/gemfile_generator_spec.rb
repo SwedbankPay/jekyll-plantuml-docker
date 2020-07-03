@@ -6,12 +6,10 @@ require 'gemfile_generator'
 require 'errors/file_not_found_error'
 require 'matchers/be_valid_gemfile_matcher'
 
-# rubocop:disable Style/MixinUsage
-include Diffy
-include Jekyll::PlantUml
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::GemfileGenerator do
+  Diff = Diffy::Diff
+  include Jekyll::PlantUml
 
-describe GemfileGenerator do
   subject(:generator) { GemfileGenerator.new }
 
   describe '#generate' do

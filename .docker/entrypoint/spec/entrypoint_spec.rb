@@ -4,11 +4,9 @@ require 'entrypoint'
 require 'docker_image'
 require 'exec_env'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::Entrypoint do
+  include Jekyll::PlantUml
 
-describe Entrypoint do
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
     Entrypoint.new(

@@ -3,12 +3,10 @@ require_relative '../lib/commands/jekyll_commander'
 
 require 'commands/jekyll_commander'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-include Jekyll::PlantUml::Commands
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::Commands::JekyllCommander do
+  include Jekyll::PlantUml
+  include Jekyll::PlantUml::Commands
 
-describe JekyllCommander do
   describe '#initialize' do
     context 'nil config' do
       it do

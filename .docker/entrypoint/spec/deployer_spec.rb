@@ -5,13 +5,10 @@ require 'commands/deployer'
 require 'helpers/spec_jekyll_build'
 require 'matchers/invoke_matcher'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-include Jekyll::PlantUml::Commands
-include Jekyll::PlantUml::Specs::Helpers
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::Commands::Deployer do
+  Deployer = Jekyll::PlantUml::Commands::Deployer
+  SpecJekyllBuild = Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuild
 
-describe Deployer do
   subject(:deployer) do
     data_dir = File.join(__dir__, 'data')
     Deployer.new(data_dir, data_dir)

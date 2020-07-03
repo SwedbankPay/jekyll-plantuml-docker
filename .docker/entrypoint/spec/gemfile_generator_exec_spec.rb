@@ -6,11 +6,9 @@ require 'gemfile_generator_exec'
 require 'errors/file_not_found_error'
 require 'matchers/be_valid_gemfile_matcher'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::GemfileGeneratorExec do
+  include Jekyll::PlantUml
 
-describe GemfileGeneratorExec do
   let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
   let(:default_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.default') }
   let(:generated_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.generated') }

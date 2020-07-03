@@ -7,12 +7,11 @@ require 'exec_env'
 require 'helpers/spec_jekyll_commander'
 require 'helpers/spec_logger'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-include Jekyll::PlantUml::Specs::Helpers
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::Commander do
+  include Jekyll::PlantUml
+  SpecLogger = Jekyll::PlantUml::Specs::Helpers::SpecLogger
+  SpecJekyllCommander = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
 
-describe Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')

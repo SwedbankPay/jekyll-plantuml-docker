@@ -5,11 +5,9 @@ require 'securerandom'
 require 'jekyll_config_provider'
 require 'errors/file_not_found_error'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-# rubocop:enable Style/MixinUsage
+describe Jekyll::PlantUml::JekyllConfigProvider do
+  include Jekyll::PlantUml
 
-describe JekyllConfigProvider do
   describe '#provide' do
     data_dir = File.join(__dir__, 'data')
     spec_config = File.join(data_dir, '_config.yml')
