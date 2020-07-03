@@ -16,6 +16,7 @@ module Jekyll
       # Jekyll site in order to verify that the HTML is correct.
       class Verifier
         def initialize(jekyll_config, log_level)
+          jekyll_config.must_be_a! :non_empty, Hash
           @jekyll_destination_dir = jekyll_config.value_for('destination')
           @log_level = log_level
           @jekyll_destination_dir.must_be_a_directory!

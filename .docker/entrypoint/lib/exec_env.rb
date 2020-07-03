@@ -15,9 +15,9 @@ module Jekyll
       attr_reader :debug
 
       def initialize(env, var_dir, data_dir, debug = false)
-        raise ArgumentError, 'env is nil' if env.nil?
-        raise ArgumentError, 'data_dir is nil' if data_dir.nil?
-        raise ArgumentError, 'var_dir is nil' if var_dir.nil?
+        env.must_be_a! :non_empty, String
+        var_dir.must_be_a! :non_empty, String
+        data_dir.must_be_a! :non_empty, String
 
         @env = env
         @var_dir = var_dir

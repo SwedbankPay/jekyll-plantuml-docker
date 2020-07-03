@@ -23,7 +23,7 @@ describe Jekyll::PlantUml::DockerImage do
       it do
         expect do
           DockerImage.new(nil, 'latest', '1.2.3')
-        end.to raise_error(ArgumentError, 'name is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
 
@@ -31,7 +31,7 @@ describe Jekyll::PlantUml::DockerImage do
       it do
         expect do
           DockerImage.new('jekyll-plantuml', nil, '1.2.3')
-        end.to raise_error(ArgumentError, 'tag is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
 
@@ -39,7 +39,7 @@ describe Jekyll::PlantUml::DockerImage do
       it do
         expect do
           DockerImage.new('jekyll-plantuml', 'latest', nil)
-        end.to raise_error(ArgumentError, 'version is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
   end

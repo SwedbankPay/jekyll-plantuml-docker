@@ -2,20 +2,20 @@
 
 load 'includes.rb'
 
-describe Jekyll::PlantUml::Commands::Verifier do
+describe Verifier do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new(nil, :error)
-        end.to raise_error(ArgumentError, 'Value cannot be nil')
+          Verifier.new(nil, :error)
+        end.to raise_error(ArgumentError, 'Hash cannot be nil')
       end
     end
 
     context 'empty config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({}, :error)
+          Verifier.new({}, :error)
         end.to raise_error(ArgumentError, 'Hash cannot be empty')
       end
     end
@@ -23,7 +23,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
     context 'non-hash config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new([], :error)
+          Verifier.new([], :error)
         end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
@@ -31,7 +31,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
     context 'missing :destination' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({ a: 'b' }, :error)
+          Verifier.new({ a: 'b' }, :error)
         end.to raise_error(ArgumentError, "No 'destination' key found in the hash")
       end
     end
@@ -39,7 +39,7 @@ describe Jekyll::PlantUml::Commands::Verifier do
     context 'non-existing :destination' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({ 'destination' => 'abc' }, :erro)
+          Verifier.new({ 'destination' => 'abc' }, :erro)
         end.to raise_error(DirectoryNotFoundError, 'abc does not exist')
       end
     end

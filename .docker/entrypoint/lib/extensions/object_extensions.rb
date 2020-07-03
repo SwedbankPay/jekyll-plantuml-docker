@@ -12,9 +12,7 @@ class Object
   def must_be_a_directory!
     raise ArgumentError, 'Value cannot be nil' if nil?
 
-    must_be_a! String
-
-    raise ArgumentError, 'String cannot be empty' if empty?
+    must_be_a! :non_empty, String
 
     dnfe = Jekyll::PlantUml::DirectoryNotFoundError
     raise dnfe, "#{self} does not exist" unless Dir.exist?(self)
@@ -23,9 +21,7 @@ class Object
   def must_be_a_file!
     raise ArgumentError, 'Value cannot be nil' if nil?
 
-    must_be_a! String
-
-    raise ArgumentError, 'String cannot be empty' if empty?
+    must_be_a! :non_empty, String
 
     fnfe = Jekyll::PlantUml::FileNotFoundError
     raise fnfe, "#{self} cannot be found." unless writable_file?
@@ -45,8 +41,33 @@ class Object
     self[key]
   end
 
-  def must_be_a!(type)
-    raise ArgumentError, 'Value cannot be nil' if nil?
+  def must_be_a!(*args)
+    parsed_args = parse_args(*args)
+    type = parsed_args[:type]
+    specifier = parsed_args[:specifier]
+    raise ArgumentError, 'Type cannot be nil' if type.nil?
+    raise ArgumentError, "#{type} cannot be nil" if nil?
     raise ArgumentError, "#{self.class} is not a #{type}" unless is_a? type
+    raise ArgumentError, "#{self.class} cannot be empty" if specifier == :non_empty && empty?
   end
+
+  private
+
+  # rubocop:disable Metrics/MethodLength
+  def parse_args(*args)
+    raise ArgumentError, 'args cannot be nil' if args.nil?
+
+    case args.size
+    when 1
+      type = args[0]
+    when 2
+      specifier = args[0]
+      type = args[1]
+    else
+      raise ArgumentError, '1 to 2 arguments required'
+    end
+
+    { specifier: specifier, type: type }
+  end
+  # rubocop:enable Metrics/MethodLength
 end

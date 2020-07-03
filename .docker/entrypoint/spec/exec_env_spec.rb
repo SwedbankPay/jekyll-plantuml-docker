@@ -23,7 +23,15 @@ describe Jekyll::PlantUml::ExecEnv do
       it do
         expect do
           ExecEnv.new(nil, data_dir, data_dir)
-        end.to raise_error(ArgumentError, 'env is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
+      end
+    end
+
+    context 'env is empty' do
+      it do
+        expect do
+          ExecEnv.new('', data_dir, data_dir)
+        end.to raise_error(ArgumentError, 'String cannot be empty')
       end
     end
 
@@ -31,7 +39,15 @@ describe Jekyll::PlantUml::ExecEnv do
       it do
         expect do
           ExecEnv.new('dev', nil, data_dir)
-        end.to raise_error(ArgumentError, 'var_dir is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
+      end
+    end
+
+    context 'var_dir is empty' do
+      it do
+        expect do
+          ExecEnv.new('dev', '', data_dir)
+        end.to raise_error(ArgumentError, 'String cannot be empty')
       end
     end
 
@@ -39,7 +55,15 @@ describe Jekyll::PlantUml::ExecEnv do
       it do
         expect do
           ExecEnv.new('dev', __dir__, nil)
-        end.to raise_error(ArgumentError, 'data_dir is nil')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
+      end
+    end
+
+    context 'data_dir is empty' do
+      it do
+        expect do
+          ExecEnv.new('dev', __dir__, '')
+        end.to raise_error(ArgumentError, 'String cannot be empty')
       end
     end
   end

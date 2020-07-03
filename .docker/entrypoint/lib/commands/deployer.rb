@@ -16,6 +16,7 @@ module Jekyll
         attr_writer :jekyll_build
 
         def initialize(jekyll_config, jekyll_var_dir)
+          jekyll_config.must_be_a! :non_empty, Hash
           @jekyll_config = jekyll_config
           @deployer_exec = DeployerExec.new(jekyll_var_dir)
         end

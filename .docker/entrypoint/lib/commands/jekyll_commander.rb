@@ -17,8 +17,7 @@ module Jekyll
       # as `build` and `serve` against the correct `Jekyll::Commands::*` class.
       class JekyllCommander
         def initialize(jekyll_config, log_level)
-          jekyll_config.must_be_a! Hash
-          raise ArgumentError, 'jekyll_config cannot be empty' if jekyll_config.empty?
+          jekyll_config.must_be_a! :non_empty, Hash
 
           @jekyll_config = jekyll_config
           @log_level = log_level

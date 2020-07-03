@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require_relative 'includes'
 
-describe Jekyll::PlantUml::JekyllConfigProvider do
+describe JekyllConfigProvider do
   describe '#provide' do
     data_dir = File.join(__dir__, 'data')
     spec_config = File.join(data_dir, '_config.yml')

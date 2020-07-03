@@ -5,7 +5,7 @@ load 'includes.rb'
 describe Jekyll::PlantUml::Commands::Deployer do
   subject(:deployer) do
     data_dir = File.join(__dir__, 'data')
-    Deployer.new(data_dir, data_dir)
+    Deployer.new({ a:'b' }, data_dir)
   end
 
   describe '#deploy' do

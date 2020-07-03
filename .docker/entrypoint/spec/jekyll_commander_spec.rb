@@ -9,7 +9,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       it do
         expect do
           JekyllCommander.new(nil, :info)
-        end.to raise_error(ArgumentError, 'Value cannot be nil')
+        end.to raise_error(ArgumentError, 'Hash cannot be nil')
       end
     end
 
@@ -17,7 +17,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
       it do
         expect do
           JekyllCommander.new({}, :info)
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be empty')
+        end.to raise_error(ArgumentError, 'Hash cannot be empty')
       end
     end
 
