@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 require_relative '../lib/commands/jekyll_commander'
 
-require 'commands/jekyll_commander'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::Commands::JekyllCommander do
-  include Jekyll::PlantUml
-  include Jekyll::PlantUml::Commands
-
   describe '#initialize' do
     context 'nil config' do
       it do

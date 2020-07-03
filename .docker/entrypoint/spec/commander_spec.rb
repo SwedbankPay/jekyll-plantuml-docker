@@ -1,17 +1,8 @@
 # frozen_string_literal: true
 
-require 'commander'
-require 'jekyll'
-require 'docker_image'
-require 'exec_env'
-require 'helpers/spec_jekyll_commander'
-require 'helpers/spec_logger'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::Commander do
-  include Jekyll::PlantUml
-  SpecLogger = Jekyll::PlantUml::Specs::Helpers::SpecLogger
-  SpecJekyllCommander = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
-
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')

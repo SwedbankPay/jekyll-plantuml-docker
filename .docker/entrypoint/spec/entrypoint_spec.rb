@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-require 'entrypoint'
-require 'docker_image'
-require 'exec_env'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::Entrypoint do
-  include Jekyll::PlantUml
-
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
     Entrypoint.new(

@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require 'docker_image'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::DockerImage do
-  include Jekyll::PlantUml
-
   subject(:docker_image) { DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
   subject { docker_image }
 

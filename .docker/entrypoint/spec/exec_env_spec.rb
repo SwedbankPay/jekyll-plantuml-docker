@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
-require 'exec_env'
-require 'errors/directory_not_found_error'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::ExecEnv do
-  include Jekyll::PlantUml
-
   describe '#initialize' do
     let(:data_dir) { File.join(__dir__, 'data') }
     subject { ExecEnv.new('dev', data_dir, data_dir) }

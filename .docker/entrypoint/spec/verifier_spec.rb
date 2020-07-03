@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
-require 'exec_env'
-require 'jekyll_config_provider'
-require 'commands/verifier'
-require 'commands/jekyll_commander'
-require 'errors/directory_not_found_error'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::Commands::Verifier do
-  include Jekyll::PlantUml
-  Verifier = Jekyll::PlantUml::Commands::Verifier
-  JekyllCommander = Jekyll::PlantUml::Commands::JekyllCommander
-
   describe '#initialize' do
     context 'nil config' do
       it do

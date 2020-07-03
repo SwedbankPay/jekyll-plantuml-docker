@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
-require 'bundler'
-require 'gemfile_differ'
-require 'errors/file_not_found_error'
+load 'includes.rb'
 
-# rubocop:disable Style/MixinUsage
-include Jekyll::PlantUml
-# rubocop:enable Style/MixinUsage
-
-describe GemfileDiffer do
+describe Jekyll::PlantUml::GemfileDiffer do
   subject(:differ) { GemfileDiffer.new }
 
   describe '#diff' do

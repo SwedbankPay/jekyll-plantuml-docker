@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-require 'fileutils'
-require 'securerandom'
-require 'jekyll_config_provider'
-require 'errors/file_not_found_error'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::JekyllConfigProvider do
-  include Jekyll::PlantUml
-
   describe '#provide' do
     data_dir = File.join(__dir__, 'data')
     spec_config = File.join(data_dir, '_config.yml')

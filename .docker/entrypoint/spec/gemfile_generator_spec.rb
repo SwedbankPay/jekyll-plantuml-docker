@@ -1,15 +1,8 @@
 # frozen_string_literal: true
 
-require 'diffy'
-require 'bundler'
-require 'gemfile_generator'
-require 'errors/file_not_found_error'
-require 'matchers/be_valid_gemfile_matcher'
+load 'includes.rb'
 
 describe Jekyll::PlantUml::GemfileGenerator do
-  Diff = Diffy::Diff
-  include Jekyll::PlantUml
-
   subject(:generator) { GemfileGenerator.new }
 
   describe '#generate' do
