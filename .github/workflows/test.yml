@@ -157,11 +157,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Upload lib output artifact
+      - name: Upload spec output artifact
         uses: actions/upload-artifact@v2
         with:
-          name: lib
-          path: ${{ env.working-directory}}/lib/
+          name: spec
+          path: ${{ env.working-directory}}/spec/*
 
       - uses: ruby/setup-ruby@v1
         with:
