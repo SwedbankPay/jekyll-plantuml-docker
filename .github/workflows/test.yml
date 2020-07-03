@@ -157,6 +157,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Upload lib output artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: lib
+          path: ${{ env.working-directory}}/lib/*
+
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
