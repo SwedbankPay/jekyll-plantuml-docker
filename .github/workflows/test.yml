@@ -161,11 +161,11 @@ jobs:
         with:
           ruby-version: 2.7
 
-      - uses: actions/cache@v2
-        with:
-          path: ${{ env.working-directory }}/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: ${{ env.working-directory }}/vendor/bundle
+      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: ${{ runner.os }}-gems-
 
       - name: Bundle Install
         run: bundle install
