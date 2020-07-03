@@ -10,8 +10,6 @@ class Object
   end
 
   def must_be_a_directory!
-    raise ArgumentError, 'Value cannot be nil' if nil?
-
     must_be_a! :non_empty, String
 
     dnfe = Jekyll::PlantUml::DirectoryNotFoundError
@@ -19,8 +17,6 @@ class Object
   end
 
   def must_be_a_file!
-    raise ArgumentError, 'Value cannot be nil' if nil?
-
     must_be_a! :non_empty, String
 
     fnfe = Jekyll::PlantUml::FileNotFoundError

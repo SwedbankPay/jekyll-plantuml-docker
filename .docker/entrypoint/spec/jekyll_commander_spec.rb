@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-require_relative '../lib/commands/jekyll_commander'
 
 load 'includes.rb'
 
-describe Jekyll::PlantUml::Commands::JekyllCommander do
+describe JekyllBuilder do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
-          JekyllCommander.new(nil, :info)
+          JekyllBuilder.new(nil, :info)
         end.to raise_error(ArgumentError, 'Hash cannot be nil')
       end
     end
@@ -16,7 +15,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
     context 'empty config' do
       it do
         expect do
-          JekyllCommander.new({}, :info)
+          JekyllBuilder.new({}, :info)
         end.to raise_error(ArgumentError, 'Hash cannot be empty')
       end
     end
@@ -24,7 +23,7 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
     context 'non-hash config' do
       it do
         expect do
-          JekyllCommander.new([], :info)
+          JekyllBuilder.new([], :info)
         end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
@@ -37,10 +36,10 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
 
       before(:all) do
         exec_env = ExecEnv.new('development', __dir__, data_dir)
-        jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
+        jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
         jekyll_config = jekyll_config_provider.provide('build')
-        jekyll_commander = JekyllCommander.new(jekyll_config, :info)
-        jekyll_commander.execute('build')
+        jekyll_builder = JekyllBuilder.new(jekyll_config, :error)
+        jekyll_builder.execute
       end
 
       subject do
@@ -78,39 +77,6 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
         #   is_expected.to include('https://swedbankpay.github.io/jekyll-plantuml-docker/')
         # }
       end
-    end
-  end
-
-  describe '#execute :serve' do
-    describe 'weird file' do
-      data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-
-      before(:all) do
-        @thread = Thread.new do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
-          jekyll_config = jekyll_config_provider.provide('serve')
-          jekyll_commander = JekyllCommander.new(jekyll_config, :info)
-          jekyll_commander.execute('serve')
-        end
-        @thread.abort_on_exception = true
-
-        JekyllServe.mutex.synchronize do
-          JekyllServe.run_cond.wait(JekyllServe.mutex) unless JekyllServe.running?
-        end
-      end
-      
-      after(:each) do
-        JekyllServe.shutdown
-  
-        JekyllServe.mutex.synchronize do
-          JekyllServe.run_cond.wait(JekyllServe.mutex) if JekyllServe.running?
-        end
-      end
-
-      it {
-        expect(File).not_to exist(File.join(__dir__, '..', '0.0.0.0'))
-      }
     end
   end
 end

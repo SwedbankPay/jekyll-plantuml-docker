@@ -90,6 +90,17 @@ describe Jekyll::PlantUml::ArgumentParser do
         is_expected.to include('--log-level' => 'error')
       }
     end
+
+    context '--dry-run' do
+      subject do
+        args = ['deploy', '--dry-run']
+        argument_parser.parse(args)
+      end
+
+      it {
+        is_expected.to include('--dry-run' => true)
+      }
+    end
   end
 
   describe '#help' do

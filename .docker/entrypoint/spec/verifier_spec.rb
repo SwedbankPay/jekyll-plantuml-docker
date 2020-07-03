@@ -53,8 +53,8 @@ describe Verifier do
       exec_env = ExecEnv.new('development', __dir__, data_dir)
       jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
       jekyll_config = jekyll_config_provider.provide('build')
-      jekyll_commander = JekyllCommander.new(jekyll_config, :error)
-      jekyll_commander.execute('build')
+      jekyll_builder = JekyllBuilder.new(jekyll_config, :error)
+      jekyll_builder.execute
     end
 
     subject { Verifier.new({ 'destination' => site_dir }, :error) }

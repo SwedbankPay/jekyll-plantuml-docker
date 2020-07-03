@@ -12,6 +12,8 @@ module Jekyll
       # The Jekyll::PlantUml::DeployerExec executes the `deploy.sh` script with
       # the provided arguments.
       class DeployerExec
+        attr_writer :logger
+
         def initialize(jekyll_var_dir)
           @jekyll_var_dir = jekyll_var_dir
         end
@@ -20,8 +22,8 @@ module Jekyll
           deploy_script_path = File.join(@jekyll_var_dir, 'deploy.sh')
 
           deploy_cmd = deploy_script_path
-          deploy_cmd << ' --verbose'
           deploy_cmd << ' --dry-run' if dry_run
+          deploy_cmd << ' --verbose'
 
           log(:debug, deploy_cmd)
 

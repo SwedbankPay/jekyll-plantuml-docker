@@ -4,23 +4,21 @@ module Jekyll
   module PlantUml
     module Specs
       module Helpers
+        # SpecLogger is used to capture log statements for testing
         class SpecLogger
-          attr_reader :level
+          attr_accessor :level
+          attr_reader :message
 
-          def initialize(only_log_level = nil)
-            @only_log_level = only_log_level
+          def initialize(*levels)
+            @levels = levels
           end
 
-          attr_writer :level
-
           def public_send(level_of_message, message)
-            return if @only_log_level && @only_log_level != level_of_message
+            return if @levels && !@levels.include?(level_of_message)
 
             @message ||= ''
             @message << message
           end
-
-          attr_reader :message
         end
       end
     end

@@ -14,6 +14,7 @@ module Jekyll
       # branch (default `gh-pages`) and pushes that branch to the remote `origin`.
       class Deployer
         attr_writer :jekyll_build
+        attr_writer :logger
 
         def initialize(jekyll_config, jekyll_var_dir)
           jekyll_config.must_be_a! :non_empty, Hash
@@ -30,6 +31,7 @@ module Jekyll
           log(:info, message)
 
           jekyll_build.process(@jekyll_config)
+          @deployer_exec.logger = @logger unless @logger.nil?
           @deployer_exec.execute(dry_run)
         end
 
