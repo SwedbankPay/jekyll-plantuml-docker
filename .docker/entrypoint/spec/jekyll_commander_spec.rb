@@ -87,27 +87,24 @@ describe Jekyll::PlantUml::Commands::JekyllCommander do
 
       before(:all) do
         @thread = Thread.new do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          exec_env = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
           jekyll_config = jekyll_config_provider.provide('serve')
-          jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
+          jekyll_commander = JekyllCommander.new(jekyll_config, :info)
           jekyll_commander.execute('serve')
         end
         @thread.abort_on_exception = true
 
-        Jekyll::Commands::Serve.mutex.synchronize do
-          unless Jekyll::Commands::Serve.running?
-            Jekyll::Commands::Serve.run_cond.wait(Jekyll::Commands::Serve.mutex)
-          end
+        JekyllServe.mutex.synchronize do
+          JekyllServe.run_cond.wait(JekyllServe.mutex) unless JekyllServe.running?
         end
       end
       
       after(:each) do
-        Jekyll::Commands::Serve.shutdown
+        JekyllServe.shutdown
   
-        Jekyll::Commands::Serve.mutex.synchronize do
-          if Jekyll::Commands::Serve.running?
-            Jekyll::Commands::Serve.run_cond.wait(Jekyll::Commands::Serve.mutex)
-          end
+        JekyllServe.mutex.synchronize do
+          JekyllServe.run_cond.wait(JekyllServe.mutex) if JekyllServe.running?
         end
       end
 

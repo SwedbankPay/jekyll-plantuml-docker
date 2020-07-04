@@ -43,3 +43,4 @@ SpecJekyllBuild ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuild
 SpecJekyllCommander ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
 SpecLogger ||= Jekyll::PlantUml::Specs::Helpers::SpecLogger
 Verifier ||= Jekyll::PlantUml::Commands::Verifier
+JekyllServe ||= Jekyll::Commands::Serve 

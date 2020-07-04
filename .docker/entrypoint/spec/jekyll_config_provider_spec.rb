@@ -45,7 +45,8 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
 
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          exec_env = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(exec_env, :info)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 
