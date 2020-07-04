@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::GemfileDiffer do
+describe GemfileDiffer do
   subject(:differ) { GemfileDiffer.new }
 
   describe '#diff' do

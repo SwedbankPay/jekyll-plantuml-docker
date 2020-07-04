@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::Entrypoint do
+describe Entrypoint do
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
     Entrypoint.new(

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
 describe Verifier do
   describe '#initialize' do

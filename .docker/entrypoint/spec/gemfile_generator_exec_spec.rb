@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::GemfileGeneratorExec do
+describe GemfileGeneratorExec do
   let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
   let(:default_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.default') }
   let(:generated_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.generated') }

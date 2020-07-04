@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::ArgumentParser do
+describe ArgumentParser do
   docker_image = DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
   argument_parser = ArgumentParser.new(docker_image)
 

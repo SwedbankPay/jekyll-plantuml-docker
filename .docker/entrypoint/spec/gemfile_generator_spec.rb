@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::GemfileGenerator do
+describe GemfileGenerator do
   subject(:generator) { GemfileGenerator.new }
 
   describe '#generate' do

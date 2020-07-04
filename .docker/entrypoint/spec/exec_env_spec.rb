@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::ExecEnv do
+describe ExecEnv do
   describe '#initialize' do
     let(:data_dir) { File.join(__dir__, 'data') }
     subject { ExecEnv.new('dev', data_dir, data_dir) }

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-load 'includes.rb'
+require 'includes'
 
-describe Jekyll::PlantUml::Commander do
+describe Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')
