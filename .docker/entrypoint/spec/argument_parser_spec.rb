@@ -31,6 +31,8 @@ describe ArgumentParser do
   end
 
   describe '#parse' do
+    subject { argument_parser.parse(args) }
+
     [['--help'], ['build', '--dry-run'], ['serve', '--dry-run']].each do |args|
       context args.join(' ') do
         it do
@@ -46,60 +48,54 @@ describe ArgumentParser do
     end
 
     context 'build' do
-      subject { argument_parser.parse(['build']) }
+      let(:args) { ['build'] }
 
       it {
-        is_expected.to include('build' => true)
+        is_expected.to have_attributes(
+          {
+            command: 'build',
+            ignore_urls: [],
+            log_level: nil,
+            environment: nil,
+            dry_run?: false,
+            verify?: false
+          }
+        )
       }
 
-      it {
-        is_expected.to include('--dry-run' => false)
-      }
+      context '--ignore-url' do
+        let(:args) { ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net', '--ignore-url="%r{[/.]?page1}"'] }
+  
+        it {
+          is_expected.to have_attributes(ignore_urls:  ['https://example.com', 'https://example.net', %r{[/.]?page1}])
+        }
+      end
+  
+      context '--log-level' do
+        let(:args) { ['build', '--log-level=error'] }
 
-      it {
-        is_expected.to include('--verify' => false)
-      }
+        it {
+          is_expected.to have_attributes(log_level: 'error')
+        }
+      end  
 
-      it {
-        is_expected.to include('--ignore-url' => [])
-      }
+      context '--env' do
+        let(:args) { ['build', '--env=production'] }
 
-      it {
-        is_expected.to include('--log-level' => nil)
-      }
+        it {
+          is_expected.to have_attributes(environment: 'production')
+        }
+      end  
     end
 
-    context '--ignore-url' do
-      subject do
-        args = ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net', '--ignore-url="%r{[/.]?page1}"']
-        argument_parser.parse(args)
+    describe 'deploy' do
+      context '--dry-run' do
+        let(:args) { ['deploy', '--dry-run'] }
+
+        it {
+          is_expected.to have_attributes(dry_run?: true)
+        }
       end
-
-      it {
-        is_expected.to include('--ignore-url' => ['https://example.com', 'https://example.net', %r{[/.]?page1}])
-      }
-    end
-
-    context '--log-level' do
-      subject do
-        args = ['build', '--log-level=error']
-        argument_parser.parse(args)
-      end
-
-      it {
-        is_expected.to include('--log-level' => 'error')
-      }
-    end
-
-    context '--dry-run' do
-      subject do
-        args = ['deploy', '--dry-run']
-        argument_parser.parse(args)
-      end
-
-      it {
-        is_expected.to include('--dry-run' => true)
-      }
     end
   end
 

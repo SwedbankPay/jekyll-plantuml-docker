@@ -32,8 +32,8 @@ module Jekyll
       end
 
       def execute(args = nil)
-        parsed_args = @argument_parser.parse(args)
-        execute_args(parsed_args)
+        arguments = @argument_parser.parse(args)
+        execute_args(arguments)
       rescue Docopt::Exit => e
         log(:info, e.message)
       rescue CommandLineArgumentError => e
@@ -50,59 +50,51 @@ module Jekyll
         )
       end
 
-      def execute_args(args)
-        command = find_command(args)
-        verify = args['--verify']
-        dry_run = args['--dry-run']
-        ignore_urls = args['--ignore-url']
-        log_level = args['--log-level']
+      def execute_args(arguments)
+        log_level = arguments.log_level
         jekyll_config_provider = JekyllConfigProvider.new(@exec_env, log_level)
-        jekyll_config = jekyll_config_provider.provide(command)
-        execute_command(jekyll_config, command, dry_run, verify, log_level)
-        verify(jekyll_config, ignore_urls, log_level) if verify
+        jekyll_config = jekyll_config_provider.provide(arguments.command)
+        execute_command(jekyll_config, arguments)
+        verify(jekyll_config, arguments) if arguments.verify?
       end
 
-      def find_command(args)
-        return 'build' if args['build'] == true
-        return 'serve' if args['serve'] == true
-        return 'deploy' if args['deploy'] == true
-
-        raise CommandLineArgumentError, 'Unkonw command'
-      end
-
-      def execute_command(jekyll_config, command, dry_run, verify, log_level)
-        case command
+      def execute_command(jekyll_config, arguments)
+        case arguments.command
         when 'deploy'
-          deploy(jekyll_config, verify, dry_run)
+          deploy(jekyll_config, arguments)
         when 'build'
-          build(jekyll_config, dry_run, log_level)
+          build(jekyll_config, arguments)
         when 'serve'
-          serve(jekyll_config, dry_run, log_level)
+          serve(jekyll_config, arguments)
         else
           raise CommandLineArgumentError, "Unknown command '#{command}'"
         end
       end
 
-      def verify(jekyll_config, ignore_urls, log_level)
-        verifier = @commands.verifier.new(jekyll_config, log_level)
-        verifier.verify(ignore_urls)
+      def verify(jekyll_config, arguments)
+        verifier = @commands.verifier.new(jekyll_config, arguments.log_level)
+        verifier.verify(arguments.ignore_urls)
       end
 
-      def deploy(jekyll_config, verify, dry_run)
+      def deploy(jekyll_config, arguments)
+        environment = arguments.environment
+        warn_of_development_environment if environment == 'development'
         deployer = @commands.deployer.new(jekyll_config, @exec_env.var_dir)
         deployer.logger = @logger unless @logger.nil?
-        deployer.deploy(dry_run, verify)
+        deployer.deploy(arguments.dry_run?, arguments.verify?)
       end
 
-      def build(jekyll_config, dry_run, log_level)
-        warn_of_dry_run if dry_run
+      def build(jekyll_config, arguments)
+        warn_of_dry_run if arguments.dry_run?
+        log_level = arguments.log_level
         jekyll_builder = @commands.builder.new(jekyll_config, log_level)
         jekyll_builder.logger = @logger unless @logger.nil?
         jekyll_builder.execute
       end
 
-      def serve(jekyll_config, dry_run, log_level)
-        warn_of_dry_run if dry_run
+      def serve(jekyll_config, arguments)
+        warn_of_dry_run if arguments.dry_run?
+        log_level = arguments.log_level
         jekyll_server = @commands.server.new(jekyll_config, log_level)
         jekyll_server.logger = @logger unless @logger.nil?
         jekyll_server.execute
@@ -111,6 +103,12 @@ module Jekyll
       def warn_of_dry_run
         msg = 'Warning: --dry-run has no effect on the `jekyll serve` command.'
         log(:warn, msg)
+      end
+
+      def warn_of_development_environment
+        log(:warn, "Warning: Deploying in 'development' environment means")
+        log(:warn, "jekyll-github-metadata won't affect the generated URLs.")
+        log(:warn, "Use --env='production' to deploy in production mode.")
       end
     end
   end

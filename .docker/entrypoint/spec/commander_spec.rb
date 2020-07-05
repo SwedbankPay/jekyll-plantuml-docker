@@ -59,18 +59,18 @@ describe Commander do
 
     context 'deploy' do
       # TODO: This should probably be reset before(:each) somehow.
-      let!(:logger) { commander.logger = SpecLogger.new(:info, :debug) }
+      let!(:logger) { commander.logger = SpecLogger.new(:info, :debug, :warn) }
 
       it {
         commander.execute(['deploy'])
-        expect(logger.message).to match(/Deploying/)
+        expect(logger.message).to include('Deploying')
       }
 
       context '--dry-run' do
         it {
           commander.execute(['deploy', '--dry-run'])
-          expect(logger.message).to match(/Deploying, dry-run/)
-          expect(logger.message).to match(/deploy.sh --dry-run/)
+          expect(logger.message).to include('Deploying, dry-run')
+          expect(logger.message).to include('deploy.sh --dry-run')
         }
       end
 
@@ -78,7 +78,7 @@ describe Commander do
         it {
           commander.commands.verifier = SpecVerifier
           commander.execute(['deploy', '--verify'])
-          expect(logger.message).to match(/Deploying, verified/)
+          expect(logger.message).to include('Deploying, verified')
         }
       end
 
@@ -86,8 +86,15 @@ describe Commander do
         it {
           commander.commands.verifier = SpecVerifier
           commander.execute(['deploy', '--dry-run', '--verify'])
-          expect(logger.message).to match(/Deploying, dry-run, verified/)
-          expect(logger.message).to match(/deploy.sh --dry-run/)
+          expect(logger.message).to include('Deploying, dry-run, verified')
+          expect(logger.message).to include('deploy.sh --dry-run')
+        }
+      end
+
+      context '--env=development' do
+        it {
+          commander.execute(['deploy', '--dry-run', '--env=development'])
+          expect(logger.message).to include("Warning: Deploying in 'development' environment")
         }
       end
     end

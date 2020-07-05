@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'docopt'
+require_relative 'arguments'
 require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -51,7 +52,8 @@ DOCOPT
       def parse(args = nil)
         params = { version: @docker_image_version }
         params[:argv] = args if args
-        Docopt.docopt(@doc, params)
+        args = Docopt.docopt(@doc, params)
+        Arguments.new(args)
       end
 
       def help
