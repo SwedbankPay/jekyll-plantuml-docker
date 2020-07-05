@@ -2,14 +2,14 @@
 
 require 'jekyll'
 require_relative 'argument_parser'
-require_relative 'command_line_argument_error'
+require_relative 'jekyll_config_provider'
 require_relative 'commands/deployer'
 require_relative 'commands/verifier'
 require_relative 'commands/jekyll_builder'
 require_relative 'commands/jekyll_server'
 require_relative 'commands/default_commands'
 require_relative 'extensions/object_extensions'
-require_relative 'jekyll_config_provider'
+require_relative 'errors/command_line_argument_error'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
