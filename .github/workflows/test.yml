@@ -157,21 +157,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Upload spec output artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: spec
-          path: ${{ env.working-directory}}/spec/*
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
 
-      # - uses: actions/cache@v2
-      #   with:
-      #     path: ${{ env.working-directory }}/vendor/bundle
-      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-      #     restore-keys: ${{ runner.os }}-gems-
+      - uses: actions/cache@v2
+        with:
+          path: ${{ env.working-directory }}/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
 
       - name: Bundle Install
         run: bundle install
@@ -221,9 +215,14 @@ jobs:
             "${IMAGE_FQN}" \
             build \
             --verify \
+            --env=production \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org \
-            --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}'
+            --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}' \
+            --ignore-url '%r{/jekyll-plantuml-docker/.*}'
+
+      - name: Verify base URL
+        run: grep 'https://swedbankpay.github.io/jekyll-plantuml-docker/' $(pwd)/tests/full/_site/index.html
 
       - name: Upload build output artifacts
         uses: actions/upload-artifact@v2
