@@ -95,19 +95,22 @@ module Jekyll
       end
 
       def build(jekyll_config, dry_run, log_level)
-        log(:warn, 'Warning: --dry-run has no effect on the `jekyll build` command.') if dry_run
-
+        warn_of_dry_run if dry_run
         jekyll_builder = @commands.builder.new(jekyll_config, log_level)
         jekyll_builder.logger = @logger unless @logger.nil?
         jekyll_builder.execute
       end
 
       def serve(jekyll_config, dry_run, log_level)
-        log(:warn, 'Warning: --dry-run has no effect on the `jekyll serve` command.') if dry_run
-
+        warn_of_dry_run if dry_run
         jekyll_server = @commands.server.new(jekyll_config, log_level)
         jekyll_server.logger = @logger unless @logger.nil?
         jekyll_server.execute
+      end
+
+      def warn_of_dry_run
+        msg = 'Warning: --dry-run has no effect on the `jekyll serve` command.'
+        log(:warn, msg)
       end
     end
   end

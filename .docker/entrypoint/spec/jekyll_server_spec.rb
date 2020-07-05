@@ -44,7 +44,8 @@ describe JekyllServer do
         @thread.abort_on_exception = true
 
         JekyllServe.mutex.synchronize do
-          JekyllServe.run_cond.wait(JekyllServe.mutex) unless JekyllServe.running?
+          running = JekyllServe.running?
+          JekyllServe.run_cond.wait(JekyllServe.mutex) unless running
         end
       end
       
@@ -52,7 +53,8 @@ describe JekyllServer do
         JekyllServe.shutdown
   
         JekyllServe.mutex.synchronize do
-          JekyllServe.run_cond.wait(JekyllServe.mutex) if JekyllServe.running?
+          running = JekyllServe.running?
+          JekyllServe.run_cond.wait(JekyllServe.mutex) if running
         end
       end
 

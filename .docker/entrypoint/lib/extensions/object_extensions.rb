@@ -44,10 +44,15 @@ class Object
     raise ArgumentError, 'Type cannot be nil' if type.nil?
     raise ArgumentError, "#{type} cannot be nil" if nil?
     raise ArgumentError, "#{self.class} is not a #{type}" unless is_a? type
-    raise ArgumentError, "#{self.class} cannot be empty" if specifier == :non_empty && empty?
+
+    cannot_be_empty(self.class) if specifier == :non_empty && empty?
   end
 
   private
+
+  def cannot_be_empty(_klass)
+    raise ArgumentError, "#{self.class} cannot be empty"
+  end
 
   # rubocop:disable Metrics/MethodLength
   def parse_args(*args)
