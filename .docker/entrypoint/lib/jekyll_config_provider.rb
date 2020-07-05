@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -10,44 +11,20 @@ module Jekyll
     # configuration by probing for `_config.yml` files and setting configuration
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
-      def initialize(jekyll_data_dir)
-        @jekyll_data_dir = jekyll_data_dir
+      def initialize(exec_env, log_level)
+        exec_env.must_be_a! ExecEnv
+
+        @verbose = exec_env.debug || log_level == :debug
+        @jekyll_data_dir = exec_env.data_dir
       end
 
       def provide(jekyll_command)
         config_file_path = config_file_path()
-        jekyll_config = config(jekyll_command, config_file_path)
-
-        begin
-          jekyll_config = configure_pages_html_url(jekyll_config)
-        rescue StandardError => e
-          unable_to_retrieve_github_metadata(e)
-        end
-
-        jekyll_config
+        config = config(jekyll_command, config_file_path)
+        config
       end
 
       private
-
-      def configure_pages_html_url(jekyll_config)
-        pages_html_url = provide_pages_html_url(jekyll_config)
-
-        if pages_html_url.nil? || pages_html_url.empty?
-          log(:info, 'No GitHub Pages URL found.')
-        else
-          log(:info, "Setting site.url to <#{pages_html_url}>.")
-          jekyll_config = jekyll_config.merge({ 'url' => pages_html_url })
-        end
-
-        jekyll_config
-      end
-
-      def unable_to_retrieve_github_metadata(error)
-        log(:error, 'Unable to retrieve GitHub metadata. URLs may be wrong in the resulting HTML.')
-        log(:error, 'Defining the JEKYLL_GITHUB_TOKEN environment variable may help.')
-        log(:error, 'See the following issue for details: https://github.com/github/pages-gem/issues/399')
-        log(:error, error)
-      end
 
       def log(severity, message)
         (@logger ||= Jekyll.logger).public_send(
@@ -74,6 +51,8 @@ module Jekyll
 
         jekyll_config = Jekyll.configuration(default_config(config_file_path))
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
+        jekyll_config['verbose'] = true if @verbose
+
         jekyll_config
       end
 
@@ -95,16 +74,6 @@ module Jekyll
           'force_polling' => true,
           'watch' => true
         }
-      end
-
-      # Given the provided jekyll_config, finds the URL that the GitHub Pages
-      # HTML is published on.
-      def provide_pages_html_url(jekyll_config)
-        ghm = Jekyll::GitHubMetadata
-        ghm.site = Jekyll::Site.new(jekyll_config)
-        gh_client = Jekyll::GitHubMetadata::Client.new
-        pages = gh_client.pages(ghm.repository.nwo)
-        pages.html_url
       end
     end
   end

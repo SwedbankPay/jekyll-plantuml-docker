@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'file_not_found_error'
-require 'jekyll_config_provider'
+require_relative 'includes'
 
-describe Jekyll::PlantUml::JekyllConfigProvider do
+describe JekyllConfigProvider do
   describe '#provide' do
     data_dir = File.join(__dir__, 'data')
     spec_config = File.join(data_dir, '_config.yml')
@@ -12,13 +11,16 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     context 'existing _config.yml' do
       it 'nil should raise' do
         expect do
-          Jekyll::PlantUml::JekyllConfigProvider.new(data_dir).provide(nil)
+          exec_env = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
+          jekyll_config_provider.provide(nil)
         end.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
 
       context 'build returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          exec_env = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
           @jekyll_config = jekyll_config_provider.provide('build')
         end
 
@@ -43,7 +45,8 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
 
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+          exec_env = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 
@@ -56,10 +59,18 @@ describe Jekyll::PlantUml::JekyllConfigProvider do
     end
 
     context 'non-existing _config.yml' do
+      rnd = SecureRandom.urlsafe_base64
+      dir = File.join(__dir__, 'data', ".#{rnd}")
+
       context 'serve returns config' do
         before(:all) do
-          jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new('non_existing_directory')
+          exec_env = ExecEnv.new('development', __dir__, dir)
+          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
           @jekyll_config = jekyll_config_provider.provide('serve')
+        end
+
+        after(:all) do
+          FileUtils.rm_rf(dir) if Dir.exist? dir
         end
 
         subject { @jekyll_config }

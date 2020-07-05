@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'docker_image'
+require 'includes'
 
-describe Jekyll::PlantUml::DockerImage do
-  subject(:docker_image) { Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
+describe DockerImage do
+  subject(:docker_image) { DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
   subject { docker_image }
 
   describe '#initialize' do
@@ -22,24 +22,24 @@ describe Jekyll::PlantUml::DockerImage do
     context 'name is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new(nil, 'latest', '1.2.3')
-        end.to raise_error(ArgumentError, 'name is nil')
+          DockerImage.new(nil, 'latest', '1.2.3')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
 
     context 'tag is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', nil, '1.2.3')
-        end.to raise_error(ArgumentError, 'tag is nil')
+          DockerImage.new('jekyll-plantuml', nil, '1.2.3')
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
 
     context 'version is nil' do
       it do
         expect do
-          Jekyll::PlantUml::DockerImage.new('jekyll-plantuml', 'latest', nil)
-        end.to raise_error(ArgumentError, 'version is nil')
+          DockerImage.new('jekyll-plantuml', 'latest', nil)
+        end.to raise_error(ArgumentError, 'String cannot be nil')
       end
     end
   end

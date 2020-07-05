@@ -2,4 +2,5 @@ plugins:
   - jemoji
   - jekyll-material-icon-tag
   - jekyll-remote-theme
+  - jekyll-github-metadata
   - kramdown-plantuml

@@ -6,3 +6,4 @@ _site/
 .pid
 vendor/
 *.generated*
+coverage/

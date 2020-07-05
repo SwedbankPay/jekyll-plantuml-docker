@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'bundler'
-require_relative 'file_not_found_error'
+require_relative 'errors/file_not_found_error'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -14,7 +15,7 @@ module Jekyll
       end
 
       def diff(default_gemfile_path, user_gemfile_path)
-        raise FileNotFoundError, "#{default_gemfile_path} cannot be found." unless path_valid?(default_gemfile_path)
+        default_gemfile_path.must_be_a_file!
 
         puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
         user_dependencies = load_dependencies(user_gemfile_path)
@@ -39,7 +40,7 @@ module Jekyll
       end
 
       def build_definition(path)
-        return nil unless path_valid?(path)
+        return nil unless path.writable_file?
 
         begin
           return Bundler::Definition.build(path, nil, {})
@@ -48,14 +49,6 @@ module Jekyll
         end
 
         nil
-      end
-
-      def path_valid?(path)
-        return true if File.writable? path
-
-        puts "#{path} not found." if @debug
-
-        false
       end
 
       def do_diff(default_dependencies, user_dependencies)

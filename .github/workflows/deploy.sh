@@ -105,7 +105,8 @@ main() {
             --env JEKYLL_GITHUB_TOKEN=$github_access_token
             --env PAGES_REPO_NWO=$repository_name
             \"$docker_image_fqn\" \
-            deploy $dry_run"
+            deploy $dry_run
+            --env=production"
 
     [ $verbose ] && echo "$docker_run_command"
 

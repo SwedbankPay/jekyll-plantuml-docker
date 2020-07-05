@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'docopt'
+require_relative 'arguments'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -10,21 +12,32 @@ module Jekyll
     # and exposes its help and usage command line screens.
     class ArgumentParser
       def initialize(docker_image)
+        docker_image.must_be_a! DockerImage
+
         @docker_image_version = docker_image.version
         # rubocop:disable Layout/HeredocIndentation,Layout/ClosingHeredocIndentation
         @doc = <<~DOCOPT
 Runs the #{docker_image.name} container's entrypoint.
 
 Usage:
-  #{docker_image.fqn} [-h | --help] [--version] <command> [--dry-run] [--verify]
+  #{docker_image.fqn} [-h | --help]
+  #{docker_image.fqn} [--version]
+  #{docker_image.fqn} build [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} serve [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...]
+  #{docker_image.fqn} deploy [--env=env] [--log-level=level] [--dry-run] [--verify] [--ignore-url=url ...]
 
 Options:
-  -h --help     Print this screen.
-  --version     Print the version of #{docker_image.name}.
-  --dry-run     On a dry-run, the the deploy command will not push the changes
-                to the remote `origin`.
-  --verify      Verifies the built output before deploying. Can be used in
-                combination with --dry-run in tests and for local debugging.
+  -h --help           Print this screen.
+  --version           Print the version of #{docker_image.name}.
+  --env=env           Set the environment Jekyll should build for. Should be set
+                      to 'production' when the command is 'deploy'. Will default
+                      to 'development' if not set.
+  --log-level=level   The level that should be visible in log output. Default 'info'.
+  --dry-run           On a dry-run, the the deploy command will not push the
+                      changes to the remote `origin`.
+  --verify            Verifies the built output before deploying. Can be used in
+                      combination with --dry-run in tests and for local debugging.
+  --ignore-url=url    Ignores the specified URL when doing --verify.
 
 Commands:
   deploy        Builds the website with `jekyll build` and then deploys
@@ -39,7 +52,8 @@ DOCOPT
       def parse(args = nil)
         params = { version: @docker_image_version }
         params[:argv] = args if args
-        Docopt.docopt(@doc, params)
+        args = Docopt.docopt(@doc, params)
+        Arguments.new(args)
       end
 
       def help

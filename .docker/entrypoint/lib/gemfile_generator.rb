@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'gemfile_differ'
-require_relative 'file_not_found_error'
+require_relative 'errors/file_not_found_error'
 require 'fileutils'
 
 # The Jekyll module contains everything related to Jekyll.

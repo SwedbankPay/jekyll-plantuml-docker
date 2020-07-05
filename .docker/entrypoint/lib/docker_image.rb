@@ -13,9 +13,9 @@ module Jekyll
       attr_reader :fqn
 
       def initialize(name, tag, version)
-        raise ArgumentError, 'name is nil' if name.nil?
-        raise ArgumentError, 'tag is nil' if tag.nil?
-        raise ArgumentError, 'version is nil' if version.nil?
+        name.must_be_a! :non_empty, String
+        tag.must_be_a! :non_empty, String
+        version.must_be_a! :non_empty, String
 
         @name = name
         @tag = tag

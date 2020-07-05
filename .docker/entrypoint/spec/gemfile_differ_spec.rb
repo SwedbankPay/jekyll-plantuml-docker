@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require 'bundler'
-require 'gemfile_differ'
-require 'file_not_found_error'
+require 'includes'
 
-describe Jekyll::PlantUml::GemfileDiffer do
-  subject(:differ) { Jekyll::PlantUml::GemfileDiffer.new }
+describe GemfileDiffer do
+  subject(:differ) { GemfileDiffer.new }
 
   describe '#diff' do
     let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }
@@ -15,7 +13,7 @@ describe Jekyll::PlantUml::GemfileDiffer do
       it 'should raise' do
         expect do
           differ.diff('abc', user_gemfile_path)
-        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc cannot be found.')
+        end.to raise_error(FileNotFoundError, 'abc cannot be found.')
       end
     end
 

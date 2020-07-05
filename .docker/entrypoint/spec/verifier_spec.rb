@@ -1,44 +1,46 @@
 # frozen_string_literal: true
 
-describe Jekyll::PlantUml::Commands::Verifier do
+require 'includes'
+
+describe Verifier do
   describe '#initialize' do
     context 'nil config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new(nil)
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be nil')
+          Verifier.new(nil, :error)
+        end.to raise_error(ArgumentError, 'Hash cannot be nil')
       end
     end
 
     context 'empty config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({})
-        end.to raise_error(ArgumentError, 'jekyll_config cannot be empty')
+          Verifier.new({}, :error)
+        end.to raise_error(ArgumentError, 'Hash cannot be empty')
       end
     end
 
     context 'non-hash config' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new([])
-        end.to raise_error(ArgumentError, 'jekyll_config must be a hash')
+          Verifier.new([], :error)
+        end.to raise_error(ArgumentError, 'Array is not a Hash')
       end
     end
 
     context 'missing :destination' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({ a: 'b' })
-        end.to raise_error(ArgumentError, "No 'destination' key found in the Jekyll config")
+          Verifier.new({ a: 'b' }, :error)
+        end.to raise_error(ArgumentError, "No 'destination' key found in the hash")
       end
     end
 
     context 'non-existing :destination' do
       it do
         expect do
-          Jekyll::PlantUml::Commands::Verifier.new({ 'destination' => 'abc' })
-        end.to raise_error(Jekyll::PlantUml::FileNotFoundError, 'abc does not exist')
+          Verifier.new({ 'destination' => 'abc' }, :erro)
+        end.to raise_error(DirectoryNotFoundError, 'abc does not exist')
       end
     end
   end
@@ -48,13 +50,14 @@ describe Jekyll::PlantUml::Commands::Verifier do
     site_dir = File.join(data_dir, '_site')
 
     before(:all) do
-      jekyll_config_provider = Jekyll::PlantUml::JekyllConfigProvider.new(data_dir)
+      exec_env = ExecEnv.new('development', __dir__, data_dir)
+      jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
       jekyll_config = jekyll_config_provider.provide('build')
-      jekyll_commander = Jekyll::PlantUml::Commands::JekyllCommander.new(jekyll_config)
-      jekyll_commander.execute('build')
+      jekyll_builder = JekyllBuilder.new(jekyll_config, :error)
+      jekyll_builder.execute
     end
 
-    subject { Jekyll::PlantUml::Commands::Verifier.new({ 'destination' => site_dir }) }
+    subject { Verifier.new({ 'destination' => site_dir }, :error) }
 
     it 'ignores urls' do
       ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]

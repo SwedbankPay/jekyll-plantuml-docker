@@ -1,19 +1,14 @@
 # frozen_string_literal: true
 
-require 'commander'
-require 'jekyll'
-require 'docker_image'
-require 'jekyll_environment'
-require 'helpers/spec_jekyll_commander'
-require 'helpers/spec_logger'
+require 'includes'
 
-describe Jekyll::PlantUml::Commander do
+describe Commander do
   let(:version) { '0.0.1-test.0' }
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')
-    Jekyll::PlantUml::Commander.new(
-      Jekyll::PlantUml::JekyllEnvironment.new('development', data_dir, data_dir),
-      Jekyll::PlantUml::DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
+    Commander.new(
+      ExecEnv.new('development', data_dir, data_dir, :level),
+      DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end
 
@@ -34,7 +29,7 @@ describe Jekyll::PlantUml::Commander do
 
     context 'build' do
       # TODO: This should probably be reset before(:each) somehow.
-      let!(:logger) { Jekyll.logger = Jekyll::PlantUml::Specs::Helpers::SpecLogger.new(:info) }
+      let!(:logger) { commander.logger = SpecLogger.new(:info) }
 
       it {
         commander.execute(['build'])
@@ -42,12 +37,65 @@ describe Jekyll::PlantUml::Commander do
       }
 
       it do
-        jekyll_commander_class = Jekyll::PlantUml::Specs::Helpers::SpecJekyllCommander
-        jekyll_commander = jekyll_commander_class.new('xyz')
-        allow(jekyll_commander_class).to receive(:new).and_return(jekyll_commander)
-        expect(jekyll_commander).to receive(:execute).with('build')
-        commander.commands[:build] = jekyll_commander_class
+        jekyll_builder_class = SpecJekyllBuilder
+        jekyll_builder = jekyll_builder_class.new('xyz', :info)
+        allow(jekyll_builder_class).to receive(:new).and_return(jekyll_builder)
+        expect(jekyll_builder).to receive(:execute)
+        commander.commands.builder = jekyll_builder_class
         commander.execute(['build'])
+      end
+
+      context '--verify' do
+        it do
+          verifier_class = SpecVerifier
+          verifier = verifier_class.new('xyz', :info)
+          allow(verifier_class).to receive(:new).and_return(verifier)
+          expect(verifier).to receive(:verify)
+          commander.commands.verifier = verifier_class
+          commander.execute(['build', '--verify'])
+        end
+      end
+    end
+
+    context 'deploy' do
+      # TODO: This should probably be reset before(:each) somehow.
+      let!(:logger) { commander.logger = SpecLogger.new(:info, :debug, :warn) }
+
+      it {
+        commander.execute(['deploy'])
+        expect(logger.message).to include('Deploying')
+      }
+
+      context '--dry-run' do
+        it {
+          commander.execute(['deploy', '--dry-run'])
+          expect(logger.message).to include('Deploying, dry-run')
+          expect(logger.message).to include('deploy.sh --dry-run')
+        }
+      end
+
+      context '--verify' do
+        it {
+          commander.commands.verifier = SpecVerifier
+          commander.execute(['deploy', '--verify'])
+          expect(logger.message).to include('Deploying, verified')
+        }
+      end
+
+      context '--dry-run --verify' do
+        it {
+          commander.commands.verifier = SpecVerifier
+          commander.execute(['deploy', '--dry-run', '--verify'])
+          expect(logger.message).to include('Deploying, dry-run, verified')
+          expect(logger.message).to include('deploy.sh --dry-run')
+        }
+      end
+
+      context '--env=development' do
+        it {
+          commander.execute(['deploy', '--dry-run', '--env=development'])
+          expect(logger.message).to include("Warning: Deploying in 'development' environment")
+        }
       end
     end
   end

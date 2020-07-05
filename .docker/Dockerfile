@@ -3,7 +3,6 @@ FROM ruby:2.7.1
 ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
     JEKYLL_DATA_DIR="/srv/jekyll" \
-    JEKYLL_ENV="development" \
     JEKYLL_VAR_DIR="/var/jekyll" \
     DRAFTS=false \
     FORCE_POLLING=false \

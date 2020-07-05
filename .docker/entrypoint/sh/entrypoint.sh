@@ -1,15 +1,48 @@
-#!/bin/bash
-set -o errexit # Immediately abort if any command fails
+#!/usr/bin/env bash
+set -o errexit # Abort if any command fails
 
-[ "${DEBUG:-false}" = "true" ] && set -x
+parse_args() {
+    if [[ "${DEBUG:-false}" = "true" ]]; then
+        verbose=true
+    else
+        verbose=false
+    fi
 
-ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/gemfile_generator_exec.rb"
+    if [[ "$*" =~ \-\-env[\=\ ]+([^\ ]+) ]]; then
+        env="${BASH_REMATCH[1]}"
+        [ $verbose ] && echo "Detected --env='$env'."
+    fi
+}
 
-default_gemfile="${JEKYLL_DATA_DIR}/Gemfile.generated"
+# echo expanded commands as they are executed (for debugging)
+enable_expanded_output() {
+    if [ $verbose ]; then
+        set -o xtrace
+        set +o verbose
+    fi
+}
 
-bundle check --gemfile="$default_gemfile" \
-  || bundle install --gemfile="$default_gemfile"
+main() {
+    parse_args "$@"
 
-bundle config set gemfile "$default_gemfile"
+    enable_expanded_output
 
-exec bundle exec ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/entrypoint.rb" "$@"
+    ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/gemfile_generator_exec.rb"
+
+    default_gemfile="${JEKYLL_DATA_DIR}/Gemfile.generated"
+
+    bundle check --gemfile="$default_gemfile" \
+      || bundle install --gemfile="$default_gemfile"
+
+    if [[ -n $env ]]; then
+        [ $verbose ] && echo "Exporting JEKYLL_ENV='$env'."
+        export JEKYLL_ENV="$env"
+    fi
+
+    # bundle config set gemfile "$default_gemfile"
+
+    BUNDLE_GEMFILE="$default_gemfile" exec bundle exec ruby "${JEKYLL_VAR_DIR}/entrypoint/lib/entrypoint.rb" "$@"
+}
+
+main "$@"
+
