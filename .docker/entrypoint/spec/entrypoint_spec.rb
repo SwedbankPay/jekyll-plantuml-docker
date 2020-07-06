@@ -6,7 +6,7 @@ describe Entrypoint do
   subject(:entrypoint) do
     data_dir = File.join(__dir__, 'data')
     Entrypoint.new(
-      ExecEnv.new('dev', data_dir, data_dir),
+      Context.new('dev', data_dir, data_dir),
       DockerImage.new('jekyll-plantuml', 'latest', '1.2.3')
     )
   end

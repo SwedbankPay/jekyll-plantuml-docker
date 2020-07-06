@@ -35,7 +35,7 @@ describe JekyllServer do
 
       before(:all) do
         @thread = Thread.new do
-          context = ExecEnv.new('development', __dir__, data_dir)
+          context = Context.new('development', __dir__, data_dir)
           jekyll_config_provider = JekyllConfigProvider.new(context, :info)
           jekyll_config = jekyll_config_provider.provide('serve')
           jekyll_server = JekyllServer.new(jekyll_config, :info)

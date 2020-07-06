@@ -12,7 +12,7 @@ module Jekyll
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
       def initialize(context, log_level)
-        context.must_be_a! ExecEnv
+        context.must_be_a! Context
 
         @verbose = context.debug || log_level == :debug
         @jekyll_data_dir = context.data_dir

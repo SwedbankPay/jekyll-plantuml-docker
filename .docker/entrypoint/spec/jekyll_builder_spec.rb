@@ -35,7 +35,7 @@ describe JekyllBuilder do
       site_dir = File.join(data_dir, '_site')
 
       before(:all) do
-        context = ExecEnv.new('development', __dir__, data_dir)
+        context = Context.new('development', __dir__, data_dir)
         jekyll_config_provider = JekyllConfigProvider.new(context, :error)
         jekyll_config = jekyll_config_provider.provide('build')
         jekyll_builder = JekyllBuilder.new(jekyll_config, :error)

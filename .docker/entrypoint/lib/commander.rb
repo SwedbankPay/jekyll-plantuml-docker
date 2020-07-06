@@ -23,7 +23,7 @@ module Jekyll
       attr_writer :logger
 
       def initialize(context, docker_image)
-        context.must_be_a! ExecEnv
+        context.must_be_a! Context
         docker_image.must_be_a! DockerImage
 
         @context = context
