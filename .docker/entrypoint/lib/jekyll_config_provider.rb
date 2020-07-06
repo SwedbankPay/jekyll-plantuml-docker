@@ -11,11 +11,11 @@ module Jekyll
     # configuration by probing for `_config.yml` files and setting configuration
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
-      def initialize(exec_env, log_level)
-        exec_env.must_be_a! ExecEnv
+      def initialize(context, log_level)
+        context.must_be_a! ExecEnv
 
-        @verbose = exec_env.debug || log_level == :debug
-        @jekyll_data_dir = exec_env.data_dir
+        @verbose = context.debug || log_level == :debug
+        @jekyll_data_dir = context.data_dir
       end
 
       def provide(jekyll_command)

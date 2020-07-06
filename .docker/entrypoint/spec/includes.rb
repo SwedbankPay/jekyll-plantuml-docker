@@ -13,7 +13,7 @@ require 'entrypoint'
 require 'errors/directory_not_found_error'
 require 'errors/file_not_found_error'
 require 'errors/command_line_argument_error'
-require 'exec_env'
+require 'context'
 require 'fileutils'
 require 'gemfile_differ'
 require 'gemfile_generator_exec'
@@ -42,7 +42,7 @@ GemfileGenerator ||= Jekyll::PlantUml::GemfileGenerator
 GemfileGeneratorExec ||= Jekyll::PlantUml::GemfileGeneratorExec
 JekyllBuilder ||= Jekyll::PlantUml::Commands::JekyllBuilder
 JekyllConfigProvider ||= Jekyll::PlantUml::JekyllConfigProvider
-JekyllServe ||= Jekyll::Commands::Serve 
+JekyllServe ||= Jekyll::Commands::Serve
 JekyllServer ||= Jekyll::PlantUml::Commands::JekyllServer
 SpecJekyllBuild ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuild
 SpecJekyllBuilder ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuilder

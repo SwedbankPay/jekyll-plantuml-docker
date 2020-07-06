@@ -22,11 +22,11 @@ module Jekyll
       attr_reader :commands
       attr_writer :logger
 
-      def initialize(exec_env, docker_image)
-        exec_env.must_be_a! ExecEnv
+      def initialize(context, docker_image)
+        context.must_be_a! ExecEnv
         docker_image.must_be_a! DockerImage
 
-        @exec_env = exec_env
+        @context = context
         @argument_parser = ArgumentParser.new(docker_image)
         @commands = Jekyll::PlantUml::Commands::DefaultCommands.new
       end
@@ -52,7 +52,7 @@ module Jekyll
 
       def execute_args(arguments)
         log_level = arguments.log_level
-        jekyll_config_provider = JekyllConfigProvider.new(@exec_env, log_level)
+        jekyll_config_provider = JekyllConfigProvider.new(@context, log_level)
         jekyll_config = jekyll_config_provider.provide(arguments.command)
         execute_command(jekyll_config, arguments)
         verify(jekyll_config, arguments) if arguments.verify?
@@ -79,7 +79,7 @@ module Jekyll
       def deploy(jekyll_config, arguments)
         environment = arguments.environment
         warn_of_development_environment if environment == 'development'
-        deployer = @commands.deployer.new(jekyll_config, @exec_env.var_dir)
+        deployer = @commands.deployer.new(jekyll_config, @context.var_dir)
         deployer.logger = @logger unless @logger.nil?
         deployer.deploy(arguments.dry_run?, arguments.verify?)
       end

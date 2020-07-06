@@ -11,16 +11,16 @@ describe JekyllConfigProvider do
     context 'existing _config.yml' do
       it 'nil should raise' do
         expect do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
+          context = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context, :info)
           jekyll_config_provider.provide(nil)
         end.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
 
       context 'build returns config' do
         before(:all) do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
+          context = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context, :error)
           @jekyll_config = jekyll_config_provider.provide('build')
         end
 
@@ -45,13 +45,13 @@ describe JekyllConfigProvider do
 
       context 'serve returns config' do
         before(:all) do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
+          context = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context, :info)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 
         subject { @jekyll_config }
-        
+
         it {
           is_expected.to include('livereload_port' => 35_729)
         }
@@ -64,8 +64,8 @@ describe JekyllConfigProvider do
 
       context 'serve returns config' do
         before(:all) do
-          exec_env = ExecEnv.new('development', __dir__, dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
+          context = ExecEnv.new('development', __dir__, dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context, :error)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 

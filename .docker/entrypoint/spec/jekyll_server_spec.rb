@@ -35,8 +35,8 @@ describe JekyllServer do
 
       before(:all) do
         @thread = Thread.new do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
+          context = ExecEnv.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context, :info)
           jekyll_config = jekyll_config_provider.provide('serve')
           jekyll_server = JekyllServer.new(jekyll_config, :info)
           jekyll_server.execute
@@ -48,10 +48,10 @@ describe JekyllServer do
           JekyllServe.run_cond.wait(JekyllServe.mutex) unless running
         end
       end
-      
+
       after(:each) do
         JekyllServe.shutdown
-  
+
         JekyllServe.mutex.synchronize do
           running = JekyllServe.running?
           JekyllServe.run_cond.wait(JekyllServe.mutex) if running
