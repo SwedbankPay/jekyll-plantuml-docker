@@ -22,18 +22,18 @@ module Jekyll
       attr_reader :commands
       attr_writer :logger
 
-      def initialize(exec_env, docker_image)
-        exec_env.must_be_a! ExecEnv
+      def initialize(context, docker_image)
+        context.must_be_a! Context
         docker_image.must_be_a! DockerImage
 
-        @exec_env = exec_env
+        @context = context
         @argument_parser = ArgumentParser.new(docker_image)
         @commands = Jekyll::PlantUml::Commands::DefaultCommands.new
       end
 
       def execute(args = nil)
-        arguments = @argument_parser.parse(args)
-        execute_args(arguments)
+        @context.arguments = @argument_parser.parse(args)
+        execute_args
       rescue Docopt::Exit => e
         log(:info, e.message)
       rescue CommandLineArgumentError => e
@@ -50,54 +50,57 @@ module Jekyll
         )
       end
 
-      def execute_args(arguments)
-        log_level = arguments.log_level
-        jekyll_config_provider = JekyllConfigProvider.new(@exec_env, log_level)
-        jekyll_config = jekyll_config_provider.provide(arguments.command)
-        execute_command(jekyll_config, arguments)
-        verify(jekyll_config, arguments) if arguments.verify?
+      def execute_args
+        configure
+        execute_command
+        verify if @context.arguments.verify?
       end
 
-      def execute_command(jekyll_config, arguments)
-        case arguments.command
+      def execute_command
+        case @context.arguments.command
         when 'deploy'
-          deploy(jekyll_config, arguments)
+          deploy
         when 'build'
-          build(jekyll_config, arguments)
+          build
         when 'serve'
-          serve(jekyll_config, arguments)
+          serve
         else
           raise CommandLineArgumentError, "Unknown command '#{command}'"
         end
       end
 
-      def verify(jekyll_config, arguments)
-        verifier = @commands.verifier.new(jekyll_config, arguments.log_level)
-        verifier.verify(arguments.ignore_urls)
+      def verify
+        verifier = @commands.verifier.new(@context)
+        verifier.verify
       end
 
-      def deploy(jekyll_config, arguments)
-        environment = arguments.environment
+      def deploy
+        environment = @context.arguments.environment
         warn_of_development_environment if environment == 'development'
-        deployer = @commands.deployer.new(jekyll_config, @exec_env.var_dir)
+        deployer = @commands.deployer.new(@context)
         deployer.logger = @logger unless @logger.nil?
-        deployer.deploy(arguments.dry_run?, arguments.verify?)
+        deployer.deploy
       end
 
-      def build(jekyll_config, arguments)
-        warn_of_dry_run if arguments.dry_run?
-        log_level = arguments.log_level
-        jekyll_builder = @commands.builder.new(jekyll_config, log_level)
+      def build
+        warn_of_dry_run if @context.arguments.dry_run?
+        jekyll_builder = @commands.builder.new(@context)
         jekyll_builder.logger = @logger unless @logger.nil?
         jekyll_builder.execute
       end
 
-      def serve(jekyll_config, arguments)
-        warn_of_dry_run if arguments.dry_run?
-        log_level = arguments.log_level
-        jekyll_server = @commands.server.new(jekyll_config, log_level)
+      def serve
+        warn_of_dry_run if @context.arguments.dry_run?
+        jekyll_server = @commands.server.new(@context)
         jekyll_server.logger = @logger unless @logger.nil?
         jekyll_server.execute
+      end
+
+      def configure
+        command = @context.arguments.command
+        jekyll_config_provider = JekyllConfigProvider.new(@context)
+        jekyll_config = jekyll_config_provider.provide(command)
+        @context.configuration = jekyll_config
       end
 
       def warn_of_dry_run

@@ -14,15 +14,17 @@ module Jekyll
       class DeployerExec
         attr_writer :logger
 
-        def initialize(jekyll_var_dir)
-          @jekyll_var_dir = jekyll_var_dir
+        def initialize(context)
+          context.must_be_a! Context
+
+          @context = context
         end
 
-        def execute(dry_run)
-          deploy_script_path = File.join(@jekyll_var_dir, 'deploy.sh')
+        def execute
+          deploy_script_path = File.join(@context.var_dir, 'deploy.sh')
 
           deploy_cmd = deploy_script_path
-          deploy_cmd << ' --dry-run' if dry_run
+          deploy_cmd << ' --dry-run' if @context.arguments.dry_run?
           deploy_cmd << ' --verbose'
 
           log(:debug, deploy_cmd)

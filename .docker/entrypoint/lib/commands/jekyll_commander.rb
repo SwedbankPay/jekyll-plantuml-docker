@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll'
+require_relative '../context'
 require_relative '../extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -15,16 +16,16 @@ module Jekyll
       class JekyllCommander
         attr_writer :logger
 
-        def initialize(jekyll_config, log_level)
-          jekyll_config.must_be_a! :non_empty, Hash
+        def initialize(context)
+          context.must_be_a! Context
 
-          @jekyll_config = jekyll_config
-          @log_level = log_level
+          @context = context
         end
 
         def execute
           Jekyll.logger = @logger unless @logger.nil?
-          Jekyll.logger.log_level = @log_level.to_sym unless @log_level.nil?
+          log_level = @context.arguments.log_level
+          Jekyll.logger.log_level = log_level.to_sym unless log_level.nil?
         end
       end
     end

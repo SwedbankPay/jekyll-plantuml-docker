@@ -7,24 +7,16 @@ describe JekyllBuilder do
     context 'nil config' do
       it do
         expect do
-          JekyllBuilder.new(nil, :info)
-        end.to raise_error(ArgumentError, 'Hash cannot be nil')
+          JekyllBuilder.new(nil)
+        end.to raise_error(ArgumentError, "#{Context} cannot be nil")
       end
     end
 
-    context 'empty config' do
+    context 'wrong type' do
       it do
         expect do
-          JekyllBuilder.new({}, :info)
-        end.to raise_error(ArgumentError, 'Hash cannot be empty')
-      end
-    end
-
-    context 'non-hash config' do
-      it do
-        expect do
-          JekyllBuilder.new([], :info)
-        end.to raise_error(ArgumentError, 'Array is not a Hash')
+          JekyllBuilder.new([])
+        end.to raise_error(ArgumentError, "Array is not a #{Context}")
       end
     end
   end
@@ -35,10 +27,10 @@ describe JekyllBuilder do
       site_dir = File.join(data_dir, '_site')
 
       before(:all) do
-        exec_env = ExecEnv.new('development', __dir__, data_dir)
-        jekyll_config_provider = JekyllConfigProvider.new(exec_env, :error)
-        jekyll_config = jekyll_config_provider.provide('build')
-        jekyll_builder = JekyllBuilder.new(jekyll_config, :error)
+        context = Context.new('development', __dir__, data_dir)
+        jekyll_config_provider = JekyllConfigProvider.new(context)
+        context.configuration = jekyll_config_provider.provide('build')
+        jekyll_builder = JekyllBuilder.new(context)
         jekyll_builder.execute
       end
 

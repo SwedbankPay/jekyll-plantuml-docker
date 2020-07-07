@@ -11,11 +11,10 @@ module Jekyll
     # configuration by probing for `_config.yml` files and setting configuration
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
-      def initialize(exec_env, log_level)
-        exec_env.must_be_a! ExecEnv
+      def initialize(context)
+        context.must_be_a! Context
 
-        @verbose = exec_env.debug || log_level == :debug
-        @jekyll_data_dir = exec_env.data_dir
+        @context = context
       end
 
       def provide(jekyll_command)
@@ -34,7 +33,7 @@ module Jekyll
       end
 
       def config_file_path
-        config_file_path = File.join(@jekyll_data_dir, '_config.yml')
+        config_file_path = File.join(@context.data_dir, '_config.yml')
 
         unless File.file?(config_file_path)
           default_config_file_path = File.join(__dir__, '..', '_config.default.yml')
@@ -51,7 +50,7 @@ module Jekyll
 
         jekyll_config = Jekyll.configuration(default_config(config_file_path))
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
-        jekyll_config['verbose'] = true if @verbose
+        jekyll_config['verbose'] = true if @context.verbose?
 
         jekyll_config
       end
@@ -60,8 +59,8 @@ module Jekyll
         {
           'config' => config_file_path,
           'incremental' => true,
-          'source' => @jekyll_data_dir,
-          'destination' => File.join(@jekyll_data_dir, '_site')
+          'source' => @context.data_dir,
+          'destination' => File.join(@context.data_dir, '_site')
         }
       end
 

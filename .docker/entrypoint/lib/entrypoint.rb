@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'commander'
-require_relative 'exec_env'
+require_relative 'context'
 require_relative 'docker_image'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -11,27 +11,27 @@ module Jekyll
     # The Jekyll::PlantUml::Entrypoint class is responsible for bootstrapping
     # the Ruby application exposed through the jekyll-plantuml Docker container.
     class Entrypoint
-      def initialize(exec_env = nil, docker_image = nil)
-        @exec_env = initialize_exec_env(exec_env)
+      def initialize(context = nil, docker_image = nil)
+        @context = initialize_context(context)
         @docker_image = initialize_docker_image(docker_image)
       end
 
       def execute
-        commander = Commander.new(@exec_env, @docker_image)
+        commander = Commander.new(@context, @docker_image)
         commander.execute
       end
 
       private
 
-      def initialize_exec_env(exec_env)
-        return exec_env unless exec_env.nil?
+      def initialize_context(context)
+        return context unless context.nil?
 
         env = ENV.fetch('JEKYLL_ENV', 'production')
         jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR')
         debug = ENV.fetch('DEBUG', false)
 
-        ExecEnv.new(env, jekyll_var_dir, jekyll_data_dir, debug)
+        Context.new(env, jekyll_var_dir, jekyll_data_dir, auth_token, debug)
       end
 
       def initialize_docker_image(docker_image)
@@ -42,6 +42,10 @@ module Jekyll
         docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
 
         DockerImage.new(docker_image_name, docker_image_tag, docker_image_version)
+      end
+
+      def auth_token
+        ENV.fetch('JEKYLL_GITHUB_TOKEN', nil) || ENV.fetch('GITHUB_TOKEN', nil)
       end
     end
   end

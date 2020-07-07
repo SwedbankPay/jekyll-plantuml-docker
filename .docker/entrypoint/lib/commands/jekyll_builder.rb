@@ -15,7 +15,7 @@ module Jekyll
       class JekyllBuilder < JekyllCommander
         def execute
           super
-          Jekyll::Commands::Build.process(@jekyll_config)
+          Jekyll::Commands::Build.process(@context.configuration)
         end
       end
     end

@@ -5,27 +5,15 @@ require 'includes'
 describe JekyllServer do
   describe '#initialize' do
     context 'nil config' do
-      it do
-        expect do
-          JekyllServer.new(nil, :info)
-        end.to raise_error(ArgumentError, 'Hash cannot be nil')
-      end
+      it {
+        expect { JekyllServer.new(nil) }.to raise_error(ArgumentError, "#{Context} cannot be nil")
+      }
     end
 
-    context 'empty config' do
-      it do
-        expect do
-          JekyllServer.new({}, :info)
-        end.to raise_error(ArgumentError, 'Hash cannot be empty')
-      end
-    end
-
-    context 'non-hash config' do
-      it do
-        expect do
-          JekyllServer.new([], :info)
-        end.to raise_error(ArgumentError, 'Array is not a Hash')
-      end
+    context 'wrong type' do
+      it {
+        expect { JekyllServer.new([]) }.to raise_error(ArgumentError, "Array is not a #{Context}")
+      }
     end
   end
 
@@ -35,10 +23,10 @@ describe JekyllServer do
 
       before(:all) do
         @thread = Thread.new do
-          exec_env = ExecEnv.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(exec_env, :info)
-          jekyll_config = jekyll_config_provider.provide('serve')
-          jekyll_server = JekyllServer.new(jekyll_config, :info)
+          context = Context.new('development', __dir__, data_dir)
+          jekyll_config_provider = JekyllConfigProvider.new(context)
+          context.configuration = jekyll_config_provider.provide('serve')
+          jekyll_server = JekyllServer.new(context)
           jekyll_server.execute
         end
         @thread.abort_on_exception = true
@@ -48,10 +36,10 @@ describe JekyllServer do
           JekyllServe.run_cond.wait(JekyllServe.mutex) unless running
         end
       end
-      
+
       after(:each) do
         JekyllServe.shutdown
-  
+
         JekyllServe.mutex.synchronize do
           running = JekyllServe.running?
           JekyllServe.run_cond.wait(JekyllServe.mutex) if running

@@ -7,8 +7,8 @@ module Jekyll
         # A spec implementation of the Jekyll::PlantUml::Commands::JekyllBuilder
         # classes, used for testing.
         class SpecVerifier
-          def initialize(_, _); end
-          def verify(_); end
+          def initialize(_); end
+          def verify; end
         end
       end
     end
