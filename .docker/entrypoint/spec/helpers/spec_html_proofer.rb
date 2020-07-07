@@ -6,11 +6,12 @@ module Jekyll
       module Helpers
         # A spec implementation of the Jekyll::PlantUml::Commands::JekyllBuilder
         # classes, used for testing.
-        class SpecJekyllBuilder
-          attr_writer :logger
+        class SpecHTMLProofer
+          def self.check_directory(_, _)
+            SpecHTMLProofer.new
+          end
 
-          def initialize(_); end
-          def execute; end
+          def run; end
         end
       end
     end

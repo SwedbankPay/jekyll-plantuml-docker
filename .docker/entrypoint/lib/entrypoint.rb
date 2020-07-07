@@ -31,7 +31,7 @@ module Jekyll
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR')
         debug = ENV.fetch('DEBUG', false)
 
-        Context.new(env, jekyll_var_dir, jekyll_data_dir, debug)
+        Context.new(env, jekyll_var_dir, jekyll_data_dir, auth_token, debug)
       end
 
       def initialize_docker_image(docker_image)
@@ -42,6 +42,10 @@ module Jekyll
         docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
 
         DockerImage.new(docker_image_name, docker_image_tag, docker_image_version)
+      end
+
+      def auth_token
+        ENV.fetch('JEKYLL_GITHUB_TOKEN', nil) || ENV.fetch('GITHUB_TOKEN', nil)
       end
     end
   end

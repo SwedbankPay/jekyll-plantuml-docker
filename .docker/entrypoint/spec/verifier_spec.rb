@@ -3,44 +3,20 @@
 require 'includes'
 
 describe Verifier do
+  context = Context.new('development', __dir__, __dir__)
+
   describe '#initialize' do
-    context 'nil config' do
-      it do
-        expect do
-          Verifier.new(nil, :error)
-        end.to raise_error(ArgumentError, 'Hash cannot be nil')
-      end
+    context 'nil context' do
+      it {
+        expect { Verifier.new(nil) }.to raise_error(ArgumentError, "#{Context} cannot be nil")
+      }
     end
 
-    context 'empty config' do
+    context 'wrong type' do
       it do
         expect do
-          Verifier.new({}, :error)
-        end.to raise_error(ArgumentError, 'Hash cannot be empty')
-      end
-    end
-
-    context 'non-hash config' do
-      it do
-        expect do
-          Verifier.new([], :error)
-        end.to raise_error(ArgumentError, 'Array is not a Hash')
-      end
-    end
-
-    context 'missing :destination' do
-      it do
-        expect do
-          Verifier.new({ a: 'b' }, :error)
-        end.to raise_error(ArgumentError, "No 'destination' key found in the hash")
-      end
-    end
-
-    context 'non-existing :destination' do
-      it do
-        expect do
-          Verifier.new({ 'destination' => 'abc' }, :erro)
-        end.to raise_error(DirectoryNotFoundError, 'abc does not exist')
+          Verifier.new({})
+        end.to raise_error(ArgumentError, "Hash is not a #{Context}")
       end
     end
   end
@@ -48,20 +24,73 @@ describe Verifier do
   describe '#verify' do
     data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'minimal')
     site_dir = File.join(data_dir, '_site')
+    context = Context.new('development', __dir__, data_dir, 'SECRET')
 
     before(:all) do
-      context = ExecEnv.new('development', __dir__, data_dir)
-      jekyll_config_provider = JekyllConfigProvider.new(context, :error)
-      jekyll_config = jekyll_config_provider.provide('build')
-      jekyll_builder = JekyllBuilder.new(jekyll_config, :error)
+      jekyll_config_provider = JekyllConfigProvider.new(context)
+      context.arguments = Arguments.new(
+        {
+          'build' => true,
+          'serve' => false,
+          'deploy' => false,
+          '--verify' => false,
+          '--dry-run' => false,
+          '--ignore-url' => false,
+          '--log-level' => 'error',
+          '--env' => nil
+        }
+      )
+      context.configuration = jekyll_config_provider.provide('build')
+      jekyll_builder = JekyllBuilder.new(context)
       jekyll_builder.execute
     end
 
-    subject { Verifier.new({ 'destination' => site_dir }, :error) }
+    subject { Verifier.new(context) }
+
+    context 'missing :destination' do
+      it {
+        allow(context).to receive(:configuration).and_return({ 'a' => 'b' })
+        expect { subject.verify }.to raise_error(ArgumentError, "No 'destination' key found in the hash")
+      }
+    end
+
+    context 'non-existing :destination' do
+      it {
+        allow(context).to receive(:configuration).and_return({ 'destination' => 'abc' })
+        expect { subject.verify }.to raise_error(DirectoryNotFoundError, 'abc does not exist')
+      }
+    end
 
     it 'ignores urls' do
       ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
-      subject.verify(ignore_urls)
+      allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
+      subject.verify
+    end
+
+    it 'sets domain_auth options' do
+      expected_options = {
+        assume_extension: true,
+        check_html: true,
+        check_unrendered_link: true,
+        enforce_https: true,
+        log_level: :error,
+        only_4xx: true,
+        domain_auth: {
+          'github.com' => {
+            template: 'Bearer %token%',
+            type: :header,
+            values: {
+              token: 'SECRET'
+            }
+          }
+        }
+      }
+      html_proofer_class = SpecHTMLProofer
+      html_proofer = html_proofer_class.new
+      allow(html_proofer_class).to receive(:check_directory).with(site_dir, expected_options).and_return(html_proofer)
+      expect(html_proofer).to receive(:run)
+      subject.html_proofer = html_proofer_class
+      subject.verify
     end
   end
 end

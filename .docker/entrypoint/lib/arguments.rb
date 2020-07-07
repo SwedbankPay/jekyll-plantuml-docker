@@ -35,14 +35,49 @@ module Jekyll
         @dry_run
       end
 
+      def self.default
+        Arguments.new({
+                        'build' => false,
+                        'serve' => false,
+                        'deploy' => false,
+                        '--verify' => false,
+                        '--dry-run' => false,
+                        '--ignore-url' => false,
+                        '--log-level' => nil,
+                        '--env' => nil
+                      })
+      end
+
       private
 
       def find_command(args)
-        return 'build' if args['build'] == true
-        return 'serve' if args['serve'] == true
-        return 'deploy' if args['deploy'] == true
+        return 'build' if args.value_for('build') == true
+        return 'serve' if args.value_for('serve') == true
+        return 'deploy' if args.value_for('deploy') == true
 
-        raise CommandLineArgumentError, 'Unkonw command'
+        # Alias CommandLineArgumentError to save line length
+        clae = CommandLineArgumentError
+
+        # If Arguments.default invoked the constructor, we shouldn't raise
+        raise clae, 'Unknown command' unless invoked_by_default?
+      end
+
+      def invoked_by_default?
+        # Find the caller location that matches Arguments.default
+        loc = caller_locations.find { |l| location_is_arguments_default?(l) }
+
+        # If we find Arguments.default in the caller locations, return true
+        !loc.nil?
+      end
+
+      def location_is_arguments_default?(location)
+        path = location.absolute_path
+        label = location.base_label
+
+        # If the path of the caller location is equal to this file's path
+        # and the caller location's base label (method name) is equal to
+        # 'default', return true.
+        path == __FILE__ && label == 'default'
       end
     end
   end

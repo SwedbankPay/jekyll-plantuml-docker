@@ -16,23 +16,24 @@ module Jekyll
         attr_writer :jekyll_build
         attr_writer :logger
 
-        def initialize(jekyll_config, jekyll_var_dir)
-          jekyll_config.must_be_a! :non_empty, Hash
-          @jekyll_config = jekyll_config
-          @deployer_exec = DeployerExec.new(jekyll_var_dir)
+        def initialize(context)
+          context.must_be_a! Context
+
+          @context = context
+          @deployer_exec = DeployerExec.new(context)
         end
 
-        def deploy(dry_run, verify)
+        def deploy
           message = 'Deploying'
-          message << ', dry-run' if dry_run
-          message << ', verified' if verify
+          message << ', dry-run' if @context.arguments.dry_run?
+          message << ', verified' if @context.arguments.verify?
           message << '…'
 
           log(:info, message)
 
-          jekyll_build.process(@jekyll_config)
+          jekyll_build.process(@context.configuration)
           @deployer_exec.logger = @logger unless @logger.nil?
-          @deployer_exec.execute(dry_run)
+          @deployer_exec.execute
         end
 
         def jekyll_build

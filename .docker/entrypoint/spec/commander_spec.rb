@@ -38,7 +38,7 @@ describe Commander do
 
       it do
         jekyll_builder_class = SpecJekyllBuilder
-        jekyll_builder = jekyll_builder_class.new('xyz', :info)
+        jekyll_builder = jekyll_builder_class.new({})
         allow(jekyll_builder_class).to receive(:new).and_return(jekyll_builder)
         expect(jekyll_builder).to receive(:execute)
         commander.commands.builder = jekyll_builder_class
@@ -48,7 +48,7 @@ describe Commander do
       context '--verify' do
         it do
           verifier_class = SpecVerifier
-          verifier = verifier_class.new('xyz', :info)
+          verifier = verifier_class.new({})
           allow(verifier_class).to receive(:new).and_return(verifier)
           expect(verifier).to receive(:verify)
           commander.commands.verifier = verifier_class

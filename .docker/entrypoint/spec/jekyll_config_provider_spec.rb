@@ -12,7 +12,7 @@ describe JekyllConfigProvider do
       it 'nil should raise' do
         expect do
           context = Context.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(context, :info)
+          jekyll_config_provider = JekyllConfigProvider.new(context)
           jekyll_config_provider.provide(nil)
         end.to raise_error(ArgumentError, 'jekyll_command is nil')
       end
@@ -20,7 +20,7 @@ describe JekyllConfigProvider do
       context 'build returns config' do
         before(:all) do
           context = Context.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(context, :error)
+          jekyll_config_provider = JekyllConfigProvider.new(context)
           @jekyll_config = jekyll_config_provider.provide('build')
         end
 
@@ -46,7 +46,7 @@ describe JekyllConfigProvider do
       context 'serve returns config' do
         before(:all) do
           context = Context.new('development', __dir__, data_dir)
-          jekyll_config_provider = JekyllConfigProvider.new(context, :info)
+          jekyll_config_provider = JekyllConfigProvider.new(context)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 
@@ -65,7 +65,7 @@ describe JekyllConfigProvider do
       context 'serve returns config' do
         before(:all) do
           context = Context.new('development', __dir__, dir)
-          jekyll_config_provider = JekyllConfigProvider.new(context, :error)
+          jekyll_config_provider = JekyllConfigProvider.new(context)
           @jekyll_config = jekyll_config_provider.provide('serve')
         end
 

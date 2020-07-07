@@ -15,7 +15,7 @@ module Jekyll
       class JekyllServer < JekyllCommander
         def execute
           super
-          Jekyll::Commands::Serve.process(@jekyll_config)
+          Jekyll::Commands::Serve.process(@context.configuration)
         end
       end
     end
