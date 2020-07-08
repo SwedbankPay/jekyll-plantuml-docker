@@ -37,7 +37,7 @@ describe JekyllServer do
         end
       end
 
-      after(:each) do
+      after(:all) do
         JekyllServe.shutdown
 
         JekyllServe.mutex.synchronize do
