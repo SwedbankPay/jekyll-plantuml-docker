@@ -18,6 +18,7 @@ describe JekyllServer do
   end
 
   describe '#execute :serve' do
+    data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
     before(:all) do
       @thread = Thread.new do
         context = Context.new('development', __dir__, data_dir)
@@ -44,17 +45,28 @@ describe JekyllServer do
     end
 
     describe 'weird file' do
-      data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-
       it {
         expect(File).not_to exist(File.join(__dir__, '..', '0.0.0.0'))
       }
     end
 
-    describe 'site is not empty'
+    describe 'site is not empty' do
+      subject do
+        Pathname.new(data_dir)
+      end
+
       it {
-        expect(Dir.empty?(File.join(data_dir, '_site'))).to equal(false)
+        is_expected.to be_directory
       }
+
+      it {
+        is_expected.to exist
+      }
+
+      it {
+        expect(Dir.entries(subject)).to_not be_empty
+      }
+
     end
   end
 end
