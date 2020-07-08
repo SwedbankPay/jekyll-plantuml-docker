@@ -34,7 +34,7 @@ parse_args() {
         elif [[ ( $1 = "-i" || $1 = "--image" ) && -n $2 ]]; then
             docker_image_fqn=$2
             shift 2
-        elif [[ ( $1 = "-I" || $1 = "--image-tag ") && -n $]]; then
+        elif [[ ( $1 = "-I" || $1 = "--image-tag" ) && -n $2 ]]; then
             docker_image_tag=$2
             shift 2
         elif [[ ( $1 = "-r" || $1 = "--repository" ) && -n $2 ]]; then
