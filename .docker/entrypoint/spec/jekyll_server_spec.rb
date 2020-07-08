@@ -51,7 +51,7 @@ describe JekyllServer do
       }
 
       it {
-        expect(Dir.empty?(File.join(data_dir, "_site"))).to_be false
+        expect(Dir.empty?(File.join(data_dir, '_site'))).to equal(false)
       }
     end
   end
