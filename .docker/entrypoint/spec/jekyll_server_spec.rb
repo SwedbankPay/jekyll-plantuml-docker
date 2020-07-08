@@ -49,6 +49,10 @@ describe JekyllServer do
       it {
         expect(File).not_to exist(File.join(__dir__, '..', '0.0.0.0'))
       }
+
+      it {
+        expect(Dir.empty?(File.join(data_dir, "_site"))).to_be false
+      }
     end
   end
 end
