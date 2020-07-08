@@ -6,7 +6,7 @@ help_message="\
 Execute a Jekyll command in the Docker container and optionally test the output.
 
 Usage:
-  $me (build | serve) --image <image> --dir <dir> --repository <name> --token <token> [--verbose] [--no-pull]
+  $me (build | serve) --image <image> --image-tag <tag >--dir <dir> --repository <name> --token <token> [--verbose] [--no-pull]
   $me --help
 
 Arguments:
@@ -16,6 +16,7 @@ Arguments:
                             the output can be found, otherwise fails.
   -h, --help                Displays this help screen.
   -i, --image <image>       The fully qualified name of the Docker image to test.
+  -I, --image-tag <tag>     The tag of the Docker image to use.
   -d, --dir                 The content directory to use for Jekyll.
   -r, --repository <name>   The name of the GitHub repository to deploy to.
   -t, --token <token>       A GitHub token with access to the repository.
@@ -32,6 +33,9 @@ parse_args() {
             return 0
         elif [[ ( $1 = "-i" || $1 = "--image" ) && -n $2 ]]; then
             docker_image_fqn=$2
+            shift 2
+        elif [[ ( $1 = "-I" || $1 = "--image-tag ") && -n $]]; then
+            docker_image_tag=$2
             shift 2
         elif [[ ( $1 = "-r" || $1 = "--repository" ) && -n $2 ]]; then
             repository_name=$2
@@ -90,7 +94,7 @@ parse_args() {
             --tty $debug_env
             --env PAGES_REPO_NWO=$repository_name
             --env JEKYLL_GITHUB_TOKEN=$github_access_token
-            --env DOCKER_IMAGE_TAG=latest
+            --env DOCKER_IMAGE_TAG=$docker_image_tag
             --volume \"${local_directory}:/srv/jekyll\"
             \"${docker_image_fqn}\"
             $jekyll_command"
