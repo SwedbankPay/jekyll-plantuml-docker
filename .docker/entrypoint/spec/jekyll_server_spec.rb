@@ -45,8 +45,12 @@ describe JekyllServer do
     end
 
     describe 'weird file' do
+      weird_filename = '0.0.0.0'
       it {
-        expect(File).not_to exist(File.join(__dir__, '..', '0.0.0.0'))
+        expect(File).not_to exist(File.join(__dir__, '..', weird_filename))
+      }
+      it {
+        expect(File).not_to exist(File.join(data_dir, weird_filename))
       }
     end
 
