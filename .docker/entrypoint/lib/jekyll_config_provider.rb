@@ -71,7 +71,8 @@ module Jekyll
           'livereload_port' => 35_729,
           'livereload' => true,
           'force_polling' => true,
-          'watch' => true
+          'watch' => true,
+          'serving' => true
         }
       end
     end
