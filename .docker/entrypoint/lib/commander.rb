@@ -90,6 +90,7 @@ module Jekyll
       end
 
       def serve
+        build
         warn_of_dry_run if @context.arguments.dry_run?
         jekyll_server = @commands.server.new(@context)
         jekyll_server.logger = @logger unless @logger.nil?
