@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve)
         run: |
-          timeout 5m \
+          timeout --preserve-status 10m \
           ./.github/workflows/docker_run_test.sh \
             serve \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
@@ -93,7 +93,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve, no Gemfile)
         run: |
-          timeout 5m \
+          timeout --preserve-status 10m \
           ./.github/workflows/docker_run_test.sh \
             serve \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
