@@ -71,6 +71,10 @@ describe JekyllServer do
         expect(Dir.entries(subject)).to_not be_empty
       }
 
+      it {
+        expect(Dir.entries(subject)).to include('index.html')
+      }
+
     end
   end
 end
