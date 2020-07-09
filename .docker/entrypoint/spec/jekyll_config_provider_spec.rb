@@ -55,6 +55,10 @@ describe JekyllConfigProvider do
         it {
           is_expected.to include('livereload_port' => 35_729)
         }
+
+        it {
+          is_expected.to include('serving' => true)
+        }
       end
     end
 
