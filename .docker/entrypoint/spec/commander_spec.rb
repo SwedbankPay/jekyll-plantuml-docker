@@ -98,15 +98,5 @@ describe Commander do
         }
       end
     end
-
-    context 'serve' do
-      # TODO: This should probably be reset before(:each) somehow.
-      let!(:logger) { commander.logger = SpecLogger.new(:info, :debug, :warn) }
-
-      it {
-        commander.execute(['serve'])
-        expect(logger.message).to match(/Generating...\s+done in/)
-      }
-    end
   end
 end
