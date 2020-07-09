@@ -6,7 +6,7 @@ help_message="\
 Execute a Jekyll command in the Docker container and optionally test the output.
 
 Usage:
-  $me (build | serve) --image <image> --image-tag <tag >--dir <dir> --repository <name> --token <token> [--verbose] [--no-pull]
+  $me (build | serve) --image <image> --image-tag <tag> --dir <dir> --repository <name> --token <token> [--verbose] [--no-pull]
   $me --help
 
 Arguments:
@@ -77,6 +77,12 @@ parse_args() {
 
     if [[ -z "$github_access_token" ]]; then
         echo "Missing required argument: --token <token>."
+        echo "$help_message"
+        return 1
+    fi
+
+    if [[ -z "$docker_image_tag" ]]; then
+        echo "Missing required argument: --image-tag <tag>."
         echo "$help_message"
         return 1
     fi
