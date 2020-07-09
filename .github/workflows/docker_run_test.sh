@@ -101,6 +101,7 @@ parse_args() {
             --env PAGES_REPO_NWO=$repository_name
             --env JEKYLL_GITHUB_TOKEN=$github_access_token
             --env DOCKER_IMAGE_TAG=$docker_image_tag
+            --env DOCKER_IMAGE_VERSION=$docker_image_tag
             --volume \"${local_directory}:/srv/jekyll\"
             \"${docker_image_fqn}\"
             $jekyll_command"
