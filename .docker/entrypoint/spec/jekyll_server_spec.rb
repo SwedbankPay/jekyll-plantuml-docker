@@ -68,7 +68,7 @@ describe JekyllServer do
       }
 
       it {
-        expect(Dir.entries(subject)).to_not be_empty
+        expect(Dir.empty? subject).to eq(false)
       }
 
       it {
