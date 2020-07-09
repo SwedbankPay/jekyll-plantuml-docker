@@ -52,7 +52,7 @@ describe JekyllServer do
 
     describe 'site is not empty' do
       subject do
-        Pathname.new(data_dir)
+        Pathname.new(File.join(data_dir, '_site'))
       end
 
       it {
