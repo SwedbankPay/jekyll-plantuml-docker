@@ -19,12 +19,18 @@ describe JekyllServer do
 
   describe '#execute :serve' do
     data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-    before(:all) do
+    buffer = StringIO.new
+    
+    before(:each) do
       @thread = Thread.new do
         context = Context.new('development', __dir__, data_dir)
         jekyll_config_provider = JekyllConfigProvider.new(context)
         context.configuration = jekyll_config_provider.provide('serve')
         jekyll_server = JekyllServer.new(context)
+
+        logger = Logger.new(buffer)
+        jekyll_server.logger = logger
+
         jekyll_server.execute
       end
       @thread.abort_on_exception = true
@@ -35,17 +41,23 @@ describe JekyllServer do
       end
     end
 
-    after(:all) do
+    after(:each) do
       JekyllServe.shutdown
 
       JekyllServe.mutex.synchronize do
         running = JekyllServe.running?
         JekyllServe.run_cond.wait(JekyllServe.mutex) if running
       end
+
+      buffer.rewind
+      puts buffer.string.to_s
     end
 
     describe 'weird file' do
       weird_filename = '0.0.0.0'
+      it {
+        expect(File).not_to exist(File.join(__dir__, weird_filename))
+      }
       it {
         expect(File).not_to exist(File.join(__dir__, '..', weird_filename))
       }
@@ -74,7 +86,6 @@ describe JekyllServer do
       it {
         expect(Dir.entries(subject)).to include('index.html')
       }
-
     end
   end
 end
