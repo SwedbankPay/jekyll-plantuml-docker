@@ -44,7 +44,7 @@ describe JekyllServer do
         running = JekyllServe.running?
         JekyllServe.run_cond.wait(JekyllServe.mutex) if running
       end
-      FileUtils.remove_dir(File.join(data_dir, '_site') , force = true)
+      FileUtils.remove_dir(File.join(data_dir, '_site'), true)
     end
 
     describe 'weird file' do
@@ -74,7 +74,7 @@ describe JekyllServer do
       }
 
       it {
-        expect(Dir.empty? subject).to eq(false)
+        expect(Dir.empty?(subject)).to eq(false)
       }
 
       it {
