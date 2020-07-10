@@ -18,8 +18,7 @@ describe JekyllServer do
   end
 
   describe '#execute :serve' do
-    data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
-    buffer = StringIO.new
+    data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'minimal')
     
     before(:all) do
       @thread = Thread.new do
@@ -27,9 +26,6 @@ describe JekyllServer do
         jekyll_config_provider = JekyllConfigProvider.new(context)
         context.configuration = jekyll_config_provider.provide('serve')
         jekyll_server = JekyllServer.new(context)
-
-        logger = Logger.new(buffer)
-        jekyll_server.logger = logger
 
         jekyll_server.execute
       end
@@ -48,9 +44,7 @@ describe JekyllServer do
         running = JekyllServe.running?
         JekyllServe.run_cond.wait(JekyllServe.mutex) if running
       end
-
-      buffer.rewind
-      puts buffer.string.to_s
+      FileUtils.remove_dir(File.join(data_dir, '_site') , force = true)
     end
 
     describe 'weird file' do
