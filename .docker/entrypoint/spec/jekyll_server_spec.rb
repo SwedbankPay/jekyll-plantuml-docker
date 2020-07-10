@@ -21,7 +21,7 @@ describe JekyllServer do
     data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'full')
     buffer = StringIO.new
     
-    before(:each) do
+    before(:all) do
       @thread = Thread.new do
         context = Context.new('development', __dir__, data_dir)
         jekyll_config_provider = JekyllConfigProvider.new(context)
@@ -41,7 +41,7 @@ describe JekyllServer do
       end
     end
 
-    after(:each) do
+    after(:all) do
       JekyllServe.shutdown
 
       JekyllServe.mutex.synchronize do
