@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll'
-require_relative 'jekyll_commander'
+require_relative 'jekyll_builder'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -12,7 +12,7 @@ module Jekyll
     module Commands
       # The Jekyll::PlantUml::JekyllBuilder class executes the Jekyll command
       # 'serve'.
-      class JekyllServer < JekyllCommander
+      class JekyllServer < JekyllBuilder
         def execute
           super
           Jekyll::Commands::Serve.process(@context.configuration)

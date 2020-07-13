@@ -13,6 +13,7 @@ jobs:
       version: ${{ steps.variables.outputs.version }}
       branch_name: ${{ steps.variables.outputs.branch_name }}
       ghpr_docker_image_fqn: ${{ steps.variables.outputs.ghpr_docker_image_fqn }}
+      ghpr_docker_image_tag: ${{ steps.variables.outputs.docker_image_tag }}
 
     steps:
       - uses: actions/checkout@v2
@@ -74,9 +75,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve)
         run: |
+          timeout --preserve-status 10m \
           ./.github/workflows/docker_run_test.sh \
             serve \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
+            --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/full \
             --token ${{ secrets.GITHUB_TOKEN }} \
@@ -90,9 +93,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve, no Gemfile)
         run: |
+          timeout --preserve-status 10m \
           ./.github/workflows/docker_run_test.sh \
             serve \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
+            --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/minimal \
             --token ${{ secrets.GITHUB_TOKEN }} \
@@ -109,6 +114,7 @@ jobs:
           ./.github/workflows/docker_run_test.sh \
             build \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
+            --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/full \
             --token ${{ secrets.GITHUB_TOKEN }} \
@@ -125,6 +131,7 @@ jobs:
           ./.github/workflows/docker_run_test.sh \
             build \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
+            --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/minimal \
             --token ${{ secrets.GITHUB_TOKEN }} \
@@ -141,6 +148,7 @@ jobs:
           ./.github/workflows/docker_run_test.sh \
             build \
             --image ${{ needs.variables.outputs.ghpr_docker_image_fqn }} \
+            --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/gemspec \
             --token ${{ secrets.GITHUB_TOKEN }} \
