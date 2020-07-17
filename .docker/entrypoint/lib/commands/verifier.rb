@@ -33,6 +33,9 @@ module Jekyll
 
           opts = options(@context.arguments.ignore_urls)
 
+          log(:debug, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
+          log(:debug, opts)
+
           @html_proofer.check_directory(@jekyll_destination_dir, opts).run
         end
 
@@ -97,6 +100,13 @@ module Jekyll
           end
 
           value
+        end
+
+        def log(severity, message)
+          (@logger ||= Jekyll.logger).public_send(
+            severity,
+            "   jekyll-plantuml: #{message}"
+          )
         end
       end
     end
