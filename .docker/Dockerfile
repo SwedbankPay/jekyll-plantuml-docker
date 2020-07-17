@@ -91,6 +91,14 @@ ARG TAG
 ARG SHA
 ARG DATE
 ARG VERSION
+
+RUN \
+    # Ensure that the build arguments are set and not empty.
+    : "${TAG:?Build argument 'TAG' is missing or empty.}" \
+    : "${SHA:?Build argument 'SHA' is missing or empty.}" \
+    : "${DATE:?Build argument 'DATE' is missing or empty.}" \
+    : "${VERSION:?Build argument 'VERSION' is missing or empty.}"
+
 ENV DOCKER_IMAGE_TAG=$TAG
 ENV DOCKER_IMAGE_VERSION=$VERSION
 
