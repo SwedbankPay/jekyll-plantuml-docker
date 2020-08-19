@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  jekyll:
+    build: 
+      dockerfile: .docker/Dockerfile
+      context: .
+    command: serve
+    environment:
+      - DEBUG=true
+      - JEKYLL_GITHUB_TOKEN=15a74fc19c889d1005f713aa2a57ef62fd5a2699
+      - DOCKER_IMAGE_TAG=1.2.3
+      - DOCKER_IMAGE_VERSION=1.2.3
+    ports:
+      - 4000:4000
+      - 35729:35729
+    volumes:
+      - ./tests/full:/srv/jekyll
+      - .bundle:/usr/local/bundle
