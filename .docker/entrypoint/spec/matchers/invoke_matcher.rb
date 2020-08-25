@@ -28,9 +28,11 @@ class InvokeMatcher
     self
   end
 
+  # rubocop:disable Lint/MissingSuper
   def respond_to_missing?(name, *args)
     @have_received_matcher.respond_to?(name, *args)
   end
+  # rubocop:enable Lint/MissingSuper
 
   def matches?(event_proc)
     raise 'missing `on`' unless defined?(@expected_recipient)

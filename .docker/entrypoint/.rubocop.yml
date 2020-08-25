@@ -1,17 +1,10 @@
 AllCops:
   NewCops: enable
-Metrics/BlockLength:
   Exclude:
     - "Rakefile"
-    - "spec/**/*.rb"
-Metrics/MethodLength:
-  Exclude:
-    - "Rakefile"
+    - "_site/**/*.rb"
     - "spec/**/*.rb"
 Layout:
-  Exclude:
-    - "Rakefile"
-    - "spec/**/*.rb"
   LineLength: 100
   IndentationStyle:
     IndentationWidth: 2
