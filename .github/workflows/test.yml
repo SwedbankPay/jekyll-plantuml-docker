@@ -224,6 +224,7 @@ jobs:
             build \
             --verify \
             --env=production \
+            --log-level=debug \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org \
             --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}' \
@@ -268,7 +269,8 @@ jobs:
             --env DEBUG="true" \
             ${IMAGE_NAME}:${IMAGE_TAG} \
             deploy \
-            --env=production
+            --env=production \
+            --log-level=debug
 
   cleanup:
     runs-on: ubuntu-latest
