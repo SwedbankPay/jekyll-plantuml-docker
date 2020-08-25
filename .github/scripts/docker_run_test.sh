@@ -93,6 +93,7 @@ parse_args() {
 
     if [[ $verbose ]]; then
         debug_env="--env DEBUG=true"
+        jekyll_command="$jekyll_command --log-level=debug"
     fi
 
     docker_run_command="\
