@@ -47,6 +47,8 @@ describe Verifier do
       jekyll_builder.execute
     end
 
+    # before(:each) { subject.html_proofer = HTMLProofer }
+
     subject { Verifier.new(context) }
 
     context 'missing :destination' do
@@ -69,7 +71,7 @@ describe Verifier do
       subject.verify
     end
 
-    it 'sets domain_auth options' do
+    it 'receives expected options' do
       expected_options = {
         assume_extension: true,
         check_html: true,
@@ -80,15 +82,6 @@ describe Verifier do
         parallel: { in_processes: Concurrent.processor_count },
         typheous: {
           verbose: false
-        },
-        domain_auth: {
-          'github.com' => {
-            template: 'Bearer %token%',
-            type: :header,
-            values: {
-              token: 'SECRET'
-            }
-          }
         }
       }
       html_proofer_class = SpecHTMLProofer
@@ -97,6 +90,15 @@ describe Verifier do
       expect(html_proofer).to receive(:run)
       subject.html_proofer = html_proofer_class
       subject.verify
+    end
+
+    it 'sets bearer token for github' do
+      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
+      logger = SpecLogger.new(:debug)
+      subject.logger = logger
+      subject.verify
+      expect(logger.message).to include('Setting Bearer Token for GitHub request')
     end
   end
 end
