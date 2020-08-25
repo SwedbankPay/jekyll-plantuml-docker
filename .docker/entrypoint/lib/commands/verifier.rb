@@ -3,6 +3,7 @@
 require 'jekyll'
 require 'html-proofer'
 require 'html-proofer-unrendered-markdown'
+require 'concurrent'
 require_relative '../context'
 require_relative '../extensions/object_extensions'
 
@@ -63,7 +64,8 @@ module Jekyll
             check_html: true,
             enforce_https: true,
             only_4xx: true,
-            check_unrendered_link: true
+            check_unrendered_link: true,
+            parallel: { in_processes: Concurrent.processor_count }
           }
 
           token = @context.auth_token

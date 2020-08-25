@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'includes'
+require 'concurrent'
 
 describe Verifier do
   context = Context.new('development', __dir__, __dir__)
@@ -76,6 +77,7 @@ describe Verifier do
         enforce_https: true,
         log_level: :error,
         only_4xx: true,
+        parallel: { in_processes: Concurrent.processor_count },
         domain_auth: {
           'github.com' => {
             template: 'Bearer %token%',
