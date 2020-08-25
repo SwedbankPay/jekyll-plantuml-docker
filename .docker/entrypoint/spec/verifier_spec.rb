@@ -78,6 +78,9 @@ describe Verifier do
         log_level: :error,
         only_4xx: true,
         parallel: { in_processes: Concurrent.processor_count },
+        typheous: {
+          verbose: false
+        },
         domain_auth: {
           'github.com' => {
             template: 'Bearer %token%',
