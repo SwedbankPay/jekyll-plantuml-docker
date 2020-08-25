@@ -65,7 +65,10 @@ module Jekyll
             enforce_https: true,
             only_4xx: true,
             check_unrendered_link: true,
-            parallel: { in_processes: Concurrent.processor_count }
+            parallel: { in_processes: Concurrent.processor_count },
+            typheous: {
+              verbose: @context.verbose?
+            }
           }
 
           token = @context.auth_token
