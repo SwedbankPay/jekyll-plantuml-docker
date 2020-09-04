@@ -37,7 +37,8 @@ describe Verifier do
           '--dry-run' => false,
           '--ignore-url' => false,
           '--log-level' => 'error',
-          '--env' => nil
+          '--env' => nil,
+          '--profile' => nil
         }
       )
       context.configuration = jekyll_config_provider.provide('build')
