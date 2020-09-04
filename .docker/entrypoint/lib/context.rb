@@ -41,16 +41,13 @@ module Jekyll
         args.must_be_a! Arguments
         @arguments = args
       end
-      
+
       def verbose?
         @debug || arguments.log_level == :debug
       end
       
       def profile?
-        puts "Profile?"
-        p @arguments.profile
-        puts "Profile?"
-        @profile
+        @arguments.profile?
       end
     end
   end
