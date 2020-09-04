@@ -45,7 +45,7 @@ module Jekyll
       def verbose?
         @debug || arguments.log_level == :debug
       end
-      
+
       def profile?
         @arguments.profile?
       end

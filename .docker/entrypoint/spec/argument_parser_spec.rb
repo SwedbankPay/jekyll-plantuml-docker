@@ -58,7 +58,8 @@ describe ArgumentParser do
             log_level: nil,
             environment: nil,
             dry_run?: false,
-            verify?: false
+            verify?: false,
+            profile?: nil
           }
         )
       }
