@@ -30,9 +30,8 @@ module Jekyll
         jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
         jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR')
         debug = ENV.fetch('DEBUG', false)
-        profile = ENV.fetch('PROFILE', false)
 
-        Context.new(env, jekyll_var_dir, jekyll_data_dir, auth_token, debug, profile)
+        Context.new(env, jekyll_var_dir, jekyll_data_dir, auth_token, debug)
       end
 
       def initialize_docker_image(docker_image)

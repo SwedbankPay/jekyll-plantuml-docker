@@ -15,12 +15,11 @@ module Jekyll
       attr_reader :var_dir
       attr_reader :data_dir
       attr_reader :debug
-      attr_reader :profile
       attr_reader :auth_token
       attr_reader :configuration
       attr_reader :arguments
 
-      def initialize(env, var_dir, data_dir, auth_token = nil, debug = false, profile = false)
+      def initialize(env, var_dir, data_dir, auth_token = nil, debug = false)
         env.must_be_a! :non_empty, String
         var_dir.must_be_a! :non_empty, String
         data_dir.must_be_a! :non_empty, String
@@ -29,7 +28,6 @@ module Jekyll
         @var_dir = var_dir
         @data_dir = data_dir
         @debug = debug
-        @profile = profile
         @auth_token = auth_token
         @arguments = Arguments.default
       end
@@ -50,7 +48,6 @@ module Jekyll
       
       def profile?
         puts "Profile?"
-        p @profile
         p @arguments.profile
         puts "Profile?"
         @profile
