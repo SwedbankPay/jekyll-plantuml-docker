@@ -85,7 +85,15 @@ describe ArgumentParser do
         it {
           is_expected.to have_attributes(environment: 'production')
         }
-      end  
+      end
+
+      context '--profile' do
+        let(:args) { ['build', '--profile']}
+
+        it {
+          is_expected.to have_attributes(profile: true)
+        }
+      end
     end
 
     describe 'deploy' do
