@@ -51,6 +51,7 @@ module Jekyll
         jekyll_config = Jekyll.configuration(default_config(config_file_path))
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
         jekyll_config['verbose'] = true if @context.verbose?
+        jekyll_config['profile'] = true if @context.profile?
 
         jekyll_config
       end
