@@ -36,10 +36,6 @@ module Jekyll
         @dry_run
       end
 
-      def profile?
-        @profile
-      end
-
       def self.default
         Arguments.new({
                         'build' => false,

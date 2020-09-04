@@ -49,6 +49,10 @@ module Jekyll
       end
       
       def profile?
+        puts "Profile?"
+        p @profile
+        p @arguments.profile
+        puts "Profile?"
         @profile
       end
     end

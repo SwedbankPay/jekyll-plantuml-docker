@@ -15,6 +15,9 @@ module Jekyll
       class JekyllServer < JekyllBuilder
         def execute
           super
+          puts "<<<------------->>>"
+          puts @context.configuration
+          puts "<<<------------->>>"
           Jekyll::Commands::Serve.process(@context.configuration)
         end
       end
