@@ -15,7 +15,6 @@ module Jekyll
       attr_reader :ignore_urls
       attr_reader :log_level
       attr_reader :environment
-      attr_reader :dry_run
       attr_reader :profile
 
       def initialize(args)
