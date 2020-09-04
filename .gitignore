@@ -7,3 +7,4 @@ _site/
 vendor/
 *.generated*
 coverage/
+docker-compose.yml
