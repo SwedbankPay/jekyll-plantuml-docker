@@ -15,6 +15,7 @@ module Jekyll
       attr_reader :ignore_urls
       attr_reader :log_level
       attr_reader :environment
+      attr_reader :profile
 
       def initialize(args)
         args.must_be_a! :non_empty, Hash
@@ -24,6 +25,7 @@ module Jekyll
         @dry_run = args.value_for('--dry-run')
         @ignore_urls = args.value_for('--ignore-url')
         @log_level = args.value_for('--log-level')
+        @profile = args.value_for('--profile')
         @environment = args.value_for('--env')
       end
 
@@ -35,6 +37,10 @@ module Jekyll
         @dry_run
       end
 
+      def profile?
+        @profile
+      end
+
       def self.default
         Arguments.new({
                         'build' => false,
@@ -44,7 +50,8 @@ module Jekyll
                         '--dry-run' => false,
                         '--ignore-url' => false,
                         '--log-level' => nil,
-                        '--env' => nil
+                        '--env' => nil,
+                        '--profile' => false
                       })
       end
 
