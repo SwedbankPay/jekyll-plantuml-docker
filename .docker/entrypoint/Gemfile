@@ -16,7 +16,7 @@ end
 gem 'docopt'
 # Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
 gem 'faraday', '~> 1.0.1'
-gem 'html-proofer'
+gem 'html-proofer', git: 'https://github.com/NullableInt/html-proofer', branch: 'feature/reduce_memory_ussage'
 gem 'html-proofer-unrendered-markdown'
 gem 'rake', '~> 13.0'
 
