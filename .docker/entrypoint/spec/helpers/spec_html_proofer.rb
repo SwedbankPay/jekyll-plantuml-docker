@@ -11,6 +11,7 @@ module Jekyll
             SpecHTMLProofer.new
           end
 
+          def before_request(&_); end
           def run; end
         end
       end

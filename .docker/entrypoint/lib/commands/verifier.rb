@@ -3,6 +3,7 @@
 require 'jekyll'
 require 'html-proofer'
 require 'html-proofer-unrendered-markdown'
+require 'concurrent'
 require_relative '../context'
 require_relative '../extensions/object_extensions'
 
@@ -16,7 +17,7 @@ module Jekyll
       # The Jekyll::PlantUml::Verifier class executes HTMLProofer on a built
       # Jekyll site in order to verify that the HTML is correct.
       class Verifier
-        attr_accessor :html_proofer
+        attr_accessor :html_proofer, :logger
 
         def initialize(context)
           context.must_be_a! Context
@@ -33,10 +34,24 @@ module Jekyll
 
           opts = options(@context.arguments.ignore_urls)
 
-          @html_proofer.check_directory(@jekyll_destination_dir, opts).run
+          log(:debug, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
+          log(:debug, opts)
+
+          proofer = @html_proofer.check_directory(@jekyll_destination_dir, opts)
+          proofer.before_request { |request| before_request(request) }
+          proofer.run
         end
 
         private
+
+        def before_request(request)
+          uri = URI(request.base_url)
+          return unless uri.host.match('github\.(com|io)$')
+
+          auth = "Bearer #{@context.auth_token}"
+          log(:debug, 'Setting Bearer Token for GitHub request')
+          request.options[:headers]['Authorization'] = auth
+        end
 
         def ensure_directory_not_empty!(dir)
           html_glob = File.join(dir, '**/*.html')
@@ -55,27 +70,15 @@ module Jekyll
         end
 
         def default_options
-          opts = {
+          {
             assume_extension: true,
             check_html: true,
             enforce_https: true,
             only_4xx: true,
-            check_unrendered_link: true
-          }
-
-          token = @context.auth_token
-          opts[:domain_auth] = domain_auth_options(token) unless token.nil?
-          opts
-        end
-
-        def domain_auth_options(auth_token)
-          {
-            'github.com' => {
-              type: :header,
-              template: 'Bearer %token%',
-              values: {
-                token: auth_token
-              }
+            check_unrendered_link: true,
+            parallel: { in_processes: Concurrent.processor_count },
+            typheous: {
+              verbose: @context.verbose?
             }
           }
         end
@@ -97,6 +100,13 @@ module Jekyll
           end
 
           value
+        end
+
+        def log(severity, message)
+          (@logger ||= Jekyll.logger).public_send(
+            severity,
+            "   jekyll-plantuml: #{message}"
+          )
         end
       end
     end
