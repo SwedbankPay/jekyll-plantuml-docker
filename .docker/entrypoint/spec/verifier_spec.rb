@@ -47,8 +47,6 @@ describe Verifier do
       jekyll_builder.execute
     end
 
-    # before(:each) { subject.html_proofer = HTMLProofer }
-
     subject { Verifier.new(context) }
 
     context 'missing :destination' do
