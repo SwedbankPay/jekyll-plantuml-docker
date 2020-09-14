@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'includes'
+require 'concurrent'
 
 describe Verifier do
   context = Context.new('development', __dir__, __dir__)
@@ -68,7 +69,7 @@ describe Verifier do
       subject.verify
     end
 
-    it 'sets domain_auth options' do
+    it 'receives expected options' do
       expected_options = {
         assume_extension: true,
         check_html: true,
@@ -76,14 +77,9 @@ describe Verifier do
         enforce_https: true,
         log_level: :error,
         only_4xx: true,
-        domain_auth: {
-          'github.com' => {
-            template: 'Bearer %token%',
-            type: :header,
-            values: {
-              token: 'SECRET'
-            }
-          }
+        parallel: { in_processes: Concurrent.processor_count },
+        typheous: {
+          verbose: false
         }
       }
       html_proofer_class = SpecHTMLProofer
@@ -92,6 +88,15 @@ describe Verifier do
       expect(html_proofer).to receive(:run)
       subject.html_proofer = html_proofer_class
       subject.verify
+    end
+
+    it 'sets bearer token for github' do
+      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
+      logger = SpecLogger.new(:debug)
+      subject.logger = logger
+      subject.verify
+      expect(logger.message).to include('Setting Bearer Token for GitHub request')
     end
   end
 end

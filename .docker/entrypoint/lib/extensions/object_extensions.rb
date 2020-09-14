@@ -54,7 +54,6 @@ class Object
     raise ArgumentError, "#{self.class} cannot be empty"
   end
 
-  # rubocop:disable Metrics/MethodLength
   def parse_args(*args)
     raise ArgumentError, 'args cannot be nil' if args.nil?
 
@@ -70,5 +69,4 @@ class Object
 
     { specifier: specifier, type: type }
   end
-  # rubocop:enable Metrics/MethodLength
 end
