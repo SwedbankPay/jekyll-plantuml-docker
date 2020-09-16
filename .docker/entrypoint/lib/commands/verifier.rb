@@ -63,7 +63,7 @@ module Jekyll
 
           opts = default_options
           log_level = @context.arguments.log_level
-          opts[:log_level] = log_level.to_sym unless log_level.nil?
+          opts[:log_level] = ":#{log_level}" unless log_level.nil?
           opts[:url_ignore] = ignore_urls if ignore_urls.valid_array?
 
           opts
@@ -79,6 +79,11 @@ module Jekyll
             parallel: { in_processes: Concurrent.processor_count },
             typheous: {
               verbose: @context.verbose?
+            },
+            verbose: @context.verbose?,
+            timeframe: "1h",
+            cache: {
+              timeframe: "1h"
             }
           }
         end

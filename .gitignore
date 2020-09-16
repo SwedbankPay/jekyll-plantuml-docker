@@ -8,3 +8,4 @@ vendor/
 *.generated*
 coverage/
 docker-compose.yml
+tests/portal
