@@ -73,15 +73,17 @@ module Jekyll
           {
             assume_extension: true,
             check_html: true,
+            check_favicon: true,
+            check_opengraph: true,
             enforce_https: true,
             only_4xx: true,
             check_unrendered_link: true,
+            report_mismatched_tags: true,
             parallel: { in_processes: Concurrent.processor_count },
             typheous: {
               verbose: @context.verbose?
             },
             verbose: @context.verbose?,
-            timeframe: "1h",
             cache: {
               timeframe: "1h"
             }
