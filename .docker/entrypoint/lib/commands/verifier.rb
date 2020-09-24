@@ -86,8 +86,7 @@ module Jekyll
             verbose: @context.verbose?,
             cache: {
               timeframe: '1h'
-            },
-            checks_to_ignore: ['opengraphcheck', 'scriptcheck', 'chercker']
+            }
           }
         end
 
