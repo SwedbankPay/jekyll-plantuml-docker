@@ -10,7 +10,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.1)
-    codecov (0.2.11)
+    codecov (0.2.12)
       json
       simplecov
     colorator (1.1.0)
@@ -118,7 +118,7 @@ GEM
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     public_suffix (4.0.6)
-    rack (2.1.4)
+    rack (1.6.13)
     rainbow (3.0.0)
     rake (13.0.1)
     rb-fsevent (0.10.4)
@@ -167,7 +167,7 @@ GEM
     simplecov (0.19.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-html (0.12.2)
+    simplecov-html (0.12.3)
     sprockets (2.12.5)
       hike (~> 1.2)
       multi_json (~> 1.0)
