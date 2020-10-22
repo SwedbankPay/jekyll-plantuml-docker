@@ -16,10 +16,10 @@ end
 gem 'concurrent-ruby'
 gem 'docopt'
 # Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
-gem 'faraday', '~> 1.1.0'
+gem 'faraday', '> 1.0'
 gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'
-gem 'rake', '~> 13.0'
+gem 'rake'
 
 group :development, :test do
   gem 'diffy'
