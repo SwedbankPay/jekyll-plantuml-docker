@@ -31,8 +31,11 @@ main() {
 
     default_gemfile="${JEKYLL_DATA_DIR}/Gemfile.generated"
 
-    bundle check --gemfile="$default_gemfile" \
-      || bundle install --gemfile="$default_gemfile"
+    if ! bundle check --gemfile="$default_gemfile"; then
+      if ! bundle install --gemfile="$default_gemfile"; then
+        echo "Bundle install failed. Try removing Gemfile.lock and try again." 1>&2
+      fi
+    fi
 
     if [[ -n $env ]]; then
         [ $verbose ] && echo "Exporting JEKYLL_ENV='$env'."
@@ -45,4 +48,3 @@ main() {
 }
 
 main "$@"
-
