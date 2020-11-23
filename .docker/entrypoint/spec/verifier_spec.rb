@@ -64,7 +64,7 @@ describe Verifier do
     end
 
     it 'ignores urls' do
-      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      ignore_urls = [ '/','http://www.wikipedia.org', %r{[/.]?page1} ]
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       subject.verify
     end
