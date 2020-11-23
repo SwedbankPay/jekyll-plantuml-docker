@@ -65,7 +65,7 @@ module Jekyll
           log_level = @context.arguments.log_level
           opts[:log_level] = log_level.to_sym unless log_level.nil?
           opts[:url_ignore] = ignore_urls if ignore_urls.valid_array?
-          opts[:cache] = { :timeframe => '30d' }
+          opts[:cache] = { :timeframe => '1h' }
 
           opts
         end
