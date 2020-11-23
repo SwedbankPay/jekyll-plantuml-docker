@@ -80,7 +80,8 @@ describe Verifier do
         parallel: { in_processes: Concurrent.processor_count },
         typheous: {
           verbose: false
-        }
+        },
+        cache: { :timeframe => '30d' }
       }
       html_proofer_class = SpecHTMLProofer
       html_proofer = html_proofer_class.new
