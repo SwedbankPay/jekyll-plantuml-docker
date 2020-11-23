@@ -64,7 +64,7 @@ describe Verifier do
     end
 
     it 'ignores urls' do
-      ignore_urls = [ '/','http://www.wikipedia.org', %r{[/.]?page1} ]
+      ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       subject.verify
     end
@@ -92,7 +92,7 @@ describe Verifier do
     end
 
     it 'sets bearer token for github' do
-      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       logger = SpecLogger.new(:debug)
       subject.logger = logger
