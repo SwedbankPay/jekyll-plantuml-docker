@@ -10,3 +10,4 @@ Layout:
     IndentationWidth: 2
 Metrics/MethodLength:
   Max: 20
+TargetRubyVersion: 2.7
