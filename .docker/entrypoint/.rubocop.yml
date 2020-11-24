@@ -11,6 +11,3 @@ Layout:
     IndentationWidth: 2
 Metrics/MethodLength:
   Max: 20
-HashSyntax:
-  SupportedStyles:
-    - no_mixed_keys
