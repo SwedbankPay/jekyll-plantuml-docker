@@ -81,7 +81,7 @@ describe Verifier do
         typheous: {
           verbose: false
         },
-        cache: { :timeframe => '1h' }
+        cache: { :timeframe: '1h' }
       }
       html_proofer_class = SpecHTMLProofer
       html_proofer = html_proofer_class.new
