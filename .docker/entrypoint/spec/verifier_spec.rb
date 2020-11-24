@@ -64,7 +64,7 @@ describe Verifier do
     end
 
     it 'ignores urls' do
-      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       subject.verify
     end
@@ -80,7 +80,8 @@ describe Verifier do
         parallel: { in_processes: Concurrent.processor_count },
         typheous: {
           verbose: false
-        }
+        },
+        cache: { :timeframe => '1h' }
       }
       html_proofer_class = SpecHTMLProofer
       html_proofer = html_proofer_class.new
@@ -91,7 +92,7 @@ describe Verifier do
     end
 
     it 'sets bearer token for github' do
-      ignore_urls = [ 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       logger = SpecLogger.new(:debug)
       subject.logger = logger
