@@ -2,6 +2,7 @@
 
 require 'jekyll'
 require_relative 'arguments'
+require_relative 'environment_variables'
 require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -27,20 +28,12 @@ module Jekyll
       end
 
       def self.from_environment
-        env = ENV.fetch('JEKYLL_ENV', 'production')
-        data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
-        var_dir = ENV.fetch('JEKYLL_VAR_DIR')
-        auth_token = ENV.fetch('JEKYLL_GITHUB_TOKEN', nil) || ENV.fetch('GITHUB_TOKEN', nil)
-        git_branch = ENV.fetch('GITHUB_BRANCH', nil)
-        git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
-        debug = ENV.fetch('DEBUG', false)
-
-        context = new(env, var_dir, data_dir)
-        context.debug = debug
-        context.auth_token = auth_token
-        context.git_branch = git_branch
-        context.git_repository_url = git_repository_url
-
+        env = EnvironmentVariables.new
+        context = new(env.env, env.var_dir, env.data_dir)
+        context.debug = env.debug
+        context.auth_token = env.auth_token
+        context.git_branch = env.git_branch
+        context.git_repository_url = env.git_repository_url
         context
       end
 
