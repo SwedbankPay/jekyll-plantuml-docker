@@ -64,7 +64,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   # We set STDOUT.sync to disasble buffering
-  STDOUT.sync = true
+  $stdout.sync = true
   # This will only run if the script was the main, not loaded or required
   Jekyll::PlantUml::GemfileGeneratorExec.new.generate
 end

@@ -23,8 +23,7 @@ module Jekyll
 
       def provide(jekyll_command)
         config_file_path = config_file_path()
-        config = config(jekyll_command, config_file_path)
-        config
+        config(jekyll_command, config_file_path)
       end
 
       def logger=(logger)

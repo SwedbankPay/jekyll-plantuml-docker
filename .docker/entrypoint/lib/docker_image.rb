@@ -7,10 +7,7 @@ module Jekyll
     # The Jekyll::PlantUml::DockerImage class provides data for the
     # jekyll-plantuml Docker image.
     class DockerImage
-      attr_reader :name
-      attr_reader :tag
-      attr_reader :version
-      attr_reader :fqn
+      attr_reader :name, :tag, :version, :fqn
 
       def initialize(name, tag, version)
         name.must_be_a! :non_empty, String
@@ -28,7 +25,7 @@ module Jekyll
         docker_image_tag = ENV.fetch('DOCKER_IMAGE_TAG')
         docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
 
-        self.new(docker_image_name, docker_image_tag, docker_image_version)
+        new(docker_image_name, docker_image_tag, docker_image_version)
       end
 
       def to_s

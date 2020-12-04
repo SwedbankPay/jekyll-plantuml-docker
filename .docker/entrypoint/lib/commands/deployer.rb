@@ -13,8 +13,7 @@ module Jekyll
       # The Jekyll::PlantUml::Deployer deploys a built Jekyll site to a specified
       # branch (default `gh-pages`) and pushes that branch to the remote `origin`.
       class Deployer
-        attr_writer :jekyll_build
-        attr_writer :logger
+        attr_writer :jekyll_build, :logger
 
         def initialize(context)
           context.must_be_a! Context

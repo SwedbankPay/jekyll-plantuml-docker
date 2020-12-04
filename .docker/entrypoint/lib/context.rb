@@ -11,15 +11,7 @@ module Jekyll
     # The Jekyll::PlantUml::Context class provides data from and about the
     # execution environment
     class Context
-      attr_reader :env
-      attr_reader :var_dir
-      attr_reader :data_dir
-      attr_reader :debug
-      attr_reader :auth_token
-      attr_reader :configuration
-      attr_reader :arguments
-      attr_reader :git_branch
-      attr_reader :git_repository_url
+      attr_reader :env, :var_dir, :data_dir, :debug, :auth_token, :configuration, :arguments, :git_branch, :git_repository_url
 
       def initialize(env, var_dir, data_dir, auth_token: nil, git_branch: nil, git_repository_url: nil, debug: false)
         env.must_be_a! :non_empty, String
@@ -45,14 +37,15 @@ module Jekyll
         git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
         debug = ENV.fetch('DEBUG', false)
 
-        self.new(
+        new(
           env,
           var_dir,
           data_dir,
           auth_token: auth_token,
           git_branch: git_branch,
           git_repository_url: git_repository_url,
-          debug: debug)
+          debug: debug
+        )
       end
 
       def configuration=(config)

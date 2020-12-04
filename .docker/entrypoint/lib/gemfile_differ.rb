@@ -14,7 +14,7 @@ module Jekyll
         @debug = debug
       end
 
-      def diff(default_gemfile_path, user_gemfile_path)
+      def diff(default_gemfile_path, user_gemfile_path, &block)
         default_gemfile_path.must_be_a_file!
 
         puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
@@ -23,9 +23,7 @@ module Jekyll
         puts "\n\n----- Sourcing gems from #{default_gemfile_path} -----" if @debug
         default_dependencies = load_dependencies(default_gemfile_path)
 
-        do_diff(default_dependencies, user_dependencies) do |dependency|
-          yield dependency
-        end
+        do_diff(default_dependencies, user_dependencies, &block)
       end
 
       private

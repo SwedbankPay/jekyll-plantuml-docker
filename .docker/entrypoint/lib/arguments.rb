@@ -11,11 +11,7 @@ module Jekyll
     # The Jekyll::PlantUml::Arguments class contains the arguments parsed from
     # the command line by Jekyll::PlantUml::ArgumentParser
     class Arguments
-      attr_reader :command
-      attr_reader :ignore_urls
-      attr_reader :log_level
-      attr_reader :environment
-      attr_reader :profile
+      attr_reader :command, :ignore_urls, :log_level, :environment, :profile
 
       def initialize(args)
         args.must_be_a! :non_empty, Hash

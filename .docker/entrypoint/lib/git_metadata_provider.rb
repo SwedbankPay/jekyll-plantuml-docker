@@ -20,15 +20,15 @@ module Jekyll
 
       def branch
         @branch ||= find_branch
-      rescue StandardError  => err
-        log(:error, err)
+      rescue StandardError => e
+        log(:error, e)
         nil
       end
 
       def repository_url
         @repository_url ||= find_repository_url
-      rescue StandardError  => err
-        log(:error, err)
+      rescue StandardError => e
+        log(:error, e)
         nil
       end
 
@@ -40,7 +40,7 @@ module Jekyll
 
         if git_parent_commits.length > 1
           # We have more than 1 parent, so this is a merge-commit
-          log(:debug, "Merge-commit detected. Finding parents.")
+          log(:debug, 'Merge-commit detected. Finding parents.')
 
           git_parent_branches = git_parent_commits.map do |git_parent_commit|
             git_parent_branch = `git describe --contains --always --all --exclude refs/tags/ #{git_parent_commit}`
@@ -63,7 +63,7 @@ module Jekyll
         git_repo_url = @context.git_repository_url || git('config --get remote.origin.url')
 
         # Translate from SSH to HTTPS URL.
-        /^git\@github\.com\:(?<repo_name>.*)\.git$/.match(git_repo_url) do |match|
+        /^git@github\.com:(?<repo_name>.*)\.git$/.match(git_repo_url) do |match|
           repo_name = match[:repo_name]
           git_repo_url = "https://github.com/#{repo_name}"
         end
