@@ -25,7 +25,8 @@ describe Verifier do
   describe '#verify' do
     data_dir = File.join(__dir__, '..', '..', '..', 'tests', 'minimal')
     site_dir = File.join(data_dir, '_site')
-    context = Context.new('development', __dir__, data_dir, auth_token: 'SECRET')
+    context = Context.new('development', __dir__, data_dir)
+    context.auth_token = 'SECRET'
 
     before(:all) do
       jekyll_config_provider = JekyllConfigProvider.new(context)

@@ -11,9 +11,10 @@ module Jekyll
     # The Jekyll::PlantUml::Context class provides data from and about the
     # execution environment
     class Context
-      attr_reader :env, :var_dir, :data_dir, :debug, :auth_token, :configuration, :arguments, :git_branch, :git_repository_url
+      attr_reader :env, :var_dir, :data_dir, :configuration, :arguments
+      attr_accessor :auth_token, :git_branch, :git_repository_url, :debug
 
-      def initialize(env, var_dir, data_dir, auth_token: nil, git_branch: nil, git_repository_url: nil, debug: false)
+      def initialize(env, var_dir, data_dir)
         env.must_be_a! :non_empty, String
         var_dir.must_be_a! :non_empty, String
         data_dir.must_be_a! :non_empty, String
@@ -21,10 +22,7 @@ module Jekyll
         @env = env
         @var_dir = var_dir
         @data_dir = data_dir
-        @auth_token = auth_token
-        @git_branch = git_branch
-        @git_repository_url = git_repository_url
-        @debug = debug
+        @debug = false
         @arguments = Arguments.default
       end
 
@@ -37,15 +35,13 @@ module Jekyll
         git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
         debug = ENV.fetch('DEBUG', false)
 
-        new(
-          env,
-          var_dir,
-          data_dir,
-          auth_token: auth_token,
-          git_branch: git_branch,
-          git_repository_url: git_repository_url,
-          debug: debug
-        )
+        context = new(env, var_dir, data_dir)
+        context.debug = debug
+        context.auth_token = auth_token
+        context.git_branch = git_branch
+        context.git_repository_url = git_repository_url
+
+        context
       end
 
       def configuration=(config)

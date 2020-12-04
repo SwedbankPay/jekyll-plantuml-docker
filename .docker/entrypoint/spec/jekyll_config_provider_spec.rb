@@ -115,7 +115,9 @@ describe JekyllConfigProvider do
       repo = 'https://example.com/SwedbankPay/nice_repository'
 
       subject {
-        context = Context.new('development', __dir__, data_dir, git_branch: branch, git_repository_url: repo)
+        context = Context.new('development', __dir__, data_dir)
+        context.git_branch = branch
+        context.git_repository_url = repo
         jekyll_config_provider = JekyllConfigProvider.new(context)
         jekyll_config_provider.provide('build')
       }
