@@ -45,8 +45,6 @@ module Jekyll
         git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
         debug = ENV.fetch('DEBUG', false)
 
-        raise git_branch unless git_branch.nil?
-
         self.new(
           env,
           var_dir,
