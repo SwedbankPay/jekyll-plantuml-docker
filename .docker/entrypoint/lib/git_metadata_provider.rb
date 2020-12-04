@@ -36,20 +36,13 @@ module Jekyll
 
       def find_branch
         git_branch = @context.git_branch || git('rev-parse --abbrev-ref HEAD')
-        git_parent_commits = `git show --no-patch --format="%P"`.split(' ')
+        git_parent_commits = `git show --no-patch --format="%P"`.split
 
         if git_parent_commits.length > 1
           # We have more than 1 parent, so this is a merge-commit
           log(:debug, 'Merge-commit detected. Finding parents.')
 
-          git_parent_branches = git_parent_commits.map do |git_parent_commit|
-            git_parent_branch = `git describe --contains --always --all --exclude refs/tags/ #{git_parent_commit}`
-            git_parent_branch.strip!
-
-            return git_parent_branch unless git_parent_branch.include?('~') || git_parent_branch.include?('^')
-          end
-
-          git_first_parent_branch = git_parent_branches.compact.first
+          git_first_parent_branch = git_first_parent_branch(git_parent_branches)
 
           return git_first_parent_branch unless git_first_parent_branch.nil? || git_first_parent_branch.empty?
         else
@@ -69,6 +62,17 @@ module Jekyll
         end
 
         git_repo_url
+      end
+
+      def git_first_parent_branch(git_parent_commits)
+        git_parent_branches = git_parent_commits.map do |git_parent_commit|
+          git_parent_branch = `git describe --contains --always --all --exclude refs/tags/ #{git_parent_commit}`
+          git_parent_branch.strip!
+
+          return git_parent_branch unless git_parent_branch.include?('~') || git_parent_branch.include?('^')
+        end
+
+        git_parent_branches.compact.first
       end
 
       def git(git_command)
