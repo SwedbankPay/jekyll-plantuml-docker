@@ -18,8 +18,10 @@ module Jekyll
       attr_reader :auth_token
       attr_reader :configuration
       attr_reader :arguments
+      attr_reader :git_branch
+      attr_reader :git_repository_url
 
-      def initialize(env, var_dir, data_dir, auth_token = nil, debug = false)
+      def initialize(env, var_dir, data_dir, auth_token: nil, git_branch: nil, git_repository_url: nil, debug: false)
         env.must_be_a! :non_empty, String
         var_dir.must_be_a! :non_empty, String
         data_dir.must_be_a! :non_empty, String
@@ -27,9 +29,32 @@ module Jekyll
         @env = env
         @var_dir = var_dir
         @data_dir = data_dir
-        @debug = debug
         @auth_token = auth_token
+        @git_branch = git_branch
+        @git_repository_url = git_repository_url
+        @debug = debug
         @arguments = Arguments.default
+      end
+
+      def self.from_environment
+        env = ENV.fetch('JEKYLL_ENV', 'production')
+        data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
+        var_dir = ENV.fetch('JEKYLL_VAR_DIR')
+        auth_token = ENV.fetch('JEKYLL_GITHUB_TOKEN', nil) || ENV.fetch('GITHUB_TOKEN', nil)
+        git_branch = ENV.fetch('GITHUB_BRANCH', nil)
+        git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
+        debug = ENV.fetch('DEBUG', false)
+
+        raise git_branch unless git_branch.nil?
+
+        self.new(
+          env,
+          var_dir,
+          data_dir,
+          auth_token: auth_token,
+          git_branch: git_branch,
+          git_repository_url: git_repository_url,
+          debug: debug)
       end
 
       def configuration=(config)

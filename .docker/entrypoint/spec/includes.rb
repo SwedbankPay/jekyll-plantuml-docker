@@ -19,6 +19,7 @@ require 'fileutils'
 require 'gemfile_differ'
 require 'gemfile_generator_exec'
 require 'gemfile_generator'
+require 'git_metadata_provider'
 require 'helpers/spec_html_proofer'
 require 'helpers/spec_jekyll_build'
 require 'helpers/spec_jekyll_builder'
@@ -43,6 +44,7 @@ FileNotFoundError ||= Jekyll::PlantUml::FileNotFoundError
 GemfileDiffer ||= Jekyll::PlantUml::GemfileDiffer
 GemfileGenerator ||= Jekyll::PlantUml::GemfileGenerator
 GemfileGeneratorExec ||= Jekyll::PlantUml::GemfileGeneratorExec
+GitMetadataProvider ||= Jekyll::PlantUml::GitMetadataProvider
 JekyllBuilder ||= Jekyll::PlantUml::Commands::JekyllBuilder
 JekyllConfigProvider ||= Jekyll::PlantUml::JekyllConfigProvider
 JekyllServe ||= Jekyll::Commands::Serve

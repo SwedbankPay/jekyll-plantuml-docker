@@ -7,7 +7,7 @@ describe Commander do
   subject(:commander) do
     data_dir = File.join(__dir__, 'data')
     Commander.new(
-      Context.new('development', data_dir, data_dir, :level),
+      Context.new('development', data_dir, data_dir),
       DockerImage.new('swedbankpay/jekyll-plantuml', version, version)
     )
   end
