@@ -24,6 +24,7 @@ gem 'rake'
 group :development, :test do
   gem 'diffy'
   gem 'rspec'
+  gem 'its'
   gem 'rubocop', require: false
 end
 
