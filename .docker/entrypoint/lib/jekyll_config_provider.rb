@@ -53,9 +53,7 @@ module Jekyll
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
         jekyll_config['verbose'] = true if @context.verbose?
         jekyll_config['profile'] = true if @context.profile?
-        jekyll_config['github'] = jekyll_config['github'] || {}
-        jekyll_config['github']['branch'] = @git.branch unless @git.branch.nil?
-        jekyll_config['github']['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        jekyll_config['github'] = github_config(jekyll_config)
 
         jekyll_config
       end
@@ -79,6 +77,13 @@ module Jekyll
           'watch' => true,
           'serving' => true
         }
+      end
+
+      def github_config(jekyll_config)
+        cfg = jekyll_config['github'] || {}
+        cfg['branch'] = @git.branch unless @git.branch.nil?
+        cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        cfg
       end
     end
   end
