@@ -95,8 +95,8 @@ module Jekyll
 
       def version_compare(version_a, version_b)
         return 0 if version_a.nil? && version_b.nil?
-        return -1 if version_a.nil? && !version_b.nil?
-        return 1 if !version_a.nil? && version_b.nil?
+        return -1 if version_a.nil?
+        return 1 if version_b.nil?
         return 1 if version_a > version_b
 
         -1
