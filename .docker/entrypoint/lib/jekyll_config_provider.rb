@@ -12,8 +12,6 @@ module Jekyll
     # configuration by probing for `_config.yml` files and setting configuration
     # values to meaningful values that should ensure a well built Jekyll site.
     class JekyllConfigProvider
-      attr_reader :logger
-
       def initialize(context)
         context.must_be_a! Context
 
@@ -24,11 +22,6 @@ module Jekyll
       def provide(jekyll_command)
         config_file_path = config_file_path()
         config(jekyll_command, config_file_path)
-      end
-
-      def logger=(logger)
-        @logger = logger
-        @git.logger = logger
       end
 
       private
