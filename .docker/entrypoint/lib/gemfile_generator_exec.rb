@@ -24,7 +24,7 @@ module Jekyll
       def generate
         gemfiles_info
 
-        gemfile_generator = GemfileGenerator.new(@debug)
+        gemfile_generator = GemfileGenerator.new(debug: @debug)
 
         gemfile_generator.generate(
           @gemfiles[:default],

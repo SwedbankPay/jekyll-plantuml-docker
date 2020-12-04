@@ -10,7 +10,7 @@ module Jekyll
   module PlantUml
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
-      def initialize(debug = false)
+      def initialize(debug: false)
         @debug = debug
       end
 

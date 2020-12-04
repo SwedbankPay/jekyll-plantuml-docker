@@ -11,9 +11,9 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGenerator class in practice merges the
     # contents of two input Gemfiles into a generated third output Gemfile.
     class GemfileGenerator
-      def initialize(debug = false)
+      def initialize(debug: false)
         @debug = debug
-        @gemfile_differ = GemfileDiffer.new(@debug)
+        @gemfile_differ = GemfileDiffer.new(debug: @debug)
       end
 
       def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
