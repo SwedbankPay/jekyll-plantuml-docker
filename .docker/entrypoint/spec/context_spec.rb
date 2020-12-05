@@ -91,6 +91,11 @@ describe Context do
         ENV['JEKYLL_DATA_DIR'] = data_dir
       end
 
+      after(:all) do
+        ENV.delete('JEKYLL_VAR_DIR')
+        ENV.delete('JEKYLL_DATA_DIR')
+      end
+
       subject { Context.from_environment }
 
       it {

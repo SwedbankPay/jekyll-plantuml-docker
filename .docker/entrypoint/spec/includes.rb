@@ -12,6 +12,7 @@ require 'context'
 require 'diffy'
 require 'docker_image'
 require 'entrypoint'
+require 'environment_variables'
 require 'errors/command_line_argument_error'
 require 'errors/directory_not_found_error'
 require 'errors/file_not_found_error'
@@ -40,6 +41,7 @@ Diff ||= Diffy::Diff
 DirectoryNotFoundError ||= Jekyll::PlantUml::DirectoryNotFoundError
 DockerImage ||= Jekyll::PlantUml::DockerImage
 Entrypoint ||= Jekyll::PlantUml::Entrypoint
+EnvironmentVariables ||= Jekyll::PlantUml::EnvironmentVariables
 FileNotFoundError ||= Jekyll::PlantUml::FileNotFoundError
 GemfileDiffer ||= Jekyll::PlantUml::GemfileDiffer
 GemfileGenerator ||= Jekyll::PlantUml::GemfileGenerator
