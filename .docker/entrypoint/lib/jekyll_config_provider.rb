@@ -82,7 +82,7 @@ module Jekyll
       def github_config(jekyll_config)
         cfg = jekyll_config['github'] || {}
         cfg['branch'] = @git.branch unless @git.branch.nil?
-        cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        # cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
         cfg
       end
     end

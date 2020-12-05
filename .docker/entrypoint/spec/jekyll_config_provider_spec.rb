@@ -125,7 +125,7 @@ describe JekyllConfigProvider do
       it {
         is_expected.to include('github' => {
           'branch' => branch,
-          'repository_url' => repo
+          # 'repository_url' => repo
         })
       }
     end
