@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require 'its'
 require 'includes'
 
 describe Context do
+  data_dir = File.join(__dir__, 'data')
+
   describe '#initialize' do
-    let(:data_dir) { File.join(__dir__, 'data') }
     subject { Context.new('dev', data_dir, data_dir) }
 
     it {
@@ -15,9 +17,16 @@ describe Context do
       is_expected.to have_attributes(
         env: 'dev',
         var_dir: data_dir,
-        data_dir: data_dir
+        data_dir: data_dir,
+        configuration: nil,
+        auth_token: nil,
+        git_branch: nil,
+        git_repository_url: nil,
+        debug: false
       )
     }
+
+    its(:arguments) { is_expected.to_not be_nil }
 
     context 'env is nil' do
       it do
@@ -65,6 +74,43 @@ describe Context do
           Context.new('dev', __dir__, '')
         end.to raise_error(ArgumentError, 'String cannot be empty')
       end
+    end
+  end
+
+  describe '#from_environment' do
+    context 'missing environment variables' do
+      it do
+        expect { Context.from_environment }.to \
+          raise_error(KeyError, 'key not found: "JEKYLL_VAR_DIR"')
+      end
+    end
+
+    context 'environment variables set' do
+      before(:all) do
+        ENV['JEKYLL_VAR_DIR'] = data_dir
+        ENV['JEKYLL_DATA_DIR'] = data_dir
+      end
+
+      subject { Context.from_environment }
+
+      it {
+        is_expected.not_to be_nil
+      }
+
+      it {
+        is_expected.to have_attributes(
+          env: 'production',
+          var_dir: data_dir,
+          data_dir: data_dir,
+          configuration: nil,
+          auth_token: nil,
+          git_branch: nil,
+          git_repository_url: nil,
+          debug: false
+        )
+      }
+
+      its(:arguments) { is_expected.to_not be_nil }
     end
   end
 end
