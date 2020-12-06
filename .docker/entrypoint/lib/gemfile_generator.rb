@@ -11,9 +11,10 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGenerator class in practice merges the
     # contents of two input Gemfiles into a generated third output Gemfile.
     class GemfileGenerator
-      def initialize(debug: false)
-        @debug = debug
-        @gemfile_differ = GemfileDiffer.new(debug: @debug)
+      attr_reader :logger
+
+      def initialize
+        @gemfile_differ = GemfileDiffer.new
       end
 
       def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
@@ -31,13 +32,18 @@ module Jekyll
         write_file(generated_gemfile_path, generated_file_contents)
       end
 
+      def logger=(logger)
+        @logger = logger
+        @gemfile_differ.logger = logger
+      end
+
       private
 
       def merge(default_gemfile_path, user_gemfile_path)
         user_gemfile_contents = path_valid?(user_gemfile_path) ? File.readlines(user_gemfile_path) : []
         default_gemfile_contents = []
 
-        puts "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----" if @debug
+        log(:debug, "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----")
 
         @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
           # Delete dependencies that override the user's dependencies, most
@@ -72,11 +78,11 @@ module Jekyll
       end
 
       def write_file(path, contents)
-        puts "\n\n----- Writing <#{path}> -----" if @debug
+        log(:debug, "\n\n----- Writing <#{path}> -----")
 
         return if contents.empty?
 
-        puts contents if @debug
+        log(:debug, contents)
 
         File.open(path, 'w') do |file|
           file.puts(contents)
@@ -86,12 +92,12 @@ module Jekyll
       end
 
       def validate_gemfile(path)
-        puts "\n\n----- Validating <#{path}> -----" if @debug
+        log(:debug, "\n\n----- Validating <#{path}> -----")
 
-        if path_valid?(path) && @debug
-          puts "#{path} exists."
-        elsif @debug
-          puts "#{path} DOES NOT EXIST! ALARM!"
+        if path_valid?(path)
+          log(:debug, "#{path} exists.")
+        else
+          log(:warn, "#{path} DOES NOT EXIST! ALARM!")
         end
 
         Bundler::Definition.build(path, nil, {})
@@ -100,23 +106,28 @@ module Jekyll
       def path_valid?(path)
         return true if !path.nil? && !path.empty? && File.exist?(path)
 
-        puts "<#{path}> not found." if @debug
+        log(:debug, "<#{path}> not found.")
 
         false
       end
 
       def return_contents?(path, contents)
-        if @debug
-          puts "\n\n----- <#{path}> contents -----"
-          puts contents
-        end
+        log(:debug, "\n\n----- <#{path}> contents -----")
+        log(:debug, contents)
 
         if path.nil?
-          puts 'Returning contents since the path on which to save it is nil.' if @debug
+          log(:debug, 'Returning contents since the path on which to save it is nil.')
           return true
         end
 
         false
+      end
+
+      def log(severity, message)
+        (@logger ||= Jekyll.logger).public_send(
+          severity,
+          "   jekyll-plantuml: #{message}"
+        )
       end
     end
   end

@@ -15,7 +15,7 @@ describe GemfileGeneratorExec do
         generated: generated_gemfile_path
       }
     )
-    generator.debug = true
+    generator.logger = SpecLogger.new
     generator
   end
 

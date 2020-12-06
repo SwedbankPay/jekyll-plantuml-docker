@@ -81,7 +81,7 @@ describe Context do
     context 'missing environment variables' do
       it do
         expect { Context.from_environment }.to \
-          raise_error(KeyError, 'key not found: "JEKYLL_VAR_DIR"')
+          raise_error(KeyError, 'key not found: "JEKYLL_DATA_DIR"')
       end
     end
 

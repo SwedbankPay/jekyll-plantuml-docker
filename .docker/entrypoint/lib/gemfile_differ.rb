@@ -10,17 +10,15 @@ module Jekyll
   module PlantUml
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
-      def initialize(debug: false)
-        @debug = debug
-      end
+      attr_accessor :logger
 
       def diff(default_gemfile_path, user_gemfile_path, &block)
         default_gemfile_path.must_be_a_file!
 
-        puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
+        log(:debug, "\n\n----- Sourcing gems from #{user_gemfile_path} -----")
         user_dependencies = load_dependencies(user_gemfile_path)
 
-        puts "\n\n----- Sourcing gems from #{default_gemfile_path} -----" if @debug
+        log(:debug, "\n\n----- Sourcing gems from #{default_gemfile_path} -----")
         default_dependencies = load_dependencies(default_gemfile_path)
 
         do_diff(default_dependencies, user_dependencies, &block)
@@ -33,7 +31,7 @@ module Jekyll
         return [] if definition.nil?
 
         dependencies = definition.dependencies
-        puts dependencies if @debug
+        log(:debug, dependencies)
         dependencies
       end
 
@@ -43,7 +41,7 @@ module Jekyll
         begin
           return Bundler::Definition.build(path, nil, {})
         rescue Bundler::GemfileNotFound => e
-          puts e if @debug
+          log(:debug, e)
         end
 
         nil
@@ -100,6 +98,13 @@ module Jekyll
         return 1 if version_a > version_b
 
         -1
+      end
+
+      def log(severity, message)
+        (@logger ||= Jekyll.logger).public_send(
+          severity,
+          "   jekyll-plantuml: #{message}"
+        )
       end
     end
   end
