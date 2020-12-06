@@ -9,6 +9,8 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
+      attr_accessor :debug
+
       def initialize(gemfiles = nil)
         @debug = ENV.fetch('DEBUG', false)
         jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)

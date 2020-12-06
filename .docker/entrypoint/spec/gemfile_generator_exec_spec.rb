@@ -8,13 +8,15 @@ describe GemfileGeneratorExec do
   let(:generated_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.generated') }
 
   subject(:generator) do
-    GemfileGeneratorExec.new(
+    generator = GemfileGeneratorExec.new(
       {
         default: default_gemfile_path,
         user: user_gemfile_path,
         generated: generated_gemfile_path
       }
     )
+    generator.debug = true
+    generator
   end
 
   describe '#generate' do
@@ -23,9 +25,7 @@ describe GemfileGeneratorExec do
     end
 
     context 'existing gemfiles' do
-      let!(:_) do
-        generator.generate
-      end
+      let!(:_) { generator.generate }
       subject { File.read(generated_gemfile_path) }
       it {
         expect(File).to exist(generated_gemfile_path)
