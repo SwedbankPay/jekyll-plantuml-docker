@@ -26,7 +26,7 @@ describe Context do
       )
     }
 
-    its(:arguments) { is_expected.to_not be_nil }
+    its(:arguments) { is_expected.to be_a Arguments }
 
     context 'env is nil' do
       it do
@@ -122,7 +122,7 @@ describe Context do
         )
       }
 
-      its(:arguments) { is_expected.to_not be_nil }
+      its(:arguments) { is_expected.to be_a Arguments }
     end
   end
 end
