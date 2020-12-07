@@ -11,10 +11,8 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      attr_accessor :logger
-
-      def initialize(gemfiles = nil)
-        @log_level = Arguments.new.log_level
+      def initialize(gemfiles = nil, args = nil)
+        @log_level = log_level(args)
         env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
         gemfiles ||= {
           default: File.join(env.var_dir, 'entrypoint', 'Gemfile'),
@@ -61,9 +59,23 @@ module Jekyll
       end
 
       def log(severity, message)
-        return if @level != severity
+        severities = [:trace, :debug, :info, :warn, :error, :fatal]
+        level_index = severities.index(@log_level)
+        severity_index = severities.index(severity)
+
+        return if level_index.nil?
+        return if level_index > severity_index
 
         puts "   jekyll-plantuml: #{message}"
+      end
+
+      def log_level(args)
+        return :fatal if args.nil? || args.empty?
+
+        docker_image = DockerImage.new('jekyll-plantuml','0.0.1-dev', '0.0.1-dev')
+        argument_parser = ArgumentParser.new(docker_image)
+        arguments = argument_parser.parse(args)
+        arguments.log_level.to_sym
       end
     end
   end
