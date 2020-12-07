@@ -10,6 +10,7 @@ require 'commands/jekyll_server'
 require 'commands/verifier'
 require 'context'
 require 'diffy'
+require 'docker_environment_variables'
 require 'docker_image'
 require 'entrypoint'
 require 'environment_variables'
@@ -39,6 +40,7 @@ Context ||= Jekyll::PlantUml::Context
 Deployer ||= Jekyll::PlantUml::Commands::Deployer
 Diff ||= Diffy::Diff
 DirectoryNotFoundError ||= Jekyll::PlantUml::DirectoryNotFoundError
+DockerEnvironmentVariables ||= Jekyll::PlantUml::DockerEnvironmentVariables
 DockerImage ||= Jekyll::PlantUml::DockerImage
 Entrypoint ||= Jekyll::PlantUml::Entrypoint
 EnvironmentVariables ||= Jekyll::PlantUml::EnvironmentVariables

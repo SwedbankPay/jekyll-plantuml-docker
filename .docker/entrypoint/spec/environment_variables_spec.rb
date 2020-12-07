@@ -26,6 +26,9 @@ describe EnvironmentVariables do
       auth_token = 'VERY_SECRET'
       branch = 'my_favorite_branch'
       repo = 'https://example.com/SwedbankPay/my_favorite_repo'
+      image_name = 'awesome_image'
+      image_tag = '1.0-awesome'
+      image_version = '1.0'
 
       before(:all) do
         env({
@@ -34,6 +37,9 @@ describe EnvironmentVariables do
           'JEKYLL_GITHUB_TOKEN' => auth_token,
           'GITHUB_BRANCH' => branch,
           'GITHUB_REPOSITORY_URL' => repo,
+          'DOCKER_IMAGE_NAME' => image_name,
+          'DOCKER_IMAGE_TAG' => image_tag,
+          'DOCKER_IMAGE_VERSION' => image_version,
           'DEBUG' => true
         })
       end
@@ -53,6 +59,15 @@ describe EnvironmentVariables do
           git_branch: branch,
           git_repository_url: repo,
           debug: true
+        )
+      }
+
+      its(:docker) {
+        is_expected.to be_a DockerEnvironmentVariables
+        is_expected.to have_attributes(
+          image_name: image_name,
+          image_tag: image_tag,
+          image_version: image_version
         )
       }
     end

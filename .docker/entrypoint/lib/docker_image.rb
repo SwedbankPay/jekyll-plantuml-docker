@@ -21,11 +21,8 @@ module Jekyll
       end
 
       def self.from_environment
-        docker_image_name = ENV.fetch('DOCKER_IMAGE_NAME')
-        docker_image_tag = ENV.fetch('DOCKER_IMAGE_TAG')
-        docker_image_version = ENV.fetch('DOCKER_IMAGE_VERSION')
-
-        new(docker_image_name, docker_image_tag, docker_image_version)
+        env = EnvironmentVariables.new
+        new(env.docker.image_name, env.docker.image_tag, env.docker.image_version)
       end
 
       def to_s

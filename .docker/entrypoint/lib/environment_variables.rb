@@ -2,6 +2,7 @@
 
 require 'jekyll'
 require_relative 'arguments'
+require_relative 'docker_environment_variables'
 require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -21,6 +22,10 @@ module Jekyll
         @git_branch = ENV.fetch('GITHUB_BRANCH', nil)
         @git_repository_url = ENV.fetch('GITHUB_REPOSITORY_URL', nil)
         @debug = fetch_debug
+      end
+
+      def docker
+        @docker ||= DockerEnvironmentVariables.new
       end
 
       private
