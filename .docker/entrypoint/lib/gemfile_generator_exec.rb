@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'jekyll'
+require_relative 'arguments'
 require_relative 'gemfile_generator'
 require_relative 'environment_variables'
 
@@ -14,6 +14,7 @@ module Jekyll
       attr_accessor :logger
 
       def initialize(gemfiles = nil)
+        @log_level = Arguments.new.log_level
         env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
         gemfiles ||= {
           default: File.join(env.var_dir, 'entrypoint', 'Gemfile'),
@@ -60,10 +61,9 @@ module Jekyll
       end
 
       def log(severity, message)
-        (@logger ||= Jekyll.logger).public_send(
-          severity,
-          "   jekyll-plantuml: #{message}"
-        )
+        return if @level != severity
+
+        puts "   jekyll-plantuml: #{message}"
       end
     end
   end
