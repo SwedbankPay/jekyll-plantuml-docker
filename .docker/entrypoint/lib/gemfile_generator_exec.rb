@@ -11,7 +11,7 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      attr_reader :logger
+      attr_accessor :logger
 
       def initialize(gemfiles = nil)
         env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
@@ -33,10 +33,6 @@ module Jekyll
           @gemfiles[:user],
           @gemfiles[:generated]
         )
-      end
-
-      def logger=(logger)
-        @logger = logger
       end
 
       private
@@ -62,7 +58,6 @@ module Jekyll
         log(:debug, "    uid: #{uid}")
         log(:debug, "    gid: #{gid}")
       end
-
 
       def log(severity, message)
         (@logger ||= Jekyll.logger).public_send(

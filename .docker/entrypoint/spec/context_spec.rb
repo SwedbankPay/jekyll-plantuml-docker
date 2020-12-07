@@ -86,14 +86,21 @@ describe Context do
     end
 
     context 'environment variables set' do
-      before(:all) do
-        ENV['JEKYLL_VAR_DIR'] = data_dir
-        ENV['JEKYLL_DATA_DIR'] = data_dir
-      end
+      include_context "env_helper"
 
-      after(:all) do
-        ENV.delete('JEKYLL_VAR_DIR')
-        ENV.delete('JEKYLL_DATA_DIR')
+      auth_token = 'SECRET_TOKEN'
+      branch = 'my_favorite_branch'
+      repo = 'https://example.com/SwedbankPay/my_favorite_repo'
+
+      before(:all) do
+        env({
+          'JEKYLL_VAR_DIR' => data_dir,
+          'JEKYLL_DATA_DIR' => data_dir,
+          'JEKYLL_GITHUB_TOKEN' => auth_token,
+          'GITHUB_BRANCH' => branch,
+          'GITHUB_REPOSITORY_URL' => repo,
+          'DEBUG' => true
+        })
       end
 
       subject { Context.from_environment }
@@ -108,10 +115,10 @@ describe Context do
           var_dir: data_dir,
           data_dir: data_dir,
           configuration: nil,
-          auth_token: nil,
-          git_branch: nil,
-          git_repository_url: nil,
-          debug: false
+          auth_token: auth_token,
+          git_branch: branch,
+          git_repository_url: repo,
+          debug: true
         )
       }
 
