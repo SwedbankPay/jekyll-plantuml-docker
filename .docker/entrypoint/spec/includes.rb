@@ -31,6 +31,7 @@ require 'jekyll_config_provider'
 require 'jekyll'
 require 'matchers/be_valid_gemfile_matcher'
 require 'matchers/invoke_matcher'
+require 'options'
 require 'securerandom'
 
 ArgumentParser ||= Jekyll::PlantUml::ArgumentParser
@@ -53,6 +54,7 @@ JekyllBuilder ||= Jekyll::PlantUml::Commands::JekyllBuilder
 JekyllConfigProvider ||= Jekyll::PlantUml::JekyllConfigProvider
 JekyllServe ||= Jekyll::Commands::Serve
 JekyllServer ||= Jekyll::PlantUml::Commands::JekyllServer
+Options ||= Jekyll::PlantUml::Options
 SpecHTMLProofer ||= Jekyll::PlantUml::Specs::Helpers::SpecHTMLProofer
 SpecJekyllBuild ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuild
 SpecJekyllBuilder ||= Jekyll::PlantUml::Specs::Helpers::SpecJekyllBuilder
