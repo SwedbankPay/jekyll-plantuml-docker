@@ -10,15 +10,19 @@ module Jekyll
   module PlantUml
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
-      attr_accessor :logger
+      def initialize(logger)
+        raise ArgumentError, 'Logger cannot be nil' if logger.nil?
+
+        @logger = logger
+      end
 
       def diff(default_gemfile_path, user_gemfile_path, &block)
         default_gemfile_path.must_be_a_file!
 
-        log(:debug, "\n\n----- Sourcing gems from #{user_gemfile_path} -----")
+        @logger.log(:debug, "\n\n----- Sourcing gems from #{user_gemfile_path} -----")
         user_dependencies = load_dependencies(user_gemfile_path)
 
-        log(:debug, "\n\n----- Sourcing gems from #{default_gemfile_path} -----")
+        @logger.log(:debug, "\n\n----- Sourcing gems from #{default_gemfile_path} -----")
         default_dependencies = load_dependencies(default_gemfile_path)
 
         do_diff(default_dependencies, user_dependencies, &block)
@@ -31,7 +35,7 @@ module Jekyll
         return [] if definition.nil?
 
         dependencies = definition.dependencies
-        log(:debug, dependencies)
+        @logger.log(:debug, dependencies)
         dependencies
       end
 
@@ -41,7 +45,7 @@ module Jekyll
         begin
           return Bundler::Definition.build(path, nil, {})
         rescue Bundler::GemfileNotFound => e
-          log(:debug, e)
+          @logger.log(:debug, e)
         end
 
         nil
@@ -98,13 +102,6 @@ module Jekyll
         return 1 if version_a > version_b
 
         -1
-      end
-
-      def log(severity, message)
-        (@logger ||= Jekyll.logger).public_send(
-          severity,
-          "   jekyll-plantuml: #{message}"
-        )
       end
     end
   end

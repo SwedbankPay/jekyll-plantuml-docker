@@ -14,12 +14,14 @@ module Jekyll
             @levels = levels
           end
 
-          def public_send(level_of_message, message)
+          def log(level_of_message, message)
             return if @levels && !@levels.include?(level_of_message)
 
             @message ||= ''
             @message << message
           end
+
+          alias_method :public_send, :log
         end
       end
     end

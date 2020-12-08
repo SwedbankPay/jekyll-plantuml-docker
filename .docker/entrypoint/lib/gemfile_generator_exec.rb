@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'optparse'
+require_relative 'console_logger'
 require_relative 'gemfile_generator'
 require_relative 'environment_variables'
 
@@ -12,7 +12,6 @@ module Jekyll
     # by bootstrapping the environment.
     class GemfileGeneratorExec
       def initialize(gemfiles: nil, args: nil)
-        @log_level = log_level(args)
         env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
         gemfiles ||= {
           default: File.join(env.var_dir, 'entrypoint', 'Gemfile'),
@@ -20,13 +19,13 @@ module Jekyll
           generated: File.join(env.data_dir, 'Gemfile.generated')
         }
         @gemfiles = gemfiles
+        @logger = ConsoleLogger.from_argv(args)
       end
 
       def generate
         gemfiles_info
 
-        gemfile_generator = GemfileGenerator.new
-        gemfile_generator.logger = @logger
+        gemfile_generator = GemfileGenerator.new(@logger)
         gemfile_generator.generate(
           @gemfiles[:default],
           @gemfiles[:user],
@@ -37,7 +36,7 @@ module Jekyll
       private
 
       def gemfiles_info
-        log(:debug, 'Gemfiles:')
+        @logger.log(:debug, 'Gemfiles:')
         @gemfiles.each do |type, path|
           gemfile_info(type, path)
         end
@@ -46,46 +45,16 @@ module Jekyll
       def gemfile_info(type, gemfile_path)
         gemfile_exists = File.exist? gemfile_path
 
-        log(:debug, "  - type: #{type}")
-        log(:debug, "    path: #{gemfile_path}")
-        log(:debug, "    exists: #{gemfile_exists}")
+        @logger.log(:debug, "  - type: #{type}")
+        @logger.log(:debug, "    path: #{gemfile_path}")
+        @logger.log(:debug, "    exists: #{gemfile_exists}")
 
         return unless gemfile_exists
 
         uid = File.stat(gemfile_path).uid
         gid = File.stat(gemfile_path).gid
-        log(:debug, "    uid: #{uid}")
-        log(:debug, "    gid: #{gid}")
-      end
-
-      def log(severity, message)
-        severities = %i[trace debug info warn error fatal]
-        level_index = severities.index(@log_level)
-        severity_index = severities.index(severity)
-
-        return if level_index.nil?
-        return if level_index > severity_index
-
-        puts "   jekyll-plantuml: #{message}"
-      end
-
-      def log_level(args)
-        return :fatal if args.nil? || args.empty?
-
-        options = parse(args)
-        return options[:log_level].to_sym if options.key?(:log_level)
-
-        :fatal
-      end
-
-      def parse(args)
-        options = {}
-
-        OptionParser.new do |opt|
-          opt.on('--log-level LOG_LEVEL', '--log-level=LOG_LEVEL') { |o| options[:log_level] = o }
-        end.parse!(args)
-
-        options
+        @logger.log(:debug, "    uid: #{uid}")
+        @logger.log(:debug, "    gid: #{gid}")
       end
     end
   end
