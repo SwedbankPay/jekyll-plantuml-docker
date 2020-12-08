@@ -76,7 +76,7 @@ describe ArgumentParser do
         let(:args) { ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net', '--ignore-url="%r{[/.]?page1}"'] }
 
         it {
-          is_expected.to have_attributes(ignore_urls:  ['https://example.com', 'https://example.net', %r{[/.]?page1}])
+          is_expected.to have_attributes(ignore_urls: ['https://example.com', 'https://example.net', %r{[/.]?page1}])
         }
       end
 
