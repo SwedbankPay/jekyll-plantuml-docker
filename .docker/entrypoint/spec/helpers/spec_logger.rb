@@ -10,6 +10,7 @@ module Jekyll
           attr_reader :message
 
           def initialize(*levels)
+            @message = ''
             @levels = levels
           end
 

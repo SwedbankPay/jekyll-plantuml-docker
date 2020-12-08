@@ -53,8 +53,8 @@ DOCOPT
       def parse(args = nil)
         params = { version: @docker_image_version }
         params[:argv] = args if args
-        args = Docopt.docopt(@doc, params)
-        Arguments.new(args)
+        options = Docopt.docopt(@doc, params)
+        Arguments.new(options)
       end
 
       def help

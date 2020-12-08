@@ -57,7 +57,8 @@ module Jekyll
       end
 
       def execute_command
-        case @context.arguments.command
+        cmd = @context.arguments.command
+        case cmd
         when 'deploy'
           deploy
         when 'build'
@@ -65,7 +66,7 @@ module Jekyll
         when 'serve'
           serve
         else
-          raise CommandLineArgumentError, "Unknown command '#{command}'"
+          raise CommandLineArgumentError, "Unknown command '#{cmd}'"
         end
       end
 

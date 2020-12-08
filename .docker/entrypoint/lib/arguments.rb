@@ -1,5 +1,6 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
+require_relative 'argument_string_builder'
 require_relative 'extensions/object_extensions'
 require_relative 'errors/command_line_argument_error'
 
@@ -42,16 +43,8 @@ module Jekyll
       end
 
       def to_s
-        string = command
-        string << " --env=#{@environment}" unless @environment.nil? || @environment.empty?
-        string << ' --verify' if @verify
-        string << ' --dry-run' if @dry_run
-        unless @ignore_urls.nil? || @ignore_urls.empty?
-          string << @ignore_urls.map { |url| " --ignore-url=#{url}" }.join(' ')
-        end
-        string << " --log-level=#{@log_level}" unless @log_level.nil? || @log_level.empty?
-        string << ' --profile' if @profile
-        string.strip
+        builder = ArgumentStringBuilder.new(self)
+        builder.to_s
       end
 
       def self.default
