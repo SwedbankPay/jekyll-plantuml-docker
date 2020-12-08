@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'jekyll'
-require_relative 'arguments'
 require_relative 'docker_environment_variables'
 require_relative 'extensions/object_extensions'
 
