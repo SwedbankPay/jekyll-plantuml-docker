@@ -1,6 +1,5 @@
 # frozen_string_literal: false
 
-require 'docopt'
 require_relative 'extensions/object_extensions'
 require_relative 'errors/command_line_argument_error'
 
@@ -16,6 +15,7 @@ module Jekyll
       def initialize(args)
         args.must_be_a! :non_empty, Hash
 
+        @args = args
         @command = find_command(args)
         @verify = args.value_for('--verify')
         @dry_run = args.value_for('--dry-run')
@@ -35,6 +35,10 @@ module Jekyll
 
       def profile?
         @profile
+      end
+
+      def inspect
+        @args.inspect
       end
 
       def to_s
