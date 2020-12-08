@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'arguments'
+require 'optparse'
 require_relative 'gemfile_generator'
 require_relative 'environment_variables'
 
@@ -11,7 +11,7 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      def initialize(gemfiles = nil, args = nil)
+      def initialize(gemfiles: nil, args: nil)
         @log_level = log_level(args)
         env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
         gemfiles ||= {
@@ -59,7 +59,7 @@ module Jekyll
       end
 
       def log(severity, message)
-        severities = [:trace, :debug, :info, :warn, :error, :fatal]
+        severities = %i[trace debug info warn error fatal]
         level_index = severities.index(@log_level)
         severity_index = severities.index(severity)
 
@@ -72,10 +72,20 @@ module Jekyll
       def log_level(args)
         return :fatal if args.nil? || args.empty?
 
-        docker_image = DockerImage.new('jekyll-plantuml','0.0.1-dev', '0.0.1-dev')
-        argument_parser = ArgumentParser.new(docker_image)
-        arguments = argument_parser.parse(args)
-        arguments.log_level.to_sym
+        options = parse(args)
+        return options[:log_level].to_sym if options.key?(:log_level)
+
+        :fatal
+      end
+
+      def parse(args)
+        options = {}
+
+        OptionParser.new do |opt|
+          opt.on('--log-level LOG_LEVEL', '--log-level=LOG_LEVEL') { |o| options[:log_level] = o }
+        end.parse!(args)
+
+        options
       end
     end
   end
@@ -85,5 +95,5 @@ if __FILE__ == $PROGRAM_NAME
   # We set STDOUT.sync to disasble buffering
   $stdout.sync = true
   # This will only run if the script was the main, not loaded or required
-  Jekyll::PlantUml::GemfileGeneratorExec.new.generate
+  Jekyll::PlantUml::GemfileGeneratorExec.new(args: ARGV).generate
 end

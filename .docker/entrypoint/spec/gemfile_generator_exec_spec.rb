@@ -17,7 +17,7 @@ describe GemfileGeneratorExec do
 
     context 'existing gemfiles' do
       before(:all) do
-        generator = GemfileGeneratorExec.new(gemfiles)
+        generator = GemfileGeneratorExec.new(gemfiles: gemfiles)
         generator.generate
       end
 
@@ -45,7 +45,7 @@ describe GemfileGeneratorExec do
     end
 
     context 'log level' do
-      subject { GemfileGeneratorExec.new(gemfiles, ['build' , "--log-level=#{log_level}"]) }
+      subject { GemfileGeneratorExec.new(gemfiles: gemfiles, args: ['build' , "--log-level=#{log_level}"]) }
 
       [:trace, :debug].each do |severity|
         context severity do
