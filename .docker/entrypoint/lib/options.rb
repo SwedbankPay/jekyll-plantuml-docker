@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -20,7 +21,9 @@ module Jekyll
       private
 
       def find_log_level(args)
-        return :fatal if args.nil? || args.empty?
+        return :fatal if args.nil?
+
+        args.must_be_a! Array
 
         options = parse(args)
         return options[:log_level].to_sym if options.key?(:log_level)

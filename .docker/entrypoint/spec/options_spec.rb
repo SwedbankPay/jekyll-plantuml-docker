@@ -30,5 +30,13 @@ describe Options do
         is_expected.to have_attributes(log_level: :fatal)
       }
     end
+
+    context 'non-array arguments' do
+      let(:args) { {} }
+
+      it {
+        expect { subject }.to raise_error(ArgumentError, 'Hash is not a Array')
+      }
+    end
   end
 end
