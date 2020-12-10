@@ -10,22 +10,22 @@ module Jekyll
   module PlantUml
     # The Jekyll::PlantUml::GemfileDiffer class performs diffing of Gemfiles.
     class GemfileDiffer
-      def initialize(debug = false)
-        @debug = debug
+      def initialize(logger)
+        raise ArgumentError, 'Logger cannot be nil' if logger.nil?
+
+        @logger = logger
       end
 
-      def diff(default_gemfile_path, user_gemfile_path)
+      def diff(default_gemfile_path, user_gemfile_path, &block)
         default_gemfile_path.must_be_a_file!
 
-        puts "\n\n----- Sourcing gems from #{user_gemfile_path} -----" if @debug
+        @logger.log(:debug, "\n\n----- Sourcing gems from #{user_gemfile_path} -----")
         user_dependencies = load_dependencies(user_gemfile_path)
 
-        puts "\n\n----- Sourcing gems from #{default_gemfile_path} -----" if @debug
+        @logger.log(:debug, "\n\n----- Sourcing gems from #{default_gemfile_path} -----")
         default_dependencies = load_dependencies(default_gemfile_path)
 
-        do_diff(default_dependencies, user_dependencies) do |dependency|
-          yield dependency
-        end
+        do_diff(default_dependencies, user_dependencies, &block)
       end
 
       private
@@ -35,7 +35,7 @@ module Jekyll
         return [] if definition.nil?
 
         dependencies = definition.dependencies
-        puts dependencies if @debug
+        @logger.log(:debug, dependencies)
         dependencies
       end
 
@@ -45,7 +45,7 @@ module Jekyll
         begin
           return Bundler::Definition.build(path, nil, {})
         rescue Bundler::GemfileNotFound => e
-          puts e if @debug
+          @logger.log(:debug, e)
         end
 
         nil
@@ -97,8 +97,8 @@ module Jekyll
 
       def version_compare(version_a, version_b)
         return 0 if version_a.nil? && version_b.nil?
-        return -1 if version_a.nil? && !version_b.nil?
-        return 1 if !version_a.nil? && version_b.nil?
+        return -1 if version_a.nil?
+        return 1 if version_b.nil?
         return 1 if version_a > version_b
 
         -1

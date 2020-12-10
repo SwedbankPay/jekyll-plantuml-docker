@@ -16,10 +16,7 @@ module Jekyll
       # different commands that are available for commandeering by
       # Jekyll::PlantUml::Commander.
       class DefaultCommands
-        attr_writer :verifier
-        attr_writer :deployer
-        attr_writer :builder
-        attr_writer :server
+        attr_writer :verifier, :deployer, :builder, :server
 
         def verifier
           @verifier || Jekyll::PlantUml::Commands::Verifier

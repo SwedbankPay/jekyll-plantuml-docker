@@ -1,5 +1,5 @@
 repository: SwedbankPay/jekyll-plantuml-docker
-remote_theme: SwedbankPay/swedbank-pay-design-guide-jekyll-theme@1.5
+theme: 'swedbank-pay-design-guide-jekyll-theme'
 exclude: ["Gemfile*"]
 plugins:
   - jekyll-github-metadata
@@ -7,6 +7,7 @@ plugins:
   - jekyll-material-icon-tag
   - kramdown-plantuml
   - jekyll-remote-theme
+  - swedbank-pay-design-guide-jekyll-theme
 github:
   branch: master
 defaults:

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jekyll'
+require_relative 'git_metadata_provider'
 require_relative 'extensions/object_extensions'
 
 # The Jekyll module contains everything related to Jekyll.
@@ -14,13 +15,13 @@ module Jekyll
       def initialize(context)
         context.must_be_a! Context
 
+        @git = GitMetadataProvider.new(context)
         @context = context
       end
 
       def provide(jekyll_command)
         config_file_path = config_file_path()
-        config = config(jekyll_command, config_file_path)
-        config
+        config(jekyll_command, config_file_path)
       end
 
       private
@@ -52,6 +53,8 @@ module Jekyll
         jekyll_config = jekyll_config.merge(serve_config) if jekyll_command == 'serve'
         jekyll_config['verbose'] = true if @context.verbose?
         jekyll_config['profile'] = true if @context.profile?
+        jekyll_config['github'] = github_config(jekyll_config)
+
         jekyll_config
       end
 
@@ -74,6 +77,13 @@ module Jekyll
           'watch' => true,
           'serving' => true
         }
+      end
+
+      def github_config(jekyll_config)
+        cfg = jekyll_config['github'] || {}
+        cfg['branch'] = @git.branch unless @git.branch.nil?
+        # cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        cfg
       end
     end
   end

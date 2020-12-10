@@ -3,7 +3,7 @@
 require 'includes'
 
 describe GemfileDiffer do
-  subject(:differ) { GemfileDiffer.new }
+  subject(:differ) { GemfileDiffer.new(SpecLogger.new) }
 
   describe '#diff' do
     let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }

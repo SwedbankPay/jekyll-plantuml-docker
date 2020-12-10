@@ -109,5 +109,25 @@ describe JekyllConfigProvider do
         }
       end
     end
+
+    context 'config contains git metadata' do
+      branch = 'my_favorite_branch'
+      repo = 'https://example.com/SwedbankPay/nice_repository'
+
+      subject {
+        context = Context.new('development', __dir__, data_dir)
+        context.git_branch = branch
+        context.git_repository_url = repo
+        jekyll_config_provider = JekyllConfigProvider.new(context)
+        jekyll_config_provider.provide('build')
+      }
+
+      it {
+        is_expected.to include('github' => {
+          'branch' => branch,
+          # 'repository_url' => repo
+        })
+      }
+    end
   end
 end

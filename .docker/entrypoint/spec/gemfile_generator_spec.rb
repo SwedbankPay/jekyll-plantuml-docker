@@ -3,7 +3,7 @@
 require 'includes'
 
 describe GemfileGenerator do
-  subject(:generator) { GemfileGenerator.new }
+  subject(:generator) { GemfileGenerator.new(SpecLogger.new) }
 
   describe '#generate' do
     let(:user_gemfile_path) { File.join(__dir__, 'data', 'Gemfile.user') }

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require_relative 'gemfile_differ'
 require_relative 'errors/file_not_found_error'
-require 'fileutils'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -11,9 +11,11 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGenerator class in practice merges the
     # contents of two input Gemfiles into a generated third output Gemfile.
     class GemfileGenerator
-      def initialize(debug = false)
-        @debug = debug
-        @gemfile_differ = GemfileDiffer.new(@debug)
+      def initialize(logger)
+        raise ArgumentError, 'Logger cannot be nil' if logger.nil?
+
+        @logger = logger
+        @gemfile_differ = GemfileDiffer.new(logger)
       end
 
       def generate(default_gemfile_path, user_gemfile_path, generated_gemfile_path = nil)
@@ -37,7 +39,7 @@ module Jekyll
         user_gemfile_contents = path_valid?(user_gemfile_path) ? File.readlines(user_gemfile_path) : []
         default_gemfile_contents = []
 
-        puts "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----" if @debug
+        @logger.log(:debug, "\n\n----- Merging <#{user_gemfile_path}> with <#{default_gemfile_path}> -----")
 
         @gemfile_differ.diff(default_gemfile_path, user_gemfile_path) do |dependency|
           # Delete dependencies that override the user's dependencies, most
@@ -72,11 +74,11 @@ module Jekyll
       end
 
       def write_file(path, contents)
-        puts "\n\n----- Writing <#{path}> -----" if @debug
+        @logger.log(:debug, "\n\n----- Writing <#{path}> -----")
 
         return if contents.empty?
 
-        puts contents if @debug
+        @logger.log(:debug, contents)
 
         File.open(path, 'w') do |file|
           file.puts(contents)
@@ -86,12 +88,12 @@ module Jekyll
       end
 
       def validate_gemfile(path)
-        puts "\n\n----- Validating <#{path}> -----" if @debug
+        @logger.log(:debug, "\n\n----- Validating <#{path}> -----")
 
-        if path_valid?(path) && @debug
-          puts "#{path} exists."
-        elsif @debug
-          puts "#{path} DOES NOT EXIST! ALARM!"
+        if path_valid?(path)
+          @logger.log(:debug, "#{path} exists.")
+        else
+          @logger.log(:warn, "#{path} DOES NOT EXIST! ALARM!")
         end
 
         Bundler::Definition.build(path, nil, {})
@@ -100,19 +102,17 @@ module Jekyll
       def path_valid?(path)
         return true if !path.nil? && !path.empty? && File.exist?(path)
 
-        puts "<#{path}> not found." if @debug
+        @logger.log(:debug, "<#{path}> not found.")
 
         false
       end
 
       def return_contents?(path, contents)
-        if @debug
-          puts "\n\n----- <#{path}> contents -----"
-          puts contents
-        end
+        @logger.log(:debug, "\n\n----- <#{path}> contents -----")
+        @logger.log(:debug, contents)
 
         if path.nil?
-          puts 'Returning contents since the path on which to save it is nil.' if @debug
+          @logger.log(:debug, 'Returning contents since the path on which to save it is nil.')
           return true
         end
 

@@ -47,6 +47,14 @@ describe ArgumentParser do
       end
     end
 
+    context 'to_s' do
+      let(:args) { ['build', '--ignore-url=https://example.com', '--log-level=error', '--env=production', '--profile'] }
+
+      it {
+        expect(subject.to_s).to eq 'build --env=production --ignore-url=https://example.com --log-level=error --profile'
+      }
+    end
+
     context 'build' do
       let(:args) { ['build'] }
 
@@ -66,19 +74,19 @@ describe ArgumentParser do
 
       context '--ignore-url' do
         let(:args) { ['build', '--ignore-url=https://example.com', '--ignore-url=https://example.net', '--ignore-url="%r{[/.]?page1}"'] }
-  
+
         it {
-          is_expected.to have_attributes(ignore_urls:  ['https://example.com', 'https://example.net', %r{[/.]?page1}])
+          is_expected.to have_attributes(ignore_urls: ['https://example.com', 'https://example.net', %r{[/.]?page1}])
         }
       end
-  
+
       context '--log-level' do
         let(:args) { ['build', '--log-level=error'] }
 
         it {
           is_expected.to have_attributes(log_level: 'error')
         }
-      end  
+      end
 
       context '--env' do
         let(:args) { ['build', '--env=production'] }
