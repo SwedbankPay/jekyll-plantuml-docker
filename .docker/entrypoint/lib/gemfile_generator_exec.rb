@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'console_logger'
 require_relative 'gemfile_generator'
+require_relative 'environment_variables'
 
 # The Jekyll module contains everything related to Jekyll.
 module Jekyll
@@ -9,23 +11,21 @@ module Jekyll
     # The Jekyll::PlantUml::GemfileGeneratorExec executes the GemfileGenerator
     # by bootstrapping the environment.
     class GemfileGeneratorExec
-      def initialize(gemfiles = nil)
-        @debug = ENV.fetch('DEBUG', false)
-        jekyll_data_dir = ENV.fetch('JEKYLL_DATA_DIR', Dir.pwd)
-        jekyll_var_dir = ENV.fetch('JEKYLL_VAR_DIR', Dir.pwd)
+      def initialize(gemfiles: nil, args: nil)
+        env = EnvironmentVariables.new(default_data_dir: Dir.pwd, default_var_dir: Dir.pwd)
         gemfiles ||= {
-          default: File.join(jekyll_var_dir, 'entrypoint', 'Gemfile'),
-          user: File.join(jekyll_data_dir, 'Gemfile'),
-          generated: File.join(jekyll_data_dir, 'Gemfile.generated')
+          default: File.join(env.var_dir, 'entrypoint', 'Gemfile'),
+          user: File.join(env.data_dir, 'Gemfile'),
+          generated: File.join(env.data_dir, 'Gemfile.generated')
         }
         @gemfiles = gemfiles
+        @logger = ConsoleLogger.from_argv(args)
       end
 
       def generate
         gemfiles_info
 
-        gemfile_generator = GemfileGenerator.new(@debug)
-
+        gemfile_generator = GemfileGenerator.new(@logger)
         gemfile_generator.generate(
           @gemfiles[:default],
           @gemfiles[:user],
@@ -36,9 +36,7 @@ module Jekyll
       private
 
       def gemfiles_info
-        return unless @debug
-
-        puts 'Gemfiles:'
+        @logger.log(:debug, 'Gemfiles:')
         @gemfiles.each do |type, path|
           gemfile_info(type, path)
         end
@@ -47,16 +45,16 @@ module Jekyll
       def gemfile_info(type, gemfile_path)
         gemfile_exists = File.exist? gemfile_path
 
-        puts "  - type: #{type}"
-        puts "    path: #{gemfile_path}"
-        puts "    exists: #{gemfile_exists}"
+        @logger.log(:debug, "  - type: #{type}")
+        @logger.log(:debug, "    path: #{gemfile_path}")
+        @logger.log(:debug, "    exists: #{gemfile_exists}")
 
         return unless gemfile_exists
 
         uid = File.stat(gemfile_path).uid
         gid = File.stat(gemfile_path).gid
-        puts "    uid: #{uid}"
-        puts "    gid: #{gid}"
+        @logger.log(:debug, "    uid: #{uid}")
+        @logger.log(:debug, "    gid: #{gid}")
       end
     end
   end
@@ -64,7 +62,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   # We set STDOUT.sync to disasble buffering
-  STDOUT.sync = true
+  $stdout.sync = true
   # This will only run if the script was the main, not loaded or required
-  Jekyll::PlantUml::GemfileGeneratorExec.new.generate
+  Jekyll::PlantUml::GemfileGeneratorExec.new(args: ARGV).generate
 end

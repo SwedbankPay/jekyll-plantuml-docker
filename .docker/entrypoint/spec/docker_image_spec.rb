@@ -1,21 +1,28 @@
 # frozen_string_literal: true
 
+require 'its'
 require 'includes'
 
 describe DockerImage do
-  subject(:docker_image) { DockerImage.new('jekyll-plantuml', 'latest', '1.2.3') }
+  image_name = 'jekyll-plantuml'
+  image_tag = 'latest'
+  image_version = '1.2.3'
+  fqn = 'jekyll-plantuml:latest'
+
+  subject(:docker_image) { DockerImage.new(image_name, image_tag, image_version) }
   subject { docker_image }
 
   describe '#initialize' do
     it {
       is_expected.not_to be_nil
     }
+
     it {
       is_expected.to have_attributes(
-        name: 'jekyll-plantuml',
-        tag: 'latest',
-        version: '1.2.3',
-        fqn: 'jekyll-plantuml:latest'
+        name: image_name,
+        tag: image_tag,
+        version: image_version,
+        fqn: fqn
       )
     }
 
@@ -45,9 +52,33 @@ describe DockerImage do
   end
 
   describe '#to_s' do
-    subject { docker_image.to_s }
+    its(:to_s) {
+      is_expected.to eq('jekyll-plantuml:latest')
+    }
+  end
+
+  describe '#from_environment' do
+    include_context "env_helper"
+
+    before(:all) do
+      env({
+        'JEKYLL_VAR_DIR' => __dir__,
+        'JEKYLL_DATA_DIR' => __dir__,
+        'DOCKER_IMAGE_NAME' => image_name,
+        'DOCKER_IMAGE_TAG' => image_tag,
+        'DOCKER_IMAGE_VERSION' => image_version
+      })
+    end
+
+    subject { DockerImage.from_environment }
+
     it {
-      expect(subject.to_s).to eq('jekyll-plantuml:latest')
+      is_expected.to have_attributes(
+        name: image_name,
+        tag: image_tag,
+        version: image_version,
+        fqn: fqn
+      )
     }
   end
 end

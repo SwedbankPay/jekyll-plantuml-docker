@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'docopt'
+require_relative 'argument_string_builder'
 require_relative 'extensions/object_extensions'
 require_relative 'errors/command_line_argument_error'
 
@@ -11,15 +11,12 @@ module Jekyll
     # The Jekyll::PlantUml::Arguments class contains the arguments parsed from
     # the command line by Jekyll::PlantUml::ArgumentParser
     class Arguments
-      attr_reader :command
-      attr_reader :ignore_urls
-      attr_reader :log_level
-      attr_reader :environment
-      attr_reader :profile
+      attr_reader :command, :ignore_urls, :log_level, :environment, :profile
 
       def initialize(args)
         args.must_be_a! :non_empty, Hash
 
+        @args = args
         @command = find_command(args)
         @verify = args.value_for('--verify')
         @dry_run = args.value_for('--dry-run')
@@ -39,6 +36,15 @@ module Jekyll
 
       def profile?
         @profile
+      end
+
+      def inspect
+        @args.inspect
+      end
+
+      def to_s
+        builder = ArgumentStringBuilder.new(self)
+        builder.to_s
       end
 
       def self.default
