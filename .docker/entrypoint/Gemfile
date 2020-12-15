@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 group :jekyll_plugins do
-  gem 'jekyll', '~> 4.1.1'
+  gem 'jekyll', '~> 4.2.0'
   gem 'jekyll-assets'
   gem 'jekyll-github-metadata'
   gem 'jekyll-material-icon-tag'
