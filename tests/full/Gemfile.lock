@@ -126,7 +126,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    swedbank-pay-design-guide-jekyll-theme (1.9.8)
+    swedbank-pay-design-guide-jekyll-theme (1.9.9)
       faraday (>= 1.0.1)
       html-proofer
       jekyll (>= 3.7, < 5.0)
