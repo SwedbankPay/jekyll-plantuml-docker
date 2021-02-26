@@ -41,7 +41,7 @@ module Jekyll
       def git_repository_url
         return @git_repository_url unless @git_repository_url.nil? || @git_repository_url.empty?
 
-        if @configuration.is_a?(Hash) && @configuration.has_key('repository')
+        if @configuration.is_a?(Hash) && @configuration.key?('repository')
           repo = @configuration['repository']
           repo = "https://github.com/#{repo}" unless repo.start_with? 'http'
 
