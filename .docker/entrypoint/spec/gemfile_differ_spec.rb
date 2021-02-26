@@ -57,7 +57,6 @@ describe GemfileDiffer do
         dependency('faraday', '~> 1.0.1'),
         dependency('jekyll-material-icon-tag'),
         dependency('kramdown-plantuml'),
-        dependency('jekyll-github-metadata'),
         dependency('docopt'),
         dependency('html-proofer'),
         dependency('html-proofer-unrendered-markdown'),

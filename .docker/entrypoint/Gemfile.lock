@@ -65,9 +65,6 @@ GEM
       rouge (~> 3.0)
       safe_yaml (~> 1.0)
       terminal-table (~> 2.0)
-    jekyll-github-metadata (2.13.0)
-      jekyll (>= 3.4, < 5.0)
-      octokit (~> 4.0, != 4.4.0)
     jekyll-material-icon-tag (1.1.1)
     jekyll-remote-theme (0.4.2)
       addressable (~> 2.0)
@@ -102,9 +99,6 @@ GEM
       racc (~> 1.4)
     nokogumbo (2.0.4)
       nokogiri (~> 1.8, >= 1.8.4)
-    octokit (4.19.0)
-      faraday (>= 0.9)
-      sawyer (~> 0.8.0, >= 0.5.3)
     open3 (0.1.0)
     parallel (1.20.1)
     parser (3.0.0.0)
@@ -156,9 +150,6 @@ GEM
     safe_yaml (1.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
-    sawyer (0.8.2)
-      addressable (>= 2.3.5)
-      faraday (> 0.8, < 2.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -188,7 +179,6 @@ DEPENDENCIES
   html-proofer-unrendered-markdown
   its
   jekyll (~> 4)
-  jekyll-github-metadata
   jekyll-material-icon-tag
   jekyll-remote-theme
   jemoji

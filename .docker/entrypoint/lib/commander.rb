@@ -76,8 +76,6 @@ module Jekyll
       end
 
       def deploy
-        environment = @context.arguments.environment
-        warn_of_development_environment if environment == 'development'
         deployer = @commands.deployer.new(@context)
         deployer.logger = @logger unless @logger.nil?
         deployer.deploy
@@ -107,12 +105,6 @@ module Jekyll
       def warn_of_dry_run
         msg = 'Warning: --dry-run has no effect on the `jekyll serve` command.'
         log(:warn, msg)
-      end
-
-      def warn_of_development_environment
-        log(:warn, "Warning: Deploying in 'development' environment means")
-        log(:warn, "jekyll-github-metadata won't affect the generated URLs.")
-        log(:warn, "Use --env='production' to deploy in production mode.")
       end
     end
   end
