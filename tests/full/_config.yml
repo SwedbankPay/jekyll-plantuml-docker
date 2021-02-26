@@ -6,8 +6,6 @@ plugins:
   - jekyll-material-icon-tag
   - kramdown-plantuml
   - swedbank-pay-design-guide-jekyll-theme
-github:
-  branch: master
 defaults:
   - values:
       layout: default

@@ -25,6 +25,7 @@ module Jekyll
           environment(arguments),
           verify(arguments),
           dry_run(arguments),
+          site_url(arguments),
           ignore_url(arguments),
           log_level(arguments),
           profile(arguments)
@@ -53,6 +54,12 @@ module Jekyll
         return nil unless arguments.dry_run?
 
         '--dry-run'
+      end
+
+      def site_url(arguments)
+        return nil if arguments.site_url.nil? || arguments.site_url.empty?
+
+        "--site-url=#{arguments.site_url}"
       end
 
       def ignore_url(arguments)

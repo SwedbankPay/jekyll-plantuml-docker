@@ -63,7 +63,7 @@ module Jekyll
           'config' => config_file_path,
           'incremental' => true,
           'source' => @context.data_dir,
-          'destination' => File.join(@context.data_dir, '_site'),
+          'destination' => File.join(@context.data_dir, '_site')
         }
         cfg['url'] = @context.arguments.site_url unless @context.arguments.site_url.nil?
         cfg

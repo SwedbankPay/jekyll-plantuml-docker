@@ -45,18 +45,16 @@ module Jekyll
         private
 
         def before_request(request)
-          log(:debug, 'BEFORE_REQUEST!')
-
           uri = URI(request.base_url)
 
           unless uri.host.match('github\.(com|io)$')
-            log(:debug, "No authorization set for <#{uri}> as it's not matching github.com or github.io.'")
+            log(:debug, "No authorization set for <#{uri}> as it's not matching github.com or github.io.")
             return
           end
 
           auth = "Bearer #{@context.auth_token}"
-          log(:debug, 'Setting Bearer Token for GitHub request.')
           request.options[:headers]['Authorization'] = auth
+          log(:debug, "Authorization set for <#{uri}>.")
         end
 
         def ensure_directory_not_empty!(dir)

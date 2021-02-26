@@ -13,7 +13,8 @@ module Jekyll
     # execution environment
     class Context
       attr_reader :env, :var_dir, :data_dir, :configuration, :arguments
-      attr_accessor :auth_token, :git_branch, :git_repository_url, :debug
+      attr_writer :git_repository_url
+      attr_accessor :auth_token, :git_branch, :debug
 
       def initialize(env, var_dir, data_dir)
         env.must_be_a! :non_empty, String
@@ -35,6 +36,19 @@ module Jekyll
         context.git_branch = env.git_branch
         context.git_repository_url = env.git_repository_url
         context
+      end
+
+      def git_repository_url
+        return @git_repository_url unless @git_repository_url.nil? || @git_repository_url.empty?
+
+        if @configuration.is_a?(Hash) && @configuration.has_key('repository')
+          repo = @configuration['repository']
+          repo = "https://github.com/#{repo}" unless repo.start_with? 'http'
+
+          return repo
+        end
+
+        nil
       end
 
       def configuration=(config)
