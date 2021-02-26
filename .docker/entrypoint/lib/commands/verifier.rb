@@ -34,8 +34,7 @@ module Jekyll
 
           opts = options(@context.arguments.ignore_urls)
 
-          log(:debug, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
-          log(:debug, opts)
+          log(:info, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
 
           proofer = @html_proofer.check_directory(@jekyll_destination_dir, opts)
           proofer.before_request { |request| before_request(request) }
