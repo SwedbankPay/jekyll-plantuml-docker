@@ -5,7 +5,6 @@ plugins:
   - jemoji
   - jekyll-material-icon-tag
   - kramdown-plantuml
-  - jekyll-remote-theme
   - swedbank-pay-design-guide-jekyll-theme
 github:
   branch: master
