@@ -59,7 +59,7 @@ module Jekyll
                         '--base-url' => nil,
                         '--log-level' => nil,
                         '--env' => nil,
-                        '--profile' => false,
+                        '--profile' => false
                       })
       end
 
