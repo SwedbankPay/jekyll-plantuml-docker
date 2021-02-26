@@ -45,11 +45,17 @@ module Jekyll
         private
 
         def before_request(request)
+          log(:debug, 'BEFORE_REQUEST!')
+
           uri = URI(request.base_url)
-          return unless uri.host.match('github\.(com|io)$')
+
+          unless uri.host.match('github\.(com|io)$')
+            log(:debug, "No authorization set for <#{uri}> as it's not matching github.com or github.io.'")
+            return
+          end
 
           auth = "Bearer #{@context.auth_token}"
-          log(:debug, 'Setting Bearer Token for GitHub request')
+          log(:debug, 'Setting Bearer Token for GitHub request.')
           request.options[:headers]['Authorization'] = auth
         end
 

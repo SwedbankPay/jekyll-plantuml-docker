@@ -101,6 +101,7 @@ describe Verifier do
       logger = SpecLogger.new(:debug)
       subject.logger = logger
       subject.verify
+      puts logger.message
       expect(logger.message).to include('Setting Bearer Token for GitHub request')
     end
   end
