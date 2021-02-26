@@ -11,7 +11,7 @@ module Jekyll
     # The Jekyll::PlantUml::Arguments class contains the arguments parsed from
     # the command line by Jekyll::PlantUml::ArgumentParser
     class Arguments
-      attr_reader :command, :ignore_urls, :log_level, :environment, :profile, :base_url
+      attr_reader :command, :ignore_urls, :log_level, :environment, :profile, :site_url
 
       def initialize(args)
         args.must_be_a! :non_empty, Hash
@@ -21,7 +21,7 @@ module Jekyll
         @verify = args.value_for('--verify')
         @dry_run = args.value_for('--dry-run')
         @ignore_urls = args.value_for('--ignore-url')
-        @base_url = args.value_for('--base-url')
+        @site_url = args.value_for('--site-url')
         @log_level = args.value_for('--log-level')
         @profile = args.value_for('--profile')
         @environment = args.value_for('--env')
@@ -56,7 +56,7 @@ module Jekyll
                         '--verify' => false,
                         '--dry-run' => false,
                         '--ignore-url' => false,
-                        '--base-url' => nil,
+                        '--site-url' => nil,
                         '--log-level' => nil,
                         '--env' => nil,
                         '--profile' => false

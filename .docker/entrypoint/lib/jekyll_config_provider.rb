@@ -59,13 +59,14 @@ module Jekyll
       end
 
       def default_config(config_file_path)
-        {
+        cfg = {
           'config' => config_file_path,
           'incremental' => true,
           'source' => @context.data_dir,
           'destination' => File.join(@context.data_dir, '_site'),
-          'baseurl' => @context.arguments.base_url
         }
+        cfg['url'] = @context.arguments.site_url unless @context.arguments.site_url.nil?
+        cfg
       end
 
       def serve_config

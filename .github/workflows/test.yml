@@ -220,7 +220,7 @@ jobs:
             --verify \
             --env=production \
             --log-level=debug \
-            --base-url=https://swedbankpay.github.io/jekyll-plantuml-docker/ \
+            --site-url=https://swedbankpay.github.io/jekyll-plantuml-docker/ \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org
 
