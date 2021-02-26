@@ -38,6 +38,7 @@ describe Verifier do
           '--verify' => false,
           '--dry-run' => false,
           '--ignore-url' => false,
+          '--base-url' => nil,
           '--log-level' => 'error',
           '--env' => nil,
           '--profile' => nil
@@ -65,7 +66,9 @@ describe Verifier do
     end
 
     it 'ignores urls' do
+      base_url = 'https://example.com'
       ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      allow(context.arguments).to receive(:base_url).and_return(base_url)
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       subject.verify
     end

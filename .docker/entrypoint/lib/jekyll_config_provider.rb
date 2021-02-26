@@ -63,7 +63,8 @@ module Jekyll
           'config' => config_file_path,
           'incremental' => true,
           'source' => @context.data_dir,
-          'destination' => File.join(@context.data_dir, '_site')
+          'destination' => File.join(@context.data_dir, '_site'),
+          'baseurl' => @context.arguments.base_url
         }
       end
 
@@ -82,7 +83,7 @@ module Jekyll
       def github_config(jekyll_config)
         cfg = jekyll_config['github'] || {}
         cfg['branch'] = @git.branch unless @git.branch.nil?
-        # cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
         cfg
       end
     end

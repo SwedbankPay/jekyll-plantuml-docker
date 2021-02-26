@@ -22,9 +22,9 @@ Runs the #{docker_image.name} container's entrypoint.
 Usage:
   #{docker_image.fqn} [-h | --help]
   #{docker_image.fqn} [--version]
-  #{docker_image.fqn} build [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...] [--profile]
-  #{docker_image.fqn} serve [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...] [--profile]
-  #{docker_image.fqn} deploy [--env=env] [--log-level=level] [--dry-run] [--verify] [--ignore-url=url ...] [--profile]
+  #{docker_image.fqn} build [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...] [--base-url=url] [--profile]
+  #{docker_image.fqn} serve [--env=env] [--log-level=level] [--verify] [--ignore-url=url ...] [--base-url=url] [--profile]
+  #{docker_image.fqn} deploy [--env=env] [--log-level=level] [--dry-run] [--verify] [--base-url=url] [--ignore-url=url ...] [--profile]
 
 Options:
   -h --help           Print this screen.
@@ -38,6 +38,7 @@ Options:
   --verify            Verifies the built output before deploying. Can be used in
                       combination with --dry-run in tests and for local debugging.
   --ignore-url=url    Ignores the specified URL when doing --verify.
+  --base-url=url      The base URL of the Jekyll site.
   --profile           Enables the Liquid Profiler
 
 Commands:

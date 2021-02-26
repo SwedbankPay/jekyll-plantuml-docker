@@ -13,9 +13,10 @@ describe Arguments do
       '--verify' => true,
       '--dry-run' => true,
       '--ignore-url' => urls,
+      '--base-url' => 'https://example.org',
       '--log-level' => :debug,
       '--env' => 'stage',
-      '--profile' => true
+      '--profile' => true,
     }
     subject { Arguments.new(args) }
 
