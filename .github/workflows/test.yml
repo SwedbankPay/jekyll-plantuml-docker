@@ -179,9 +179,6 @@ jobs:
         run: bundle install
 
       - name: RSpec
-        env:
-          PAGES_REPO_NWO: ${{ github.repository }}
-          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bundle exec rake
 
       - name: Codecov Upload
@@ -217,14 +214,13 @@ jobs:
           docker pull "${IMAGE_FQN}"
           docker run \
             --volume $(pwd)/tests/full:/srv/jekyll \
-            --env JEKYLL_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            --env PAGES_REPO_NWO=${{ github.repository }} \
             --env DEBUG=true \
             "${IMAGE_FQN}" \
             build \
             --verify \
             --env=production \
             --log-level=debug \
+            --base-url=https://swedbankpay.github.io/jekyll-plantuml-docker/ \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org \
             --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}' \
