@@ -217,6 +217,7 @@ jobs:
             --volume $(pwd)/tests/full:/srv/jekyll \
             --env DEBUG=true \
             --env GITHUB_BRANCH=${{ needs.variables.outputs.build_branch }} \
+            --env GITHUB_REPOSITORY_URL=${{ github.event.repository.html_url }} \
             "${IMAGE_FQN}" \
             build \
             --verify \
