@@ -11,7 +11,8 @@ jobs:
       sha8: ${{ steps.variables.outputs.sha8 }}
       date: ${{ steps.variables.outputs.date }}
       version: ${{ steps.variables.outputs.version }}
-      branch_name: ${{ steps.variables.outputs.branch_name }}
+      build_branch: ${{ steps.variables.outputs.build_branch }}
+      deploy_branch: ${{ steps.variables.outputs.deploy_branch }}
       ghpr_docker_image_fqn: ${{ steps.variables.outputs.ghpr_docker_image_fqn }}
       ghpr_docker_image_tag: ${{ steps.variables.outputs.docker_image_tag }}
 
@@ -179,9 +180,6 @@ jobs:
         run: bundle install
 
       - name: RSpec
-        env:
-          PAGES_REPO_NWO: ${{ github.repository }}
-          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bundle exec rake
 
       - name: Codecov Upload
@@ -217,18 +215,18 @@ jobs:
           docker pull "${IMAGE_FQN}"
           docker run \
             --volume $(pwd)/tests/full:/srv/jekyll \
-            --env JEKYLL_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            --env PAGES_REPO_NWO=${{ github.repository }} \
             --env DEBUG=true \
+            --env GITHUB_BRANCH=${{ needs.variables.outputs.build_branch }} \
+            --env GITHUB_REPOSITORY_URL=${{ github.event.repository.html_url }} \
             "${IMAGE_FQN}" \
             build \
             --verify \
             --env=production \
             --log-level=debug \
+            --site-url=https://swedbankpay.github.io/jekyll-plantuml-docker/ \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org \
-            --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/master.*}' \
-            --ignore-url '%r{/jekyll-plantuml-docker/.*}'
+            --ignore-url '%r{https://github.com/SwedbankPay/jekyll-plantuml-docker/tree/.*}'
 
       - name: Verify base URL
         run: grep 'https://swedbankpay.github.io/jekyll-plantuml-docker/' $(pwd)/tests/full/_site/index.html
@@ -252,7 +250,7 @@ jobs:
           SHA8: ${{ needs.variables.outputs.sha8 }}
           WORK_DIR: ${{ github.workspace }}
           GIT_DEPLOY_DIR: _site
-          GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.branch_name }}
+          GIT_DEPLOY_BRANCH: ${{ needs.variables.outputs.deploy_branch }}
           GIT_DEPLOY_REPO: https://${{ secrets.GH_PAGES_TOKEN }}@github.com/${{ github.repository }}.git
           IMAGE_TAG: ${{ needs.variables.outputs.sha8 }}
           IMAGE_NAME: docker.pkg.github.com/swedbankpay/jekyll-plantuml-docker/jekyll-plantuml
@@ -280,4 +278,4 @@ jobs:
       - uses: actions/checkout@v2
       - name: Cleanup
         if: always()
-        run: .github/scripts/cleanup.sh --branch ${{ needs.variables.outputs.branch_name }} --commit ${{ github.sha }} --remote --verbose
+        run: .github/scripts/cleanup.sh --branch ${{ needs.variables.outputs.deploy_branch }} --commit ${{ github.sha }} --remote --verbose

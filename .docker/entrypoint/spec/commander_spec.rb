@@ -90,13 +90,6 @@ describe Commander do
           expect(logger.message).to include('deploy.sh --dry-run')
         }
       end
-
-      context '--env=development' do
-        it {
-          commander.execute(['deploy', '--dry-run', '--env=development'])
-          expect(logger.message).to include("Warning: Deploying in 'development' environment")
-        }
-      end
     end
   end
 end

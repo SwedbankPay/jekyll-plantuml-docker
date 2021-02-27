@@ -20,6 +20,18 @@ describe JekyllConfigProvider do
       context 'build returns config' do
         before(:all) do
           context = Context.new('development', __dir__, data_dir)
+          context.arguments = Arguments.new({
+            'build' => true,
+            'serve' => false,
+            'deploy' => false,
+            '--verify' => true,
+            '--dry-run' => true,
+            '--ignore-url' => nil,
+            '--site-url' => 'https://example.org',
+            '--log-level' => :debug,
+            '--env' => 'stage',
+            '--profile' => true,
+          })
           jekyll_config_provider = JekyllConfigProvider.new(context)
           @jekyll_config = jekyll_config_provider.provide('build')
         end
@@ -40,6 +52,10 @@ describe JekyllConfigProvider do
 
         it {
           is_expected.to include('incremental' => true)
+        }
+
+        it {
+          is_expected.to include('url' => 'https://example.org')
         }
       end
 
@@ -125,7 +141,7 @@ describe JekyllConfigProvider do
       it {
         is_expected.to include('github' => {
           'branch' => branch,
-          # 'repository_url' => repo
+          'repository_url' => repo
         })
       }
     end

@@ -21,7 +21,7 @@ describe GemfileDiffer do
       specify do
         expect do |b|
           differ.diff(default_gemfile_path, 'xyz', &b)
-        end.to yield_control.exactly(11).times
+        end.to yield_control.exactly(9).times
       end
 
       specify do
@@ -35,7 +35,7 @@ describe GemfileDiffer do
       specify do
         expect do |b|
           differ.diff(default_gemfile_path, user_gemfile_path, &b)
-        end.to yield_control.exactly(11).times
+        end.to yield_control.exactly(9).times
       end
 
       specify do
@@ -52,12 +52,10 @@ describe GemfileDiffer do
     def yield_expected_dependencies(*_args)
       yield_successive_args(
         dependency('jekyll', '~> 4.1'),
-        dependency('jekyll-assets'),
         dependency('jemoji'),
         dependency('faraday', '~> 1.0.1'),
         dependency('jekyll-material-icon-tag'),
         dependency('kramdown-plantuml'),
-        dependency('jekyll-github-metadata'),
         dependency('docopt'),
         dependency('html-proofer'),
         dependency('html-proofer-unrendered-markdown'),

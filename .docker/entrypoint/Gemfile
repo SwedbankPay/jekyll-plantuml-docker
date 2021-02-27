@@ -4,9 +4,7 @@ source 'https://rubygems.org'
 
 group :jekyll_plugins do
   gem 'jekyll', '~> 4'
-  gem 'jekyll-github-metadata'
   gem 'jekyll-material-icon-tag'
-  gem 'jekyll-remote-theme'
   gem 'jemoji'
   gem 'kramdown-plantuml'
   gem 'rouge'

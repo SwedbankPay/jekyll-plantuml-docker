@@ -38,6 +38,7 @@ describe Verifier do
           '--verify' => false,
           '--dry-run' => false,
           '--ignore-url' => false,
+          '--site-url' => nil,
           '--log-level' => 'error',
           '--env' => nil,
           '--profile' => nil
@@ -65,7 +66,9 @@ describe Verifier do
     end
 
     it 'ignores urls' do
+      site_url = 'https://example.com'
       ignore_urls = [ '/', 'http://www.wikipedia.org', %r{[/.]?page1} ]
+      allow(context.arguments).to receive(:site_url).and_return(site_url)
       allow(context.arguments).to receive(:ignore_urls).and_return(ignore_urls)
       subject.verify
     end
@@ -98,7 +101,7 @@ describe Verifier do
       logger = SpecLogger.new(:debug)
       subject.logger = logger
       subject.verify
-      expect(logger.message).to include('Setting Bearer Token for GitHub request')
+      expect(logger.message).to include('Authorization set for')
     end
   end
 end

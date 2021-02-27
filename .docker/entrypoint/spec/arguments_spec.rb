@@ -13,9 +13,10 @@ describe Arguments do
       '--verify' => true,
       '--dry-run' => true,
       '--ignore-url' => urls,
+      '--site-url' => 'https://example.org',
       '--log-level' => :debug,
       '--env' => 'stage',
-      '--profile' => true
+      '--profile' => true,
     }
     subject { Arguments.new(args) }
 
@@ -32,7 +33,7 @@ describe Arguments do
     its(:verify?) { is_expected.to be true }
     its(:dry_run?) { is_expected.to be true }
     its(:profile?) { is_expected.to be true }
-    its(:to_s) { is_expected.to eq 'build --env=stage --verify --dry-run --ignore-url=https://example.com --ignore-url=https://example.net --log-level=debug --profile' }
+    its(:to_s) { is_expected.to eq 'build --env=stage --verify --dry-run --site-url=https://example.org --ignore-url=https://example.com --ignore-url=https://example.net --log-level=debug --profile' }
     its(:inspect) { is_expected.to eq args.inspect }
   end
 end

@@ -1,13 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'jekyll', '~> 4.1', group: :jekyll_plugins
-gem 'jekyll-assets'
 gem 'jemoji'
 # Neccessary to prevent Jekyll errors. See https://github.com/github/personal-website/issues/166
 gem 'faraday', '~> 1.0.1'
 gem 'jekyll-material-icon-tag'
 gem 'kramdown-plantuml'
-gem 'jekyll-github-metadata'
 gem 'docopt'
 gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'

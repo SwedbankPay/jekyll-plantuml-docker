@@ -7,7 +7,13 @@ describe Context do
   data_dir = File.join(__dir__, 'data')
 
   describe '#initialize' do
-    subject { Context.new('dev', data_dir, data_dir) }
+    let(:configuration) { nil }
+
+    subject {
+      context = Context.new('dev', data_dir, data_dir)
+      context.configuration = configuration unless configuration.nil?
+      context
+    }
 
     it {
       is_expected.not_to be_nil
@@ -27,62 +33,45 @@ describe Context do
     }
 
     its(:arguments) { is_expected.to be_a Arguments }
+    its(:git_repository_url) { is_expected.to be_nil }
 
     context 'env is nil' do
-      it do
-        expect do
-          Context.new(nil, data_dir, data_dir)
-        end.to raise_error(ArgumentError, 'String cannot be nil')
-      end
+      it { expect { Context.new(nil, data_dir, data_dir) }.to raise_error(ArgumentError, 'String cannot be nil') }
     end
 
     context 'env is empty' do
-      it do
-        expect do
-          Context.new('', data_dir, data_dir)
-        end.to raise_error(ArgumentError, 'String cannot be empty')
-      end
+      it { expect { Context.new('', data_dir, data_dir) }.to raise_error(ArgumentError, 'String cannot be empty') }
     end
 
     context 'var_dir is nil' do
-      it do
-        expect do
-          Context.new('dev', nil, data_dir)
-        end.to raise_error(ArgumentError, 'String cannot be nil')
-      end
+      it { expect { Context.new('dev', nil, data_dir) }.to raise_error(ArgumentError, 'String cannot be nil') }
     end
 
     context 'var_dir is empty' do
-      it do
-        expect do
-          Context.new('dev', '', data_dir)
-        end.to raise_error(ArgumentError, 'String cannot be empty')
-      end
+      it { expect { Context.new('dev', '', data_dir) }.to raise_error(ArgumentError, 'String cannot be empty') }
     end
 
     context 'data_dir is nil' do
-      it do
-        expect do
-          Context.new('dev', __dir__, nil)
-        end.to raise_error(ArgumentError, 'String cannot be nil')
-      end
+      it { expect { Context.new('dev', __dir__, nil) }.to raise_error(ArgumentError, 'String cannot be nil') }
     end
 
     context 'data_dir is empty' do
-      it do
-        expect do
-          Context.new('dev', __dir__, '')
-        end.to raise_error(ArgumentError, 'String cannot be empty')
-      end
+      it { expect { Context.new('dev', __dir__, '') }.to raise_error(ArgumentError, 'String cannot be empty') }
+    end
+
+    context 'with configuration' do
+      let(:configuration) {
+        cfg = Jekyll.configuration
+        cfg['repository'] = 'Acme/bomb'
+        cfg
+      }
+      its(:git_repository_url) { is_expected.to eq 'https://github.com/Acme/bomb' }
     end
   end
 
   describe '#from_environment' do
     context 'missing environment variables' do
-      it do
-        expect { Context.from_environment }.to \
-          raise_error(KeyError, 'key not found: "JEKYLL_DATA_DIR"')
-      end
+      it { expect { Context.from_environment }.to raise_error(KeyError, 'key not found: "JEKYLL_DATA_DIR"') }
     end
 
     context 'environment variables set' do

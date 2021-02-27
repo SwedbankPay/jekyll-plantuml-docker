@@ -59,12 +59,14 @@ module Jekyll
       end
 
       def default_config(config_file_path)
-        {
+        cfg = {
           'config' => config_file_path,
           'incremental' => true,
           'source' => @context.data_dir,
           'destination' => File.join(@context.data_dir, '_site')
         }
+        cfg['url'] = @context.arguments.site_url unless @context.arguments.site_url.nil?
+        cfg
       end
 
       def serve_config
@@ -82,8 +84,27 @@ module Jekyll
       def github_config(jekyll_config)
         cfg = jekyll_config['github'] || {}
         cfg['branch'] = @git.branch unless @git.branch.nil?
-        # cfg['repository_url'] = @git.repository_url unless @git.repository_url.nil?
+        repository_url = find_repository_url(jekyll_config)
+
+        if repository_url.nil?
+          log(:debug, 'No repository_url found.')
+        else
+          log(:debug, "Setting site.github.repository_url to <#{repository_url}>.")
+          cfg['repository_url'] = repository_url
+        end
+
         cfg
+      end
+
+      def find_repository_url(jekyll_config)
+        return @git.repository_url unless @git.repository_url.nil? || @git.repository_url.empty?
+
+        repository_url = jekyll_config['repository']
+        unless repository_url.nil? || repository_url.start_with?('https://') || repository_url.start_with?('http://')
+          repository_url = "https://github.com/#{repository_url}"
+        end
+
+        repository_url
       end
     end
   end

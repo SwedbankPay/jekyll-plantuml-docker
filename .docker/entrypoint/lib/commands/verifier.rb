@@ -34,8 +34,7 @@ module Jekyll
 
           opts = options(@context.arguments.ignore_urls)
 
-          log(:debug, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
-          log(:debug, opts)
+          log(:info, "Checking '#{@jekyll_destination_dir}' with HTMLProofer")
 
           proofer = @html_proofer.check_directory(@jekyll_destination_dir, opts)
           proofer.before_request { |request| before_request(request) }
@@ -46,11 +45,15 @@ module Jekyll
 
         def before_request(request)
           uri = URI(request.base_url)
-          return unless uri.host.match('github\.(com|io)$')
+
+          unless uri.host.match('github\.(com|io)$')
+            log(:debug, "No authorization set for <#{uri}> as it's not matching github.com or github.io.")
+            return
+          end
 
           auth = "Bearer #{@context.auth_token}"
-          log(:debug, 'Setting Bearer Token for GitHub request')
           request.options[:headers]['Authorization'] = auth
+          log(:debug, "Authorization set for <#{uri}>.")
         end
 
         def ensure_directory_not_empty!(dir)
