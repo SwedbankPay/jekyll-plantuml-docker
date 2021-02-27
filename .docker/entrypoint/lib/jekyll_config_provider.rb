@@ -72,7 +72,7 @@ module Jekyll
         site_url = @context.arguments.site_url
 
         unless site_url.nil?
-          config['url'] = site_url
+          config['url'] = URI.join(site_url, '/').to_s
           config['baseurl'] = URI(site_url).path
         end
 

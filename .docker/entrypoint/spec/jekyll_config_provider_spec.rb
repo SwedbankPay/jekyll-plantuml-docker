@@ -19,7 +19,9 @@ describe JekyllConfigProvider do
 
       context 'build returns config' do
         path = '/Acme/bomb'
-        site_url = "https://example.org#{path}"
+        site_base_url = 'https://example.org/'
+        site_full_url = URI.join(site_base_url, path).to_s
+
         before(:all) do
           context = Context.new('development', __dir__, data_dir)
           context.arguments = Arguments.new({
@@ -29,7 +31,7 @@ describe JekyllConfigProvider do
             '--verify' => true,
             '--dry-run' => true,
             '--ignore-url' => nil,
-            '--site-url' => site_url,
+            '--site-url' => site_full_url,
             '--log-level' => :debug,
             '--env' => 'stage',
             '--profile' => true,
@@ -57,7 +59,7 @@ describe JekyllConfigProvider do
         }
 
         it {
-          is_expected.to include('url' => site_url)
+          is_expected.to include('url' => site_base_url)
         }
 
         it {
