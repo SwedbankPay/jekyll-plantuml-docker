@@ -19,7 +19,7 @@ describe JekyllConfigProvider do
 
       context 'build returns config' do
         path = '/Acme/bomb'
-        site_base_url = 'https://example.org/'
+        site_base_url = 'https://example.org'
         site_full_url = URI.join(site_base_url, path).to_s
 
         before(:all) do
