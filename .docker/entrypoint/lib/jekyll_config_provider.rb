@@ -65,8 +65,18 @@ module Jekyll
           'source' => @context.data_dir,
           'destination' => File.join(@context.data_dir, '_site')
         }
-        cfg['url'] = @context.arguments.site_url unless @context.arguments.site_url.nil?
-        cfg
+        urls(cfg)
+      end
+
+      def urls(config)
+        site_url = @context.arguments.site_url
+
+        unless site_url.nil?
+          config['url'] = site_url
+          config['baseurl'] = URI(site_url).path
+        end
+
+        config
       end
 
       def serve_config
