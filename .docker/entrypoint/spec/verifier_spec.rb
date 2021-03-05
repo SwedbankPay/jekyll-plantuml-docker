@@ -2,6 +2,7 @@
 
 require 'includes'
 require 'concurrent'
+require 'fileutils'
 
 describe Verifier do
   context = Context.new('development', __dir__, __dir__)
@@ -48,6 +49,8 @@ describe Verifier do
       jekyll_builder = JekyllBuilder.new(context)
       jekyll_builder.execute
     end
+
+    after { FileUtils.rm_rf(File.expand_path(File.join(__dir__, '..', 'tmp'))) }
 
     subject { Verifier.new(context) }
 
