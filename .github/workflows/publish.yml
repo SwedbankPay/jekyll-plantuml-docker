@@ -47,7 +47,7 @@ jobs:
 
       - name: Publish unstable Docker image to GitHub Package Registry
         if: startsWith(github.ref, 'refs/tags/') != true
-        uses: whoan/docker-build-with-cache-action@v5.3.3
+        uses: whoan/docker-build-with-cache-action@v5.11.1
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
 
       - name: Publish stable Docker image to Docker Hub
         if: startsWith(github.ref, 'refs/tags/')
-        uses: whoan/docker-build-with-cache-action@v5.3.3
+        uses: whoan/docker-build-with-cache-action@v5.11.1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: "${{ secrets.DOCKERHUB_PASSWORD }}"
