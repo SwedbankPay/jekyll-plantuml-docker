@@ -169,15 +169,8 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-
-      - uses: actions/cache@v2
-        with:
-          path: ${{ env.working-directory }}/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
-
-      - name: Bundle Install
-        run: bundle install
+          bundler-cache: true
+          working-directory: ${{ env.working-directory }}
 
       - name: RSpec
         run: bundle exec rake
@@ -200,12 +193,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-
-      - uses: actions/cache@v2
-        with:
-          path: tests/full/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
+          bundler-cache: true
 
       - name: Verify build output
         env:
