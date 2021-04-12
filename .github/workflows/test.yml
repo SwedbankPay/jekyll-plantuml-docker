@@ -170,7 +170,7 @@ jobs:
         with:
           ruby-version: 2.7
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: ${{ env.working-directory }}/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -201,7 +201,7 @@ jobs:
         with:
           ruby-version: 2.7
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: tests/full/vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
