@@ -1,4 +1,4 @@
-FROM ruby:2.7.2
+FROM ruby:3.0.1
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1 \
     GEM_HOME="/usr/gem" \
