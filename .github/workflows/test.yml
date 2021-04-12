@@ -170,6 +170,7 @@ jobs:
         with:
           ruby-version: 2.7
           bundler-cache: true
+          working-directory: ${{ env.working-directory }}
 
       - name: RSpec
         run: bundle exec rake
