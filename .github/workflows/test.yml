@@ -23,13 +23,13 @@ jobs:
         run: git fetch --prune --unshallow
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.6
+        uses: gittools/actions/gitversion/setup@v0.9.9
         with:
           versionSpec: "5.x.x"
 
       - name: GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.6
+        uses: gittools/actions/gitversion/execute@v0.9.9
 
       - name: Generate variables
         id: variables
@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5.3.3
+        uses: whoan/docker-build-with-cache-action@v5.11.1
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
