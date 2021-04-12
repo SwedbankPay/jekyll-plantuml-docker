@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5.3.3
+        uses: whoan/docker-build-with-cache-action@v5.11.1
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
