@@ -12,6 +12,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: amend
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: .github/scripts/amend.sh
