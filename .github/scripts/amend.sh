@@ -58,12 +58,19 @@ parse_github_context() {
         exit 1
     fi
 
+    sha=$(echo "$github_context_json" | jq --raw-output .sha)
     pr_url=$(echo "$github_context_json" | jq --raw-output .event.issue.pull_request.html_url)
     sender_login=$(echo "$github_context_json" | jq --raw-output .event.sender.login)
     sender_url=$(echo "$github_context_json" | jq --raw-output .event.sender.url)
     repo_url=$(echo "$github_context_json" | jq --raw-output .event.repository.html_url)
     repo_clone_url=$(echo "$github_context_json" | jq --raw-output .event.repository.clone_url)
     collaborators_url=$(echo "$github_context_json" | jq --raw-output .event.repository.collaborators_url)
+
+    if [[ -z "$sha" ]]; then
+        echo "No 'sha' found in the GitHub context." >&2
+        echo "$help_message"
+        exit 1
+    fi
 
     if [[ -z "$pr_url" ]]; then
         echo "No 'event.issue.pull_request.html_url' found in the GitHub context." >&2
@@ -142,7 +149,7 @@ enable_expanded_output() {
 
 amend() {
     gh pr checkout "$pr_url"
-    gh pr comment --body "Amending the last commit."
+    gh pr comment --body "The commit $sha is being amended."
     git config --global user.name "$name"
     git config --global user.email "$email"
     git remote set-url origin "$authenticated_repo_url"
