@@ -16,4 +16,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
           GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: .github/scripts/amend.sh --verbose
+        run: .github/scripts/amend.sh --user payex-dev --verbose
