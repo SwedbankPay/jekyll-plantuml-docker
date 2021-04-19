@@ -113,6 +113,7 @@ enable_expanded_output() {
 
 amend() {
     gh pr checkout "$pr_url"
+    gh pr comment --body "Amending the last commit."
     git config --global user.name "$name"
     git config --global user.email "$email"
     git commit --amend --no-edit
