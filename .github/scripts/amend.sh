@@ -8,10 +8,29 @@ Usage: echo $me
 Checks out the pull request where an '/amend' comment is made and amends its
 latest commit with the credentials of the user who wrote the '/amend' comment.
 
-GITHUB_CONTEXT: An environment variable containing a JSON string of the GitHub
-                context object. Typically generated with \${{ toJson(github) }}."
+Arguments:
+  -h, --help      Displays this help screen.
+  -v, --verbose   Increase verbosity. Useful for debugging.
 
-main() {
+Environment Variables:
+  GITHUB_CONTEXT: An environment variable containing a JSON string of the GitHub
+                  context object. Typically generated with \${{ toJson(github) }}."
+
+parse_args() {
+    while : ; do
+        if [[ $1 = "-h" || $1 = "--help" ]]; then
+            echo "$help_message"
+            return 0
+        elif [[ $1 = "-v" || $1 = "--verbose" ]]; then
+            verbose=true
+            shift
+        else
+            break
+        fi
+    done
+}
+
+parse_github_context() {
     github_context_json="$GITHUB_CONTEXT"
 
     if [[ -z "$github_context_json" ]]; then
@@ -82,6 +101,28 @@ main() {
     # Replace the template part of the URL with the username (collaborator).
     # https://api.github.com/repos/asbjornu/test/collaborators{/collaborator}
     collaborator_url="${collaborators_url/\{\/collaborator\}//$username}"
+}
+
+# echo expanded commands as they are executed (for debugging)
+enable_expanded_output() {
+    if [ $verbose ]; then
+        set -o xtrace
+        set +o verbose
+    fi
+}
+
+amend() {
+    gh pr checkout "$pr_url"
+    git config --global user.name "$name"
+    git config --global user.email "$email"
+    git commit --amend --no-edit
+    git push --force
+}
+
+main() {
+    parse_args "$@"
+    enable_expanded_output
+    parse_github_context
 
     # If the request for </repos/{owner}/{repo}/collaborators/{username}>
     # fails (404 not found), `gh` should return 1 and thus fail the entire
@@ -92,14 +133,6 @@ main() {
     else
         echo "'$username' does not have access to the repository <$repo_url>."
     fi
-}
-
-amend() {
-    gh pr checkout "$pr_url"
-    git config --global user.name "$name"
-    git config --global user.email "$email"
-    git commit --amend --no-edit
-    git push --force
 }
 
 main "$@"
