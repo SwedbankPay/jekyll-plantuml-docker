@@ -23,7 +23,7 @@ jobs:
       docker_image_fqn: ${{ steps.variables.outputs.docker_image_fqn }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
 
@@ -47,10 +47,10 @@ jobs:
         (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') ||
         (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         if: ${{ github.event_name != 'pull_request_target' }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
         if: ${{ github.event_name == 'pull_request_target' }}
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -87,7 +87,7 @@ jobs:
     needs: [docker-publish, variables]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
 
       - name: Download and Run Image
         run: |
