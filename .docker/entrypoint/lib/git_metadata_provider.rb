@@ -42,7 +42,7 @@ module Jekyll
           # We have more than 1 parent, so this is a merge-commit
           log(:debug, 'Merge-commit detected. Finding parents.')
 
-          git_first_parent_branch = git_first_parent_branch(git_parent_branches)
+          git_first_parent_branch = git_first_parent_branch(git_parent_commits)
 
           return git_first_parent_branch unless git_first_parent_branch.nil? || git_first_parent_branch.empty?
         else
