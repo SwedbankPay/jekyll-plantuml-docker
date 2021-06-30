@@ -30,7 +30,7 @@ RUN apt-get clean && \
     install -y \
     locales=2.28-10 \
     default-jre=2:1.11-71 \
-    graphviz=2.40.1-6 \
+    graphviz=2.40.1-6+deb10u1 \
     fontconfig=2.13.1-2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -124,6 +124,7 @@ ENTRYPOINT ["/var/jekyll/entrypoint/sh/entrypoint.sh"]
 #        --build-arg SHA="0252c90062dd3251985a97108354d980d2de7a10" \
 #        --build-arg DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
 #        --build-arg VERSION="1.2.3" \
+#        --build-arg TAG="1.2.3" \
 #        --tag swedbankpay/jekyll-plantuml:1.2.3
 #
 # How to run this Dockerfile after building:
