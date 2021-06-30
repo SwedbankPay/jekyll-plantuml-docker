@@ -124,6 +124,7 @@ ENTRYPOINT ["/var/jekyll/entrypoint/sh/entrypoint.sh"]
 #        --build-arg SHA="0252c90062dd3251985a97108354d980d2de7a10" \
 #        --build-arg DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
 #        --build-arg VERSION="1.2.3" \
+#        --build-arg TAG="1.2.3" \
 #        --tag swedbankpay/jekyll-plantuml:1.2.3
 #
 # How to run this Dockerfile after building:
