@@ -10,5 +10,5 @@ gem 'rake'
 
 gem 'jekyll-material-icon-tag', '~> 1.1'
 gem 'jemoji', '~> 0.12.0'
-gem 'kramdown-plantuml', '~> 1.0'
+gem 'kramdown-plantuml', '~> 1.1'
 gem 'swedbank-pay-design-guide-jekyll-theme', '~> 1.11'
