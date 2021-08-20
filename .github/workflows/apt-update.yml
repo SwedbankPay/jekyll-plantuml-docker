@@ -1,6 +1,8 @@
 name: apt update
-
-on: [push]
+on:
+  schedule:
+  - cron: "30 2 * * *"
+  workflow_dispatch:
 
 jobs:
   apt-update:
