@@ -28,10 +28,10 @@ RUN apt-get clean && \
     apt-get \
     --no-install-recommends \
     install -y \
-    locales=2.28-10 \
-    default-jre=2:1.11-71 \
-    graphviz=2.40.1-6+deb10u1 \
-    fontconfig=2.13.1-2 && \
+    locales=2.31-13 \
+    default-jre=2:1.11-72 \
+    graphviz=2.42.2-5 \
+    fontconfig=2.13.1-4.2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
