@@ -1,5 +1,5 @@
 pull_request_rules:
-  - name: Automatic approve on dependabot PR
+  - name: Automatically approve dependency updates
     conditions:
       - and:
           label=dependencies
@@ -25,6 +25,7 @@ pull_request_rules:
   - name: Thank contributor
     conditions:
       - merged
+      - -author~=^.*\[bot\]$
     actions:
       comment:
         message: "Thank you @{{author}} for your contribution!"
