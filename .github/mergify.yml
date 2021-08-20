@@ -1,22 +1,26 @@
 pull_request_rules:
   - name: Automatically approve dependency updates
     conditions:
-      - and:
-          label=dependencies
       - or:
-          author~=^dependabot(|-preview)\[bot\]$
-          author~=^github-actions\[bot\]$
+        - and:
+            author~=^dependabot(|-preview)\[bot\]$
+            label=dependencies
+        - and:
+            author~=^github-actions\[bot\]$
+            label=dependencies
     actions:
       review:
         type: APPROVE
 
   - name: Automatic merge on approval
     conditions:
-      - and:
-          label=dependencies
       - or:
-          author~=^dependabot(|-preview)\[bot\]$
-          author~=^github-actions\[bot\]$
+        - and:
+            author~=^dependabot(|-preview)\[bot\]$
+            label=dependencies
+        - and:
+            author~=^github-actions\[bot\]$
+            label=dependencies
     actions:
       merge:
         method: merge
