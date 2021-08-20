@@ -23,6 +23,8 @@ RUN addgroup --system --gid 1000 jekyll && \
     mkdir -p $JEKYLL_VAR_DIR && \
     mkdir -p $JEKYLL_DATA_DIR
 
+COPY .docker/apt.json /tmp/apt.json
+
 RUN apt-get clean && \
     apt-get update && \
     apt-get --no-install-recommends install -y jq && \
