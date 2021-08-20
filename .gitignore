@@ -9,3 +9,4 @@ vendor/
 coverage/
 docker-compose.yml
 tmp/
+.vscode
