@@ -23,7 +23,7 @@ jobs:
           Update apt.json
 
           Bump APT packages to their latest versions in `apt.json`.
-        branch: features/update-apt-json
+        branch: feature/update-apt-json
         title: Update APT packages
         body: Bump APT packages to their latest versions in `apt.json`.
         delete-branch: true
