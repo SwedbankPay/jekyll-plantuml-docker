@@ -23,15 +23,14 @@ RUN addgroup --system --gid 1000 jekyll && \
     mkdir -p $JEKYLL_VAR_DIR && \
     mkdir -p $JEKYLL_DATA_DIR
 
+COPY .docker/apt.json /tmp/apt.json
+
 RUN apt-get clean && \
     apt-get update && \
-    apt-get \
-    --no-install-recommends \
-    install -y \
-    locales=2.28-10 \
-    default-jre=2:1.11-71 \
-    graphviz=2.40.1-6+deb10u1 \
-    fontconfig=2.13.1-2 && \
+    apt-get --no-install-recommends install -y jq && \
+    jq -r 'to_entries | .[] | .key + "=" + .value' /tmp/apt.json | xargs apt-get install -y --no-install-recommends && \
+    rm /tmp/apt.json && \
+    apt-get purge -y jq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
