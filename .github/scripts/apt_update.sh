@@ -37,6 +37,8 @@ main() {
 
     enable_expanded_output
 
+    [ $verbose ] && find . # Output the diretory tree if $verbose
+
     JSON=$(cat apt.json)
 
     for PACKAGE in $(echo "$JSON" | jq -r 'keys | .[]'); do
