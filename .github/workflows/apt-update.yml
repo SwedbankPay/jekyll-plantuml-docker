@@ -9,9 +9,10 @@ jobs:
     container: debian:buster-slim
 
     steps:
-    - uses: actions/checkout@v2.3.4
-
     - run: apt-get update
+    - run: apt-get install -y git
+
+    - uses: actions/checkout@v2.3.4
 
     - name: update apt.json
       working-directory: .docker
