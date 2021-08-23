@@ -59,7 +59,7 @@ main() {
 
     echo "Writing to $json_file_path:"
     echo "$JSON"
-    echo "$JSON" | python -m json.tool > "$json_file_path"
+    echo "$JSON" | jq --monochrome-output . > "$json_file_path"
 }
 
 main "$@"
