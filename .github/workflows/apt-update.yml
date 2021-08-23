@@ -41,6 +41,7 @@ jobs:
     needs: variables
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Build Docker Image
       uses: whoan/docker-build-with-cache-action@v5.11.1
       with:
@@ -73,7 +74,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: apt.json
-        path: .docker/apt.json
+        path: /tmp/apt.json
 
     - uses: peter-evans/create-pull-request@v3
       with:
