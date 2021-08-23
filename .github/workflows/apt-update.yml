@@ -11,9 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
 
-    - name: apt-get update
+    - run: sudo apt-get update
+
+    - name: update apt.json
       working-directory: .docker
-      run: ${{ github.workspace }}/.github/scripts/apt_update.sh
+      run: ${{ github.workspace }}/.github/scripts/apt_update.sh --verbose
 
     - uses: actions/upload-artifact@v2
       with:
