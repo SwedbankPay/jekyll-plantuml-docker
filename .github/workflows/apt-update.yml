@@ -28,5 +28,6 @@ jobs:
         body: Bump APT packages to their latest versions in `apt.json`.
         delete-branch: true
         labels: dependencies, apt
-        committer: Swedbank Pay <opensource@swedbankpay.com>
-        author: Swedbank Pay <opensource@swedbankpay.com>
+        committer: PayEx <dev@payex.com>
+        author: PayEx <dev@payex.com>
+        token: ${{ secrets.APT_UPDATE_TOKEN}}
