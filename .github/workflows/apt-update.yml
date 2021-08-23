@@ -13,9 +13,12 @@ jobs:
 
     - name: apt-get update
       working-directory: .docker
-      run: |
-        sudo apt-get update
-        sh ${{ github.workspace }}/.github/scripts/apt_update.sh
+      run: ${{ github.workspace }}/.github/scripts/apt_update.sh
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: apt.json
+        path: .docker/apt.json
 
     - uses: peter-evans/create-pull-request@v3
       with:
