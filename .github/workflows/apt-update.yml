@@ -10,7 +10,7 @@ jobs:
 
     steps:
     - run: apt-get update
-    - run: apt-get install -y git
+    - run: apt-get install -y git jq
 
     - uses: actions/checkout@v2.3.4
 
