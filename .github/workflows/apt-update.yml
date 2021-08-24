@@ -35,4 +35,4 @@ jobs:
         labels: dependencies, apt
         committer: PayEx <dev@payex.com>
         author: PayEx <dev@payex.com>
-        token: ${{ secrets.APT_UPDATE_TOKEN}}
+        token: ${{ secrets.APT_UPDATE_TOKEN }}
