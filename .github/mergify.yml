@@ -4,7 +4,7 @@ pull_request_rules:
       - label=dependencies
       - or:
           - author~=^dependabot(|-preview)\[bot\]$
-          - author~=^github-actions\[bot\]$
+          - author~=^payex-dev$
     actions:
       review:
         type: APPROVE
@@ -14,7 +14,7 @@ pull_request_rules:
       - label=dependencies
       - or:
           - author~=^dependabot(|-preview)\[bot\]$
-          - author~=^github-actions\[bot\]$
+          - author~=^payex-dev$
     actions:
       merge:
         method: merge

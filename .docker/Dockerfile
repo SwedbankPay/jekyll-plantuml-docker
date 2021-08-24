@@ -17,13 +17,15 @@ ENV BUNDLE_HOME="$GEM_HOME" \
     GIT_DEPLOY_DIR="${JEKYLL_DATA_DIR}/_site" \
     PATH="${GEM_BIN}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+RUN cat /etc/os-release
+
 # Create all folders needed by RubyGems, Bundler, etc.
 RUN addgroup --system --gid 1000 jekyll && \
     adduser --system --gid 1000 jekyll && \
     mkdir -p $JEKYLL_VAR_DIR && \
     mkdir -p $JEKYLL_DATA_DIR
 
-COPY .docker/apt.json /tmp/apt.json
+COPY .docker/apt.json /tmp/
 
 RUN apt-get clean && \
     apt-get update && \

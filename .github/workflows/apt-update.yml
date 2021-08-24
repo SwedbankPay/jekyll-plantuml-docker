@@ -1,4 +1,5 @@
 name: apt update
+
 on:
   schedule:
   - cron: "30 2 * * *"
@@ -7,13 +8,18 @@ on:
 jobs:
   apt-update:
     timeout-minutes: 10
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    # This container image needs to match the base image used in the Dockerfile
+    container: debian:bullseye-slim
+
     steps:
+    - run: apt-get update
+    - run: apt-get install -y git jq
+
     - uses: actions/checkout@v2.3.4
 
-    - name: apt-get update
-      working-directory: .docker
-      run: ${{ github.workspace }}/.github/scripts/apt_update.sh
+    - name: update apt.json
+      run: .github/scripts/apt_update.sh --file .docker/apt.json
 
     - uses: actions/upload-artifact@v2
       with:
@@ -33,4 +39,4 @@ jobs:
         labels: dependencies, apt
         committer: PayEx <dev@payex.com>
         author: PayEx <dev@payex.com>
-        token: ${{ secrets.APT_UPDATE_TOKEN}}
+        token: ${{ secrets.APT_UPDATE_TOKEN }}
