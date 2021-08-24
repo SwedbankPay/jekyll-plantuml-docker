@@ -6,6 +6,7 @@ jobs:
   apt-update:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    # This container image needs to match the base image used in the Dockerfile
     container: debian:bullseye-slim
 
     steps:
