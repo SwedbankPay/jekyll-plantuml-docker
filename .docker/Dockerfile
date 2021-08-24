@@ -26,7 +26,6 @@ RUN addgroup --system --gid 1000 jekyll && \
     mkdir -p $JEKYLL_DATA_DIR
 
 COPY .docker/apt.json /tmp/
-COPY .docker/apt_update.sh /bin/
 
 RUN apt-get clean && \
     apt-get update && \
