@@ -6,7 +6,7 @@ jobs:
   apt-update:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    container: debian:buster-slim
+    container: debian:bullseye-slim
 
     steps:
     - run: apt-get update
