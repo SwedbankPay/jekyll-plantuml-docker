@@ -14,10 +14,10 @@ GEM
     em-websocket (0.5.2)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
-    ethon (0.14.0)
+    ethon (0.15.0)
       ffi (>= 1.15.0)
     eventmachine (1.2.7)
-    faraday (1.7.0)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -52,8 +52,9 @@ GEM
       yell (~> 2.0)
     html-proofer-unrendered-markdown (0.1.3)
       html-proofer (~> 3.0, >= 3.15.1)
+    htmlentities (4.3.4)
     http_parser.rb (0.6.0)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     jekyll (4.2.1)
       addressable (~> 2.4)
@@ -87,7 +88,8 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    kramdown-plantuml (1.1.4)
+    kramdown-plantuml (1.1.12)
+      htmlentities (~> 4)
       kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.1)
       open3 (~> 0.1)
@@ -105,11 +107,11 @@ GEM
     nokogumbo (2.0.5)
       nokogiri (~> 1.8, >= 1.8.4)
     open3 (0.1.1)
-    parallel (1.20.1)
+    parallel (1.21.0)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rainbow (3.0.0)
     rake (13.0.6)
     rb-fsevent (0.11.0)
@@ -126,18 +128,18 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.7)
     sassc (2.4.0)
       ffi (~> 1.9)
-    swedbank-pay-design-guide-jekyll-theme (1.12.0)
-      faraday (>= 1.0.1)
-      html-proofer
+    swedbank-pay-design-guide-jekyll-theme (1.12.4)
+      faraday (~> 1, >= 1.0.1)
+      html-proofer (~> 3, >= 3.19)
       jekyll (>= 3.7, < 5.0)
-      jekyll-contentblocks
-      jekyll-material-icon-tag
-      jekyll-redirect-from
-      jemoji
-      kramdown-plantuml
+      jekyll-contentblocks (~> 1, >= 1.2)
+      jekyll-material-icon-tag (~> 1, >= 1.1)
+      jekyll-redirect-from (~> 0.16)
+      jemoji (~> 0.12)
+      kramdown-plantuml (~> 1, >= 1.1.12)
       nokogiri (~> 1.11)
       rake (~> 13.0)
-      sass
+      sass (~> 3, >= 3.7)
     terminal-table (2.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     typhoeus (1.4.0)
@@ -146,7 +148,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.8.0)
     yell (2.2.2)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
@@ -157,10 +159,10 @@ DEPENDENCIES
   jekyll (~> 4.2)
   jekyll-material-icon-tag (~> 1.1)
   jemoji (~> 0.12.0)
-  kramdown-plantuml (~> 1.1)
+  kramdown-plantuml (>= 1.1.12)
   open3 (~> 0.1.1)
   rake
-  swedbank-pay-design-guide-jekyll-theme (~> 1.11)
+  swedbank-pay-design-guide-jekyll-theme (>= 1.12.4)
 
 BUNDLED WITH
    2.2.26

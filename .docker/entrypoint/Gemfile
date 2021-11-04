@@ -6,7 +6,7 @@ group :jekyll_plugins do
   gem 'jekyll', '~> 4'
   gem 'jekyll-material-icon-tag'
   gem 'jemoji'
-  gem 'kramdown-plantuml'
+  gem 'kramdown-plantuml', '>= 1.1.12'
   gem 'rouge'
 end
 
