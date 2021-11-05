@@ -10,3 +10,4 @@ coverage/
 docker-compose.yml
 tmp/
 .vscode
+Gemfile.lock
