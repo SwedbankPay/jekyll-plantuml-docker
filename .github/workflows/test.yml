@@ -18,34 +18,40 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          fetch-depth: 0
+      - uses: gittools/actions/gitversion/setup@v0.9.11
         with:
           versionSpec: "5.x.x"
-
-      - name: GitVersion
-        id: gitversion
+      - id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.11
-
-      - name: Generate variables
-        id: variables
+      - id: variables
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: ./.github/scripts/variables.sh ${{ steps.gitversion.outputs.fullSemVer }}
 
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: haya14busa/action-cond@v1
+        id: reporter
+        with:
+          cond: ${{ github.event_name == 'pull_request' }}
+          if_true: github-pr-review
+          if_false: github-check
+      - uses: reviewdog/action-hadolint@v1
+        with:
+          fail_on_error: true
+          level: warning
+          reporter: ${{ steps.reporter.outputs.value }}
+
   verify-bash:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - name: ShellCheck
         uses: bewuethr/shellcheck-action@v2
-
       - name: Control Character Check
         run: ./.github/scripts/control_character_finder.sh
 
@@ -60,12 +66,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         if: ${{ github.event_name != 'pull_request_target' }}
-
       - uses: actions/checkout@v2
         if: ${{ github.event_name == 'pull_request_target' }}
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-
       - name: Build Docker Image
         uses: whoan/docker-build-with-cache-action@v5.11.1
         with:
@@ -82,7 +86,6 @@ jobs:
   test-serve:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
-
     steps:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve)
@@ -100,7 +103,6 @@ jobs:
   test-serve-no-gemfile:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
-
     steps:
       - uses: actions/checkout@v2
       - name: Run Docker Image (serve, no Gemfile)
@@ -118,7 +120,6 @@ jobs:
   test-build:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
-
     steps:
       - uses: actions/checkout@v2
       - name: Run Docker Image (build)
@@ -135,7 +136,6 @@ jobs:
   test-build-no-gemfile:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
-
     steps:
       - uses: actions/checkout@v2
       - name: Run Docker Image (build, no Gemfile)
@@ -176,28 +176,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
           bundler-cache: true
           working-directory: ${{ env.working-directory }}
-
-      - name: RSpec
-        run: bundle exec rake
-
-      - name: Codecov Upload
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - run: bundle exec rake
+      - name: codecov
         run: bundle exec rake codecov:upload || echo 'Codecov upload failed'
-
-      - name: RuboCop
+      - name: rubocop
         run: bundle exec rubocop --fail-level warning --display-only-fail-level-offenses
 
   verify-output:
     runs-on: ubuntu-latest
     needs: [variables, docker-build]
-
     steps:
       - uses: actions/checkout@v2
 
