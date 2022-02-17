@@ -1,24 +1,28 @@
 pull_request_rules:
-  - name: Automatically approve dependency updates
+  - name: Automatic approve on dependabot PR
     conditions:
-      - label=dependencies
-      - or:
-          - author~=^dependabot(|-preview)\[bot\]$
-          - author~=^payex-dev$
+      - author~=^dependabot(|-preview)\[bot\]$
     actions:
       review:
         type: APPROVE
 
   - name: Automatic merge on approval
     conditions:
-      - label=dependencies
-      - or:
-          - author~=^dependabot(|-preview)\[bot\]$
-          - author~=^payex-dev$
+      - author~=^dependabot(|-preview)\[bot\]$
+      - '#commits-behind=0' # Only merge up to date pull requests
+      - check-success=docker-verify
+      - check-success=test-deploy
+      - check-success=test-serve
+      - check-success=test-serve-no-gemfile
+      - check-success=test-build
+      - check-success=test-build-gemspec
+      - check-success=verify-output
+      - check-success=hadolint
+      - check-success=verify-bash
+      - check-success=rspec
+      - check-success=license/cla
     actions:
       merge:
-        method: merge
-        strict: smart
 
   - name: Thank contributor
     conditions:
@@ -26,4 +30,4 @@ pull_request_rules:
       - -author~=^.*\[bot\]$
     actions:
       comment:
-        message: "Thank you @{{author}} for your contribution!"
+        message: "Thank you for your contribution, @{{author}}! :pray:"
