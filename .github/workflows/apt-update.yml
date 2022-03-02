@@ -16,7 +16,7 @@ jobs:
     - run: apt-get update
     - run: apt-get install -y git jq
 
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v3
 
     - name: update apt.json
       run: .github/scripts/apt_update.sh --file .docker/apt.json
