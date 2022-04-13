@@ -129,11 +129,11 @@ sequenceDiagram
 
 ## Small image
 
-![Octocat](https://user-images.githubusercontent.com/12283/163170886-bb90a4fe-99e2-4f6f-8f52-810a4c2237de.png)
+[![Octocat](https://user-images.githubusercontent.com/12283/163170886-bb90a4fe-99e2-4f6f-8f52-810a4c2237de.png)](https://github.com/)
 
 ## Large image
 
-![Branching](https://user-images.githubusercontent.com/12283/163170807-511d1085-2d53-46c3-981b-653f6173f7c2.png)
+[![Branching](https://user-images.githubusercontent.com/12283/163170807-511d1085-2d53-46c3-981b-653f6173f7c2.png)](https://github.com/)
 
 ## Definition lists can be used with HTML syntax
 
