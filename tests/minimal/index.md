@@ -129,11 +129,11 @@ sequenceDiagram
 
 ## Small image
 
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
+![Octocat](https://user-images.githubusercontent.com/12283/163170886-bb90a4fe-99e2-4f6f-8f52-810a4c2237de.png)
 
 ## Large image
 
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
+![Branching](https://user-images.githubusercontent.com/12283/163170807-511d1085-2d53-46c3-981b-653f6173f7c2.png)
 
 ## Definition lists can be used with HTML syntax
 
