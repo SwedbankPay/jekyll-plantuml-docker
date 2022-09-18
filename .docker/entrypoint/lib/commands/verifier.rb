@@ -68,14 +68,15 @@ module Jekyll
           log_level = @context.arguments.log_level
           opts[:log_level] = log_level.to_sym unless log_level.nil?
           opts[:url_ignore] = ignore_urls if ignore_urls.valid_array?
-          opts[:cache] = { timeframe: '1h' }
+          opts[:cache] = { timeframe: { external: '1w' } }
 
           opts
         end
 
         def default_options
           {
-            assume_extension: true,
+            checks: ['Links', 'Images', 'Scripts', 'UnrenderedLink'],
+            allow_missing_href: true,
             check_html: true,
             enforce_https: true,
             only_4xx: true,
