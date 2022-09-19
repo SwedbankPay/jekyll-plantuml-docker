@@ -13,6 +13,7 @@ gem 'rouge', '~> 3'
 
 group :development, :test do
   gem 'awesome_print'
+  gem 'bundler', '>= 2.3'
   gem 'codecov', '>= 0.6'
   gem 'diffy', '~> 3'
   gem 'html-proofer', '>= 4'
