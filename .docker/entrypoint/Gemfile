@@ -12,6 +12,7 @@ gem 'kramdown-plantuml', '>= 1.1.12'
 gem 'rouge', '~> 3'
 
 group :development, :test do
+  gem 'awesome_print'
   gem 'codecov', '>= 0.6'
   gem 'diffy', '~> 3'
   gem 'html-proofer', '>= 4'
