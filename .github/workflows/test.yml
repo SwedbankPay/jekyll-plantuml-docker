@@ -97,7 +97,8 @@ jobs:
             --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/full \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --verbose
 
   test-serve-no-gemfile:
     runs-on: ubuntu-latest
@@ -113,7 +114,8 @@ jobs:
             --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/minimal \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --verbose
 
   test-build:
     runs-on: ubuntu-latest
@@ -128,7 +130,8 @@ jobs:
             --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/full \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --verbose
 
   test-build-no-gemfile:
     runs-on: ubuntu-latest
@@ -143,7 +146,8 @@ jobs:
             --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/minimal \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --verbose
 
   test-build-gemspec:
     runs-on: ubuntu-latest
@@ -159,7 +163,8 @@ jobs:
             --image-tag ${{ needs.variables.outputs.ghpr_docker_image_tag }} \
             --repository ${{ github.repository }} \
             --dir ${{ github.workspace }}/tests/gemspec \
-            --token ${{ secrets.GITHUB_TOKEN }}
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --verbose
 
   rspec:
     runs-on: ubuntu-latest
