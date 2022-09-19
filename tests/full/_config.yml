@@ -1,11 +1,9 @@
 repository: SwedbankPay/jekyll-plantuml-docker
-theme: swedbank-pay-design-guide-jekyll-theme
 exclude: ["Gemfile*"]
 plugins:
   - jemoji
   - jekyll-material-icon-tag
   - kramdown-plantuml
-  - swedbank-pay-design-guide-jekyll-theme
 defaults:
   - values:
       layout: default

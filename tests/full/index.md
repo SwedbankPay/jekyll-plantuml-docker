@@ -10,11 +10,10 @@ Text can be **bold**, _italic_, or ~~strikethrough~~.
 * [Absolute URL to page]({{ page.url | absolute_url }}).
 * [Relative URL to CSS file]({{ "/test.css" | relative_url }}).
 * [External absolute full link](https://www.wikipedia.org)
-* [External protocol relative link](//www.wikipedia.org)
 * [Internal absolute full link]({{ site.url }})
-* [Internal explicit relative link](./page1)
-* [Internal implicit relative link](page1)
-* [Internal absolute link](/page1)
+* [Internal explicit relative link](./link)
+* [Internal implicit relative link](link)
+* [Internal absolute link](/link)
 
 There should be whitespace between paragraphs.
 

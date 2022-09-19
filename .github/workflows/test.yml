@@ -178,7 +178,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 2.7.6
           bundler-cache: true
           working-directory: ${{ env.working-directory }}
       - run: bundle exec rake
@@ -195,7 +195,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: 2.7.6
           bundler-cache: true
 
       - name: Verify build output
@@ -206,14 +206,14 @@ jobs:
           docker pull "${IMAGE_FQN}"
           docker run \
             --volume $(pwd)/tests/full:/srv/jekyll \
-            --env DEBUG=true \
+            --env DEBUG=false \
             --env GITHUB_BRANCH=${{ needs.variables.outputs.build_branch }} \
             --env GITHUB_REPOSITORY_URL=${{ github.event.repository.html_url }} \
             "${IMAGE_FQN}" \
             build \
             --verify \
             --env=production \
-            --log-level=debug \
+            --log-level=error \
             --site-url=https://example.com/ \
             --ignore-url '%r{[/.]?page1}' \
             --ignore-url http://www.wikipedia.org \
@@ -241,13 +241,13 @@ jobs:
           docker pull "${IMAGE_FQN}"
           docker run \
             --volume $(pwd)/tests/full:/srv/jekyll \
-            --env DEBUG=true \
+            --env DEBUG=false \
             --env GITHUB_BRANCH=${{ needs.variables.outputs.build_branch }} \
             --env GITHUB_REPOSITORY_URL=${{ github.event.repository.html_url }} \
             "${IMAGE_FQN}" \
             build \
             --env=production \
-            --log-level=debug \
+            --log-level=error \
             --site-url=https://swedbankpay.github.io/jekyll-plantuml-docker/
 
       - name: Verify base URL
@@ -286,11 +286,11 @@ jobs:
             --env GIT_DEPLOY_REPO="${GIT_DEPLOY_REPO}" \
             --env PAGES_REPO_NWO="${{ github.repository }}" \
             --env JEKYLL_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
-            --env DEBUG="true" \
+            --env DEBUG=false \
             ${IMAGE_NAME}:${IMAGE_TAG} \
             deploy \
             --env=production \
-            --log-level=debug
+            --log-level=error
 
   cleanup:
     runs-on: ubuntu-latest

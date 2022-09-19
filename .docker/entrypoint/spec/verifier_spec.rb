@@ -78,7 +78,8 @@ describe Verifier do
 
     it 'receives expected options' do
       expected_options = {
-        assume_extension: true,
+        checks: ['Links', 'Images', 'Scripts', 'UnrenderedLink'],
+        allow_missing_href: true,
         check_html: true,
         check_unrendered_link: true,
         enforce_https: true,
@@ -88,7 +89,7 @@ describe Verifier do
         typheous: {
           verbose: false
         },
-        cache: { :timeframe => '1h' }
+        cache: { timeframe: { external: '1w' } }
       }
       html_proofer_class = SpecHTMLProofer
       html_proofer = html_proofer_class.new

@@ -1,3 +1,6 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
 AllCops:
   NewCops: enable
   Exclude:
@@ -5,7 +8,7 @@ AllCops:
     - _site/**/*
     - spec/**/*
     - vendor/**/*
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 2.7.6
 Layout:
   LineLength: 100
   IndentationStyle:
