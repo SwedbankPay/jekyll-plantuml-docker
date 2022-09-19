@@ -75,7 +75,7 @@ module Jekyll
 
         def default_options
           {
-            checks: ['Links', 'Images', 'Scripts', 'UnrenderedLink'],
+            checks: %w[Links Images Scripts UnrenderedLink],
             allow_missing_href: true,
             check_html: true,
             enforce_https: true,
