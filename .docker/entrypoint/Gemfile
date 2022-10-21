@@ -9,7 +9,7 @@ gem 'jekyll', '~> 4'
 gem 'jekyll-material-icon-tag', '~> 1.0'
 gem 'jemoji', '>= 0.12'
 gem 'kramdown-plantuml', '>= 1.1.12'
-gem 'rouge', '~> 3'
+gem 'rouge', '~> 4'
 
 group :development, :test do
   gem 'codecov', '>= 0.6'
