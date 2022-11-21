@@ -71,7 +71,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Build Docker Image
-        uses: whoan/docker-build-with-cache-action@v5.11.1
+        uses: whoan/docker-build-with-cache-action@v6.0.0
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
