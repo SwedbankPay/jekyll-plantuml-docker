@@ -106,7 +106,7 @@ GEM
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    open3 (0.1.2)
+    open3 (0.2.0)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     pdf-reader (2.11.0)
@@ -168,7 +168,7 @@ DEPENDENCIES
   jekyll-material-icon-tag (~> 1.1)
   jemoji (~> 0.13.0)
   kramdown-plantuml (>= 1.1.12)
-  open3 (~> 0.1.2)
+  open3 (~> 0.2.0)
   rake
   swedbank-pay-design-guide-jekyll-theme (>= 1.12.4)
 

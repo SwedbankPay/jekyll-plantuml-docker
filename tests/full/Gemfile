@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'html-proofer'
 gem 'html-proofer-unrendered-markdown'
 gem 'jekyll', '~> 4.3', group: :jekyll_plugins
-gem 'open3', '~> 0.1.2'
+gem 'open3', '~> 0.2.0'
 gem 'rake'
 
 gem 'jekyll-material-icon-tag', '~> 1.1'
