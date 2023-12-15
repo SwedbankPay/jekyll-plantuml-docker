@@ -227,7 +227,7 @@ jobs:
         run: grep '${{ github.event.repository.html_url }}' ${{ github.workspace }}/tests/full/_site/index.html
 
       - name: Upload build output artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: verify-output-verify-html
@@ -254,7 +254,7 @@ jobs:
         run: grep 'https://swedbankpay.github.io/jekyll-plantuml-docker/' ${{ github.workspace }}/tests/full/_site/index.html
 
       - name: Upload build output artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: verify-output-build-html
